@@ -587,3 +587,41 @@ ValueError: File validation failed. Issues: ['excel_structure']
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 77 records/sec
+2025-08-29 14:09:50 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:10:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: Ferro_raw_08.18.xlsx
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 31 | raw_columns: 23 | file_size_mb: 0.008341789245605469
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 21 | empty_rows_removed: 3 | duplicate_headers_removed: 0 | remaining_rows: 18
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 18 records | 1727 records/sec
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 18 | rows_after_filtering: 15 | rows_removed: 3 | filter_rate: 16.7%
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 15 records | 2754 records/sec
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.09s | 15 records | 173 records/sec
+2025-08-29 14:22:29 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: Ferro_raw_08.18.xlsx
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 31 | raw_columns: 23 | file_size_mb: 0.008341789245605469
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 21 | empty_rows_removed: 3 | duplicate_headers_removed: 0 | remaining_rows: 18
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 18 records | 1814 records/sec
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 18 | rows_after_filtering: 15 | rows_removed: 3 | filter_rate: 16.7%
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 15 records | 2607 records/sec
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.08s | 15 records | 179 records/sec

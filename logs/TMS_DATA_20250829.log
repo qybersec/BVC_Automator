@@ -467,3 +467,31 @@ ValueError: Excel file format cannot be determined, you must specify an engine m
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
 2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:10:05 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: Ferro_raw_08.18.xlsx
+2025-08-29 14:10:05 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.18 - 08.22 Reports\Ferro_raw_08.18.xlsx | Size: 8.5KB
+2025-08-29 14:10:05 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 31 | columns: 23 | non_empty_cells: 320
+2025-08-29 14:10:05 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 18 | total_columns: 23 | empty_rows: 0 | empty_columns: 3 | duplicate_rows: 0 | empty_load_numbers: 18 | invalid_load_numbers: 18 | Potential Savings_conversion_failures: 3 | Ship Date_invalid_dates: 18
+2025-08-29 14:10:06 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for Ferro_raw_08.18.xlsx
+2025-08-29 14:10:06 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 14:10:06 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Total Cost to numeric
+2025-08-29 14:10:06 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Potential Savings to numeric
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 3
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 6 rows
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:10:06 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 6 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 1 | total_rows_affected: 7
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: Ferro_raw_08.18.xlsx
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.18 - 08.22 Reports\Ferro_raw_08.18.xlsx | Size: 8.5KB
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 31 | columns: 23 | non_empty_cells: 320
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 18 | total_columns: 23 | empty_rows: 0 | empty_columns: 3 | duplicate_rows: 0 | empty_load_numbers: 18 | invalid_load_numbers: 18 | Potential Savings_conversion_failures: 3 | Ship Date_invalid_dates: 18
+2025-08-29 14:22:36 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for Ferro_raw_08.18.xlsx
+2025-08-29 14:22:36 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 14:22:36 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Total Cost to numeric
+2025-08-29 14:22:36 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Potential Savings to numeric
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 3
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 6 rows
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:22:36 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 6 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 1 | total_rows_affected: 7
