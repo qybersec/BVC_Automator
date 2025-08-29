@@ -1,6 +1,6 @@
 # 🚛 TMS Data Processor Pro
 
-A professional, user-friendly Transportation Management System (TMS) data processor that transforms raw shipping data into beautifully formatted, actionable reports with automatic cost analysis and savings calculations.
+A professional, enterprise-grade Transportation Management System (TMS) data processor that transforms raw shipping data into beautifully formatted Excel reports with automatic cost analysis and savings calculations. Built for logistics professionals who need to analyze carrier performance and identify cost optimization opportunities.
 
 ## ✨ Features
 
@@ -144,7 +144,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- Built for BVC transportation optimization needs
+- Built for transportation and logistics optimization
 - Designed with user experience in mind
 - Optimized for professional business use
 
