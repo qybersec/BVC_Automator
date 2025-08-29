@@ -1,0 +1,589 @@
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: non_existent_file.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: invalid.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: large_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.02s | 4 records | 200 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 448 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.10s | 4 records | 42 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 355 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 349 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.06s | 4 records | 64 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 461 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 382 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 78 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: non_existent_file.xlsx
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: invalid.xlsx
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['excel_structure']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['excel_structure']
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: large_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 54 | raw_columns: 23 | file_size_mb: 0.008717536926269531
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 44 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 44
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 44 records | 3110 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 44 | rows_after_filtering: 44 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.02s | 44 records | 2304 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.11s | 44 records | 413 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.05s | 4 records | 87 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.02s | 4 records | 184 records/sec
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.15s | 4 records | 26 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.02s | 4 records | 249 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 314 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.10s | 4 records | 39 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 364 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 422 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.06s | 4 records | 67 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 370 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 329 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.06s | 4 records | 62 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: non_existent_file.xlsx
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: invalid.xlsx
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['excel_structure']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['excel_structure']
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: large_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 54 | raw_columns: 23 | file_size_mb: 0.008717536926269531
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 44 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 44
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 44 records | 3675 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 44 | rows_after_filtering: 44 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 44 records | 4524 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.10s | 44 records | 462 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 429 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 391 records/sec
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 78 records/sec
+2025-08-29 13:54:41 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: Ferro_raw_08.18.xlsx
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 31 | raw_columns: 23 | file_size_mb: 0.008341789245605469
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 21 | empty_rows_removed: 3 | duplicate_headers_removed: 0 | remaining_rows: 18
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.06s | 18 records | 316 records/sec
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 18 | rows_after_filtering: 15 | rows_removed: 3 | filter_rate: 16.7%
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.02s | 15 records | 822 records/sec
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.17s | 15 records | 90 records/sec
+2025-08-29 13:57:56 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: Ferro_raw_08.18.xlsx
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 31 | raw_columns: 23 | file_size_mb: 0.008341789245605469
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 21 | empty_rows_removed: 3 | duplicate_headers_removed: 0 | remaining_rows: 18
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 18 records | 1833 records/sec
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 18 | rows_after_filtering: 15 | rows_removed: 3 | filter_rate: 16.7%
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 15 records | 2325 records/sec
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.09s | 15 records | 170 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 332 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 375 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.09s | 4 records | 47 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.03s | 4 records | 122 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 364 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.08s | 4 records | 50 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 471 records/sec
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 468 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 86 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: non_existent_file.xlsx
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: invalid.xlsx
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['excel_structure']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['excel_structure']
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: large_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 54 | raw_columns: 23 | file_size_mb: 0.008716583251953125
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 44 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 44
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 44 records | 4677 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 44 | rows_after_filtering: 44 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 44 records | 3881 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.11s | 44 records | 388 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.0059375762939453125
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 300 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 392 records/sec
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.07s | 4 records | 58 records/sec
+2025-08-29 14:04:08 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: FERROWORKS BVC 08.04.25 - 08.08.25.xlsx
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 42 | raw_columns: 22 | file_size_mb: 0.015613555908203125
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 5 | data_start_row: 7 | confidence: 1.0
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 35 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 35
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:04:18 | [31mERROR[0m | TMS_MAIN | error:82 | Unexpected processing error | file_path: C:/Users/Quincy Nguyen/Documents/Weekly Reports/August 2025/08.04 - 08.08 Reports/FERROWORKS BVC 08.04.25 - 08.08.25.xlsx | Exception: positional indexers are out-of-bounds
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 205, in clean_and_process_data
+    data_df = data_df.iloc[:, relevant_columns]
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1184, in __getitem__
+    return self._getitem_tuple(key)
+           ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1690, in _getitem_tuple
+    tup = self._validate_tuple_indexer(tup)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 966, in _validate_tuple_indexer
+    self._validate_key(k, i)
+    ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1612, in _validate_key
+    raise IndexError("positional indexers are out-of-bounds")
+IndexError: positional indexers are out-of-bounds
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: f_raw_8.4.xlsx
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 58 | raw_columns: 23 | file_size_mb: 0.011677742004394531
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 48 | empty_rows_removed: 7 | duplicate_headers_removed: 2 | remaining_rows: 39
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 39 records | 4126 records/sec
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 39 | rows_after_filtering: 35 | rows_removed: 4 | filter_rate: 10.3%
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 35 records | 5663 records/sec
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.16s | 35 records | 222 records/sec
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: Ferro_raw_08.18.xlsx
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 31 | raw_columns: 23 | file_size_mb: 0.008341789245605469
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 21 | empty_rows_removed: 3 | duplicate_headers_removed: 0 | remaining_rows: 18
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.02s | 18 records | 986 records/sec
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 18 | rows_after_filtering: 15 | rows_removed: 3 | filter_rate: 16.7%
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 15 records | 1719 records/sec
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.17s | 15 records | 90 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.005936622619628906
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 320 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.02s | 4 records | 178 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.09s | 4 records | 43 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.005936622619628906
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 498 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 512 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.06s | 4 records | 72 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.005936622619628906
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 479 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 495 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 80 records/sec
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: non_existent_file.xlsx
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['file_path']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['file_path']
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: invalid.xlsx
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_MAIN | error:82 | Validation error | Exception: File validation failed. Issues: ['excel_structure']
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\tms_processor.py", line 149, in clean_and_process_data
+    raise ValueError(f"File validation failed. Issues: {failed_steps}")
+ValueError: File validation failed. Issues: ['excel_structure']
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: large_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 54 | raw_columns: 23 | file_size_mb: 0.008717536926269531
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 44 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 44
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 44 records | 5554 records/sec
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 44 | rows_after_filtering: 44 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 44 records | 4880 records/sec
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.09s | 44 records | 494 records/sec
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | ModernTMSProcessor initialized with enhanced features
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Starting TMS data processing | file: sample_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Loading Excel file
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | RAW_DATA: raw_rows: 14 | raw_columns: 23 | file_size_mb: 0.005936622619628906
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting title information
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Data structure detected | header_row: 8 | data_start_row: 10 | confidence: 1.0
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting data rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | DATA_CLEANING: initial_data_rows: 4 | empty_rows_removed: 0 | duplicate_headers_removed: 0 | remaining_rows: 4
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Extracting relevant columns
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | COLUMN_EXTRACTION: total_available_columns: 23 | relevant_columns_selected: 21 | max_expected_columns: 22
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Cleaning and validating data types
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Data type cleaning took 0.01s | 4 records | 408 records/sec
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Filtering invalid rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | ROW_FILTERING: rows_before_filtering: 4 | rows_after_filtering: 4 | rows_removed: 0 | filter_rate: 0.0%
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Applying business logic rules
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Business logic application took 0.01s | 4 records | 472 records/sec
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Sorting data
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PROCESSING: Calculating summary statistics
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_MAIN | info:71 | PERFORMANCE: Total TMS processing took 0.05s | 4 records | 77 records/sec

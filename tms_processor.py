@@ -5,24 +5,76 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import os
 import threading
+import time
 from pathlib import Path
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
+from typing import Dict, List, Optional, Tuple, Any
+
+# Import our new modules
+try:
+    from config import tms_config
+    from logger_config import main_logger, data_logger, gui_logger, ProgressLogger
+    from validators import tms_validator, tms_cleaner
+except ImportError as e:
+    print(f"Warning: Could not import enhanced modules: {e}")
+    print("Falling back to basic functionality...")
+    # Create mock objects for backward compatibility
+    class MockConfig:
+        def get(self, key, default=None):
+            defaults = {
+                'data_structure.default_header_row': 8,
+                'data_structure.default_data_start_row': 11,
+                'data_structure.min_data_columns': 5,
+                'data_structure.expected_columns': 21,
+                'business_rules.min_non_empty_values': 5
+            }
+            return defaults.get(key, default)
+    
+    class MockLogger:
+        def info(self, msg, **kwargs): print(f"INFO: {msg}")
+        def error(self, msg, **kwargs): print(f"ERROR: {msg}")
+        def warning(self, msg, **kwargs): print(f"WARNING: {msg}")
+        def debug(self, msg, **kwargs): print(f"DEBUG: {msg}")
+        def log_processing_step(self, step, details=None): self.info(f"Processing: {step}")
+        def log_data_stats(self, stats, prefix=""): self.info(f"{prefix}: {stats}")
+        def log_performance(self, op, duration, records=None): self.info(f"{op}: {duration:.2f}s")
+    
+    class MockValidator:
+        def run_full_validation(self, file_path): return {'overall_valid': True, 'validation_steps': {}}
+    
+    tms_config = MockConfig()
+    main_logger = data_logger = gui_logger = MockLogger()
+    tms_validator = MockValidator()
+    
+    def ProgressLogger(logger, total, operation):
+        class MockProgress:
+            def update(self, inc=1): pass
+            def complete(self): pass
+        return MockProgress()
 
 class ModernTMSProcessor:
-    # Configuration constants
-    DEFAULT_HEADER_ROW = 8
-    DEFAULT_DATA_START_ROW = 11
-    MIN_DATA_COLUMNS = 5
-    EXPECTED_COLUMNS = 21
+    """Enhanced TMS Processor with comprehensive validation and error handling"""
     
     def __init__(self):
+        self.logger = main_logger
+        self.data_logger = data_logger
+        self.config = tms_config
+        
+        # Data storage
         self.raw_data = None
         self.processed_data = None
         self.summary_stats = {}
         self.title_info = {}
+        self.validation_results = None
+        
+        # Performance tracking
+        self.processing_start_time = None
+        self.processing_stats = {}
+        
+        self.logger.info("ModernTMSProcessor initialized with enhanced features")
         
     def _extract_title_info(self, df_raw):
         """Extract title and report information from the top rows"""
@@ -82,36 +134,81 @@ class ModernTMSProcessor:
         
         return df.drop(rows_to_drop)
     
-    def clean_and_process_data(self, file_path):
-        """Main function to clean and process the TMS Excel file"""
+    def clean_and_process_data(self, file_path: str) -> pd.DataFrame:
+        """Main function to clean and process the TMS Excel file with comprehensive validation"""
+        self.processing_start_time = time.time()
+        self.logger.log_processing_step("Starting TMS data processing", {'file': Path(file_path).name})
+        
         try:
-            # Read raw Excel file
+            # Step 1: Comprehensive validation
+            self.validation_results = tms_validator.run_full_validation(file_path)
+            
+            if not self.validation_results['overall_valid']:
+                failed_steps = [step for step, result in self.validation_results['validation_steps'].items() 
+                               if not result.get('valid', False)]
+                raise ValueError(f"File validation failed. Issues: {failed_steps}")
+            
+            # Step 2: Load and validate Excel data
+            self.logger.log_processing_step("Loading Excel file")
             df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
             
-            # Extract title information from top rows
+            self.logger.log_data_stats({
+                'raw_rows': len(df_raw),
+                'raw_columns': len(df_raw.columns),
+                'file_size_mb': Path(file_path).stat().st_size / (1024*1024)
+            }, "RAW_DATA")
+            
+            # Step 3: Extract metadata
+            self.logger.log_processing_step("Extracting title information")
             self.title_info = self._extract_title_info(df_raw)
             
-            # Intelligently detect data structure
-            header_row, data_start_row = self._detect_data_structure(df_raw)
+            # Step 4: Use validation results for structure detection
+            header_info = self.validation_results['validation_steps']['header_detection']['details']
+            header_row = header_info.get('header_row', self.config.get('data_structure.default_header_row', 8))
+            data_start_row = header_info.get('data_start_row', self.config.get('data_structure.default_data_start_row', 11))
+            
+            self.logger.log_processing_step("Data structure detected", {
+                'header_row': header_row,
+                'data_start_row': data_start_row,
+                'confidence': header_info.get('confidence_score', 0)
+            })
             
             # Get headers
             headers = df_raw.iloc[header_row].dropna().tolist()
             
-            # Extract data starting from row 10
+            # Step 5: Extract and clean data with progress tracking
+            self.logger.log_processing_step("Extracting data rows")
             data_df = df_raw.iloc[data_start_row:].copy()
             
-            # Remove completely empty rows and duplicate header rows
+            # Remove completely empty rows and duplicate header rows with logging
+            initial_rows = len(data_df)
             data_df = data_df.dropna(how='all')
+            empty_rows_removed = initial_rows - len(data_df)
+            
             data_df = self._remove_duplicate_headers(data_df)
+            duplicate_headers_removed = initial_rows - empty_rows_removed - len(data_df)
+            
+            self.logger.log_data_stats({
+                'initial_data_rows': initial_rows,
+                'empty_rows_removed': empty_rows_removed,
+                'duplicate_headers_removed': duplicate_headers_removed,
+                'remaining_rows': len(data_df)
+            }, "DATA_CLEANING")
             
             # Reset index after dropping rows
             data_df = data_df.reset_index(drop=True)
             
-            # Extract relevant data columns (skip column A, start from column 2)
-            # Check how many columns we actually have
+            # Step 6: Column extraction with intelligent selection
+            self.logger.log_processing_step("Extracting relevant columns")
             max_cols = min(22, len(data_df.columns))
             relevant_columns = list(range(2, max_cols + 1))
             data_df = data_df.iloc[:, relevant_columns]
+            
+            self.logger.log_data_stats({
+                'total_available_columns': len(df_raw.columns),
+                'relevant_columns_selected': len(relevant_columns),
+                'max_expected_columns': 22
+            }, "COLUMN_EXTRACTION")
             
             # Set proper column names with full descriptive headers
             base_column_names = [
@@ -137,44 +234,100 @@ class ModernTMSProcessor:
             
             data_df.columns = column_names
             
-            # Clean and fix data types
-            data_df = self._clean_data_types(data_df)
+            # Step 7: Enhanced data type cleaning with validation
+            self.logger.log_processing_step("Cleaning and validating data types")
+            cleaning_start = time.time()
+            data_df = self._clean_data_types_enhanced(data_df)
+            cleaning_time = time.time() - cleaning_start
+            self.logger.log_performance("Data type cleaning", cleaning_time, len(data_df))
+            
+            # Enhanced row filtering with detailed logging
+            self.logger.log_processing_step("Filtering invalid rows")
+            pre_filter_count = len(data_df)
             
             # Remove rows where Load No. is missing or empty
-            data_df = data_df.dropna(subset=['Load No.'])
-            data_df = data_df[data_df['Load No.'].astype(str).str.strip() != '']
-            data_df = data_df[data_df['Load No.'].astype(str).str.strip() != 'nan']
+            if 'Load No.' in data_df.columns:
+                data_df = data_df.dropna(subset=['Load No.'])
+                data_df = data_df[data_df['Load No.'].astype(str).str.strip() != '']
+                data_df = data_df[data_df['Load No.'].astype(str).str.strip() != 'nan']
+            else:
+                self.logger.warning("Load No. column not found - skipping Load No. validation")
             
             # Remove any remaining rows that are mostly empty
-            data_df = data_df.dropna(thresh=5)  # Keep rows with at least 5 non-null values
+            min_values = self.config.get('business_rules.min_non_empty_values', 5)
+            data_df = data_df.dropna(thresh=min_values)
             
-            # Reset index again after final cleaning
+            # Reset index and log filtering results
             data_df = data_df.reset_index(drop=True)
+            rows_filtered = pre_filter_count - len(data_df)
             
-            # Apply business logic rules
-            data_df = self._apply_business_logic(data_df)
+            self.logger.log_data_stats({
+                'rows_before_filtering': pre_filter_count,
+                'rows_after_filtering': len(data_df),
+                'rows_removed': rows_filtered,
+                'filter_rate': f"{(rows_filtered/pre_filter_count*100):.1f}%" if pre_filter_count > 0 else "0%"
+            }, "ROW_FILTERING")
             
-            # Sort by Destination City
-            data_df = data_df.sort_values('Destination City', na_position='last')
+            # Apply business logic rules with enhanced tracking
+            self.logger.log_processing_step("Applying business logic rules")
+            business_start = time.time()
+            data_df = self._apply_business_logic_enhanced(data_df)
+            business_time = time.time() - business_start
+            self.logger.log_performance("Business logic application", business_time, len(data_df))
             
-            # Calculate summary statistics
+            # Sort by Destination City with error handling
+            self.logger.log_processing_step("Sorting data")
+            if 'Destination City' in data_df.columns:
+                data_df = data_df.sort_values('Destination City', na_position='last')
+            else:
+                self.logger.warning("Destination City column not found - skipping sort")
+                # Try alternative column names
+                destination_cols = [col for col in data_df.columns if 'destination' in col.lower() and 'city' in col.lower()]
+                if destination_cols:
+                    data_df = data_df.sort_values(destination_cols[0], na_position='last')
+                    self.logger.info(f"Sorted by alternative column: {destination_cols[0]}")
+            
+            # Step 8: Calculate summary statistics
+            self.logger.log_processing_step("Calculating summary statistics")
             self._calculate_summary_stats(data_df)
+            
+            # Step 9: Final processing metrics
+            processing_time = time.time() - self.processing_start_time
+            self.processing_stats = {
+                'total_time': processing_time,
+                'records_processed': len(data_df),
+                'processing_rate': len(data_df) / processing_time if processing_time > 0 else 0
+            }
+            
+            self.logger.log_performance(
+                "Total TMS processing", 
+                processing_time, 
+                len(data_df)
+            )
             
             self.processed_data = data_df
             return data_df
             
         except (FileNotFoundError, PermissionError) as e:
+            self.logger.error("File access error", exception=e, file_path=file_path)
             raise FileNotFoundError(f"Cannot access file: {str(e)}")
         except (pd.errors.EmptyDataError, pd.errors.ParserError) as e:
+            self.logger.error("Excel parsing error", exception=e, file_path=file_path)
             raise ValueError(f"Invalid Excel file format: {str(e)}")
+        except ValueError as e:
+            # Re-raise validation errors
+            self.logger.error("Validation error", exception=e)
+            raise
         except Exception as e:
+            self.logger.error("Unexpected processing error", exception=e, file_path=file_path)
             raise RuntimeError(f"Error processing file: {str(e)}")
     
-    def _clean_data_types(self, df):
-        """Clean and fix data types for each column"""
+    def _clean_data_types_enhanced(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Enhanced data type cleaning with comprehensive validation and logging"""
         df = df.copy()
+        cleaning_stats = {'columns_processed': 0, 'conversion_failures': 0}
         
-        # Convert numeric columns
+        # Convert numeric columns with enhanced error tracking
         numeric_columns = [
             'Selected Transit Days', 'Selected Freight Cost', 'Selected Accessorial Cost', 'Selected Total Cost',
             'Least Cost Transit Days', 'Least Cost Freight Cost', 'Least Cost Accessorial Cost', 'Least Cost Total Cost', 'Potential Savings'
@@ -182,7 +335,14 @@ class ModernTMSProcessor:
         
         for col in numeric_columns:
             if col in df.columns:
+                cleaning_stats['columns_processed'] += 1
+                original_nulls = df[col].isnull().sum()
                 df[col] = pd.to_numeric(df[col], errors='coerce')
+                new_nulls = df[col].isnull().sum()
+                conversion_failures = new_nulls - original_nulls
+                if conversion_failures > 0:
+                    cleaning_stats['conversion_failures'] += conversion_failures
+                    self.data_logger.warning(f"Failed to convert {conversion_failures} values in {col} to numeric")
         
         # Ensure PS column is properly numeric and handle any string values
         if 'PS' in df.columns:
@@ -191,11 +351,21 @@ class ModernTMSProcessor:
             # Fill any NaN values with 0
             df['PS'] = df['PS'].fillna(0)
         
-        # Convert date column and format as MM/DD/YY
+        # Convert date column with enhanced error handling
         if 'Ship Date' in df.columns:
-            df['Ship Date'] = pd.to_datetime(df['Ship Date'], errors='coerce').dt.strftime('%m/%d/%y')
+            cleaning_stats['columns_processed'] += 1
+            original_nulls = df['Ship Date'].isnull().sum()
+            date_series = pd.to_datetime(df['Ship Date'], errors='coerce')
+            new_nulls = date_series.isnull().sum()
+            date_failures = new_nulls - original_nulls
+            if date_failures > 0:
+                cleaning_stats['conversion_failures'] += date_failures
+                self.data_logger.warning(f"Failed to convert {date_failures} date values in Ship Date")
+            
+            date_format = self.config.get('formatting.date_format', '%m/%d/%y')
+            df['Ship Date'] = date_series.dt.strftime(date_format)
         
-        # Clean string columns
+        # Clean string columns with tracking
         string_columns = [
             'Load No.', 'Origin City', 'Origin State', 'Origin Postal',
             'Destination City', 'Destination State', 'Destination Postal',
@@ -204,14 +374,22 @@ class ModernTMSProcessor:
         
         for col in string_columns:
             if col in df.columns:
+                cleaning_stats['columns_processed'] += 1
                 df[col] = df[col].astype(str).str.strip()
                 df[col] = df[col].replace('nan', '')
         
+        self.data_logger.log_data_stats(cleaning_stats, "TYPE_CLEANING")
         return df
     
-    def _apply_business_logic(self, df):
-        """Apply TMS business logic rules"""
+    def _apply_business_logic_enhanced(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Apply TMS business logic rules with enhanced tracking and validation"""
         df = df.copy()
+        business_stats = {
+            'same_carrier_rule_applied': 0,
+            'empty_data_rule_applied': 0,
+            'negative_savings_rule_applied': 0,
+            'total_rows_affected': 0
+        }
         
         try:
             # Ensure PS column is numeric from the start to avoid comparison errors
@@ -221,49 +399,93 @@ class ModernTMSProcessor:
                 print("Warning: PS column not found in dataframe")
                 print(f"Available columns: {df.columns.tolist()}")
         
-            # Rule 1: Same Carriers - Set Potential Savings to 0
-            same_carrier_mask = (
-                (df['Selected Carrier'].astype(str) == df['Least Cost Carrier'].astype(str)) & 
-                (df['Selected Carrier'].notna()) & 
-                (df['Least Cost Carrier'].notna()) &
-                (df['Selected Carrier'].astype(str) != '') & 
-                (df['Least Cost Carrier'].astype(str) != '') &
-                (df['Selected Carrier'].astype(str) != 'nan') & 
-                (df['Least Cost Carrier'].astype(str) != 'nan')
-            )
-            if 'Potential Savings' in df.columns:
-                df.loc[same_carrier_mask, 'Potential Savings'] = 0
+            # Rule 1: Same Carriers - Set Potential Savings to 0 (Enhanced)
+            if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
+                same_carrier_mask = (
+                    (df['Selected Carrier'].astype(str) == df['Least Cost Carrier'].astype(str)) & 
+                    (df['Selected Carrier'].notna()) & 
+                    (df['Least Cost Carrier'].notna()) &
+                    (df['Selected Carrier'].astype(str) != '') & 
+                    (df['Least Cost Carrier'].astype(str) != '') &
+                    (df['Selected Carrier'].astype(str) != 'nan') & 
+                    (df['Least Cost Carrier'].astype(str) != 'nan')
+                )
+                
+                same_carrier_count = same_carrier_mask.sum()
+                business_stats['same_carrier_rule_applied'] = same_carrier_count
+                
+                if 'Potential Savings' in df.columns and same_carrier_count > 0:
+                    default_savings = self.config.get('business_rules.same_carrier_savings', 0.0)
+                    df.loc[same_carrier_mask, 'Potential Savings'] = default_savings
+                    self.data_logger.info(f"Applied same carrier rule to {same_carrier_count} rows")
+            else:
+                self.data_logger.warning("Cannot apply same carrier rule - required columns missing")
             
-            # Rule 2: Empty Least Cost - Copy Selected data and set savings to 0
-            empty_least_cost_mask = (
-                df['Least Cost Carrier'].isna() | 
-                (df['Least Cost Carrier'].astype(str) == '') |
-                (df['Least Cost Carrier'].astype(str) == 'nan')
-            )
-            column_pairs = [
-                ('Selected Carrier', 'Least Cost Carrier'), ('Selected Service Type', 'Least Cost Service Type'), ('Selected Transit Days', 'Least Cost Transit Days'),
-                ('Selected Freight Cost', 'Least Cost Freight Cost'), ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), ('Selected Total Cost', 'Least Cost Total Cost')
-            ]
-            self._copy_selected_to_least_cost(df, empty_least_cost_mask, column_pairs)
-            if 'Potential Savings' in df.columns:
-                df.loc[empty_least_cost_mask, 'Potential Savings'] = 0
+            # Rule 2: Empty Least Cost - Copy Selected data and set savings to 0 (Enhanced)
+            if 'Least Cost Carrier' in df.columns:
+                empty_least_cost_mask = (
+                    df['Least Cost Carrier'].isna() | 
+                    (df['Least Cost Carrier'].astype(str) == '') |
+                    (df['Least Cost Carrier'].astype(str) == 'nan')
+                )
+                
+                empty_count = empty_least_cost_mask.sum()
+                business_stats['empty_data_rule_applied'] = empty_count
+                
+                if empty_count > 0:
+                    column_pairs = [
+                        ('Selected Carrier', 'Least Cost Carrier'), 
+                        ('Selected Service Type', 'Least Cost Service Type'), 
+                        ('Selected Transit Days', 'Least Cost Transit Days'),
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'), 
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), 
+                        ('Selected Total Cost', 'Least Cost Total Cost')
+                    ]
+                    self._copy_selected_to_least_cost(df, empty_least_cost_mask, column_pairs)
+                    
+                    if 'Potential Savings' in df.columns:
+                        df.loc[empty_least_cost_mask, 'Potential Savings'] = 0
+                    
+                    self.data_logger.info(f"Applied empty data rule to {empty_count} rows")
+            else:
+                self.data_logger.warning("Cannot apply empty data rule - Least Cost Carrier column missing")
 
-            # Rule 3: Negative Savings - Copy Selected data and set savings to 0
+            # Rule 3: Negative Savings - Copy Selected data and set savings to 0 (Enhanced)
             if 'Potential Savings' in df.columns:
                 # Ensure Potential Savings is numeric before comparison
                 ps_numeric = pd.to_numeric(df['Potential Savings'], errors='coerce').fillna(0)
                 negative_savings_mask = ps_numeric < 0
-                self._copy_selected_to_least_cost(df, negative_savings_mask, column_pairs)
-                df.loc[negative_savings_mask, 'Potential Savings'] = 0
+                negative_count = negative_savings_mask.sum()
+                business_stats['negative_savings_rule_applied'] = negative_count
+                
+                if negative_count > 0:
+                    column_pairs = [
+                        ('Selected Carrier', 'Least Cost Carrier'), 
+                        ('Selected Service Type', 'Least Cost Service Type'), 
+                        ('Selected Transit Days', 'Least Cost Transit Days'),
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'), 
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), 
+                        ('Selected Total Cost', 'Least Cost Total Cost')
+                    ]
+                    self._copy_selected_to_least_cost(df, negative_savings_mask, column_pairs)
+                    df.loc[negative_savings_mask, 'Potential Savings'] = 0
+                    self.data_logger.info(f"Applied negative savings rule to {negative_count} rows")
+            else:
+                self.data_logger.warning("Cannot apply negative savings rule - Potential Savings column missing")
+                
+            # Calculate total affected rows
+            business_stats['total_rows_affected'] = (
+                business_stats['same_carrier_rule_applied'] + 
+                business_stats['empty_data_rule_applied'] + 
+                business_stats['negative_savings_rule_applied']
+            )
+            
+            self.data_logger.log_data_stats(business_stats, "BUSINESS_LOGIC")
                 
         except Exception as e:
-            print(f"Error in _apply_business_logic: {e}")
-            print(f"DataFrame info:")
-            print(f"  Shape: {df.shape}")
-            print(f"  Columns: {df.columns.tolist()}")
-            if 'PS' in df.columns:
-                print(f"  PS column dtype: {df['PS'].dtype}")
-            raise e
+            self.data_logger.error("Business logic application failed", exception=e, 
+                                 df_shape=df.shape, df_columns=df.columns.tolist())
+            raise RuntimeError(f"Business logic error: {str(e)}")
             
         return df
     
@@ -404,8 +626,8 @@ class ModernTMSProcessor:
         # Add headers with enhanced styling and color coding
         headers = self.processed_data.columns.tolist()
         header_border = Border(
-            left=Side(style='thin', color='FFFFFF'),
-            right=Side(style='thin', color='FFFFFF'),
+            left=Side(style='thin', color='D0D0D0'),
+            right=Side(style='thin', color='D0D0D0'),
             top=Side(style='medium', color='2C3E50'),
             bottom=Side(style='medium', color='2C3E50')
         )
@@ -426,12 +648,12 @@ class ModernTMSProcessor:
             else:
                 cell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")  # Default blue
         
-        # Add data with alternating row colors
+        # Add data with alternating row colors and comprehensive borders
         data_border = Border(
-            left=Side(style='thin', color='E8E8E8'),
-            right=Side(style='thin', color='E8E8E8'),
-            top=Side(style='thin', color='E8E8E8'),
-            bottom=Side(style='thin', color='E8E8E8')
+            left=Side(style='thin', color='D0D0D0'),
+            right=Side(style='thin', color='D0D0D0'),
+            top=Side(style='thin', color='D0D0D0'),
+            bottom=Side(style='thin', color='D0D0D0')
         )
         
         # Filter out any remaining empty rows before writing to Excel
@@ -466,15 +688,24 @@ class ModernTMSProcessor:
                 content_length = len(str(value)) if value else 0
                 max_content_length = max(max_content_length, content_length)
             
-            # Calculate optimal row height based on longest content in the row
-            if max_content_length > 30:  # Very long content (like "CENTRAL TRANSPORT INTERNATIONAL")
-                optimal_height = min(40, max(20, max_content_length * 0.7))  # More generous scaling for long names
+            # Enhanced dynamic height calculation for long carrier names
+            # Check if this row contains carrier information that might wrap
+            has_carrier_data = any('TRANSPORT' in str(val).upper() or 
+                                 'LOGISTICS' in str(val).upper() or 
+                                 'FREIGHT' in str(val).upper() or
+                                 len(str(val)) > 25 for val in data_row if val)
+            
+            if has_carrier_data and max_content_length > 25:
+                # For carrier names, be more generous with height to prevent cutoff
+                optimal_height = min(50, max(30, max_content_length * 1.2))
+            elif max_content_length > 30:  # Very long content
+                optimal_height = min(45, max(25, max_content_length * 1.0))
             elif max_content_length > 20:  # Long content
-                optimal_height = min(30, max(18, max_content_length * 0.6))  # Scale height with content
+                optimal_height = min(35, max(22, max_content_length * 0.8))
             elif max_content_length > 15:  # Medium content
-                optimal_height = 22
+                optimal_height = 25
             else:
-                optimal_height = 18  # Default compact height for short content
+                optimal_height = 20  # Default height with a bit more room
             
             # Set the row height once for the entire row
             ws_data.row_dimensions[row].height = optimal_height
@@ -526,289 +757,63 @@ class ModernTMSProcessor:
         except Exception:
             pass
 
-        # Skip totals row since we have Performance Insights instead
-        row += 1
+        # Add totals row with key financial metrics
+        totals_row = row + 2
         
-        # Legend column widths will be determined by auto-fit below
-        
-        # Position Performance Insights box below the data table area
-        # Add Performance Insights (PI) compact block at columns O-P (15-16)
-        insights_row = row + 1  # Place closer to table for compactness
-        insights_col = 15  # Column O
-        
-        thick_border = Border(
-            left=Side(style='medium', color='2E86AB'),
-            right=Side(style='medium', color='2E86AB'),
-            top=Side(style='medium', color='2E86AB'),
-            bottom=Side(style='medium', color='2E86AB')
-        )
-        thin_border = Border(
-            left=Side(style='thin', color='B0C4DE'),
-            right=Side(style='thin', color='B0C4DE'),
-            top=Side(style='thin', color='B0C4DE'),
-            bottom=Side(style='thin', color='B0C4DE')
+        # Add "TOTALS" label
+        totals_label = ws_data.cell(row=totals_row, column=1, value="TOTALS")
+        totals_label.font = Font(size=12, bold=True, color="FFFFFF")
+        totals_label.fill = PatternFill(start_color="2C3E50", end_color="2C3E50", fill_type="solid")
+        totals_label.alignment = Alignment(horizontal="center", vertical="center")
+        totals_label.border = Border(
+            left=Side(style='medium', color='2C3E50'),
+            right=Side(style='medium', color='2C3E50'),
+            top=Side(style='medium', color='2C3E50'),
+            bottom=Side(style='medium', color='2C3E50')
         )
         
-        # Two-row PI with labels in W and values in X
-        metric_row = insights_row
-        value_row = insights_row
-        pi_items = [
-            ("Total Selected Carrier Costs", f"${self.summary_stats['total_selected_cost']:,.2f}"),
-            ("Total Potential Savings", f"${self.summary_stats['total_potential_savings']:,.2f}")
-        ]
-        current_row = metric_row
-        for label, val in pi_items:
-            lcell = ws_data.cell(row=current_row, column=insights_col, value=label)
-            lcell.font = Font(size=13, bold=True, color="2C3E50")  # Reduced from 14 to 13
-            lcell.fill = PatternFill(start_color="E8F4FD", end_color="E8F4FD", fill_type="solid")
-            lcell.border = thin_border
-            lcell.alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
-
-            vcell = ws_data.cell(row=current_row, column=insights_col + 1, value=val)
-            vcell.font = Font(size=13, bold=True, color="27AE60")  # Reduced from 14 to 13
-            vcell.fill = PatternFill(start_color="F7FAFC", end_color="F7FAFC", fill_type="solid")
-            vcell.border = thin_border
-            vcell.alignment = Alignment(horizontal="left", vertical="center")
-
-            current_row += 1
+        # Find the Selected Total Cost and Potential Savings columns
+        selected_cost_col = None
+        potential_savings_col = None
+        for col_idx, header in enumerate(headers, 1):
+            if 'Selected Total Cost' in str(header):
+                selected_cost_col = col_idx
+            elif 'Potential Savings' in str(header):
+                potential_savings_col = col_idx
         
-        # Let autofit later determine widths for all ws_data columns (including PI/CAL)
-        
-        # Create beautiful summary sheet
-        ws_summary = wb.create_sheet("Summary")
-        
-        # Title with modern styling
-        title_cell = ws_summary['A1']
-        title_cell.value = "📊 TMS REPORT - SUMMARY STATISTICS"
-        title_cell.font = Font(size=18, bold=True, color="FFFFFF")
-        title_cell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
-        title_cell.alignment = Alignment(horizontal="center", vertical="center")
-        ws_summary.merge_cells('A1:D1')
-        
-        # Apply styling to merged title cells
-        title_border = Border(
-            left=Side(style='medium', color='1F4E79'),
-            right=Side(style='medium', color='1F4E79'),
-            top=Side(style='medium', color='1F4E79'),
-            bottom=Side(style='medium', color='1F4E79')
-        )
-        for col in ['A', 'B', 'C', 'D']:
-            cell = ws_summary[f'{col}1']
-            cell.border = title_border
-            cell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
-        
-        # Add company and date info if available
-        info_row = 3
-        if self.title_info:
-            if 'company_name' in self.title_info:
-                company_cell = ws_summary[f'A{info_row}']
-                company_cell.value = f"Company: {self.title_info['company_name']}"
-                company_cell.font = Font(size=12, bold=True, color="2D3748")
-                info_row += 1
-            if 'date_range' in self.title_info:
-                date_cell = ws_summary[f'A{info_row}']
-                date_cell.value = f"Report Period: {self.title_info['date_range']}"
-                date_cell.font = Font(size=12, bold=True, color="2D3748")
-                info_row += 1
-        
-        # Headers with professional styling
-        header_row = info_row + 2
-        headers = ["📋 Metric", "📊 Value", "💡 Description", "🎯 Impact"]
-        header_colors = ["4A90E2", "27AE60", "FF8C42", "9B59B6"]
-        
-        for col_idx, (header, color) in enumerate(zip(headers, header_colors), 1):
-            cell = ws_summary.cell(row=header_row, column=col_idx, value=header)
-            cell.font = Font(size=12, bold=True, color="FFFFFF")
-            cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-            cell.alignment = Alignment(horizontal="center", vertical="center")
-            cell.border = Border(
-                left=Side(style='thin', color='FFFFFF'),
-                right=Side(style='thin', color='FFFFFF'),
-                top=Side(style='medium', color='2C3E50'),
-                bottom=Side(style='medium', color='2C3E50')
+        # Add Total Selected Cost
+        if selected_cost_col:
+            cost_cell = ws_data.cell(row=totals_row, column=selected_cost_col, 
+                                   value=f"${self.summary_stats['total_selected_cost']:,.2f}")
+            cost_cell.font = Font(size=12, bold=True, color="FFFFFF")
+            cost_cell.fill = PatternFill(start_color="3498DB", end_color="3498DB", fill_type="solid")
+            cost_cell.alignment = Alignment(horizontal="center", vertical="center")
+            cost_cell.number_format = '"$"#,##0.00'
+            cost_cell.border = Border(
+                left=Side(style='medium', color='3498DB'),
+                right=Side(style='medium', color='3498DB'),
+                top=Side(style='medium', color='3498DB'),
+                bottom=Side(style='medium', color='3498DB')
             )
         
-        # Enhanced summary data with impact analysis
-        summary_data = [
-            ["Total Loads Processed", f"{self.summary_stats['total_loads']:,}", "Number of shipments analyzed", "📦 Volume"],
-            ["Total Selected Carrier Costs", f"${self.summary_stats['total_selected_cost']:,.2f}", "Current transportation spend", "💰 Baseline"],
-            ["Total Least Cost Alternative", f"${self.summary_stats['total_least_cost']:,.2f}", "Optimal cost if all loads used cheapest option", "🎯 Target"],
-            ["Total Potential Savings", f"${self.summary_stats['total_potential_savings']:,.2f}", "Money that could be saved", "💵 Opportunity"],
-            ["Average Savings per Load", f"${self.summary_stats['average_savings_per_load']:,.2f}", "Per-shipment savings potential", "📈 Efficiency"],
-            ["Savings Percentage", f"{self.summary_stats['percentage_savings']:.2f}%", "Savings as % of total spend", "📊 Rate"],
-            ["Loads with Savings Opportunities", f"{self.summary_stats['loads_with_savings']:,}", "Shipments that could be optimized", "🔍 Focus"],
-            ["Actionable Savings Total", f"${self.summary_stats['total_savings_opportunity']:,.2f}", "Realistic savings from optimizable loads", "✅ Achievable"]
-        ]
-        
-        # Add data with alternating colors and professional styling
-        data_border = Border(
-            left=Side(style='thin', color='E8E8E8'),
-            right=Side(style='thin', color='E8E8E8'),
-            top=Side(style='thin', color='E8E8E8'),
-            bottom=Side(style='thin', color='E8E8E8')
-        )
-        
-        for row_idx, (metric, value, description, impact) in enumerate(summary_data, header_row + 1):
-            row_color = "F8F9FA" if row_idx % 2 == 0 else "FFFFFF"
-            
-            # Metric column
-            metric_cell = ws_summary.cell(row=row_idx, column=1, value=metric)
-            metric_cell.font = Font(size=11, bold=True, color="2D3748")
-            metric_cell.fill = PatternFill(start_color=row_color, end_color=row_color, fill_type="solid")
-            metric_cell.border = data_border
-            metric_cell.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-            
-            # Value column with special formatting for currency and percentages
-            value_cell = ws_summary.cell(row=row_idx, column=2, value=value)
-            if "$" in str(value):
-                value_cell.font = Font(size=11, bold=True, color="27AE60")
-            elif "%" in str(value):
-                value_cell.font = Font(size=11, bold=True, color="3498DB")
-            else:
-                value_cell.font = Font(size=11, bold=True, color="E74C3C")
-            value_cell.fill = PatternFill(start_color=row_color, end_color=row_color, fill_type="solid")
-            value_cell.border = data_border
-            value_cell.alignment = Alignment(horizontal="center", vertical="center")
-            
-            # Description column
-            desc_cell = ws_summary.cell(row=row_idx, column=3, value=description)
-            desc_cell.font = Font(size=10, color="4A5568")
-            desc_cell.fill = PatternFill(start_color=row_color, end_color=row_color, fill_type="solid")
-            desc_cell.border = data_border
-            desc_cell.alignment = Alignment(horizontal="left", vertical="center", indent=1, wrap_text=True)
-            
-            # Impact column
-            impact_cell = ws_summary.cell(row=row_idx, column=4, value=impact)
-            impact_cell.font = Font(size=10, bold=True, color="7C3AED")
-            impact_cell.fill = PatternFill(start_color=row_color, end_color=row_color, fill_type="solid")
-            impact_cell.border = data_border
-            impact_cell.alignment = Alignment(horizontal="center", vertical="center")
-        
-        # Auto-fit columns on Summary sheet (ensure content fits)
-        try:
-            for col_idx in range(1, ws_summary.max_column + 1):
-                max_len = 0
-                col_letter = get_column_letter(col_idx)
-                for row_idx in range(1, ws_summary.max_row + 1):
-                    val = ws_summary.cell(row=row_idx, column=col_idx).value
-                    if val is not None:
-                        max_len = max(max_len, len(str(val)))
-                ws_summary.column_dimensions[col_letter].width = max(8, max_len + 1.5)  # Ensure content fits
-            ws_summary.sheet_view.showGridLines = True
-        except Exception:
-            pass
-        
-        # Add insights section
-        insights_start_row = header_row + len(summary_data) + 3
-        
-        # Insights title
-        insights_title = ws_summary.cell(row=insights_start_row, column=1, value="🎯 KEY INSIGHTS & RECOMMENDATIONS")
-        insights_title.font = Font(size=14, bold=True, color="FFFFFF")
-        insights_title.fill = PatternFill(start_color="E74C3C", end_color="E74C3C", fill_type="solid")
-        insights_title.alignment = Alignment(horizontal="center", vertical="center")
-        ws_summary.merge_cells(f'A{insights_start_row}:D{insights_start_row}')
-        
-        # Apply styling to merged insights title
-        for col in [1, 2, 3, 4]:
-            cell = ws_summary.cell(row=insights_start_row, column=col)
-            cell.border = title_border
-            cell.fill = PatternFill(start_color="E74C3C", end_color="E74C3C", fill_type="solid")
-        
-        # Add key insights
-        insights = [
-            f"💡 {self.summary_stats['loads_with_savings']} out of {self.summary_stats['total_loads']} loads ({(self.summary_stats['loads_with_savings']/max(self.summary_stats['total_loads'], 1)*100):.1f}%) have savings opportunities",
-            f"🎯 Focus on optimizing the {self.summary_stats['loads_with_savings']} loads with savings potential",
-            f"📈 Average savings per optimizable load: ${(self.summary_stats['total_savings_opportunity']/max(self.summary_stats['loads_with_savings'], 1)):,.2f}",
-            f"⚡ Quick wins: Target loads with highest individual savings first"
-        ]
-        
-        for i, insight in enumerate(insights, insights_start_row + 1):
-            insight_cell = ws_summary.cell(row=i, column=1, value=insight)
-            insight_cell.font = Font(size=11, color="2D3748")
-            insight_cell.alignment = Alignment(horizontal="left", vertical="center", indent=1, wrap_text=True)
-            ws_summary.merge_cells(f'A{i}:D{i}')
-            
-            # Apply styling to merged insight cells
-            for col in [1, 2, 3, 4]:
-                cell = ws_summary.cell(row=i, column=col)
-                cell.fill = PatternFill(start_color="F7FAFC", end_color="F7FAFC", fill_type="solid")
-                cell.border = Border(
-                    left=Side(style='thin', color='E2E8F0'),
-                    right=Side(style='thin', color='E2E8F0'),
-                    top=Side(style='thin', color='E2E8F0'),
-                    bottom=Side(style='thin', color='E2E8F0')
-                )
-
-        # === Move CAL (Column Abbreviations Legend) to Summary sheet ===
-        cal_start_row = insights_start_row + len(insights) + 3
-        cal_title = ws_summary.cell(row=cal_start_row, column=1, value="📋 COLUMN ABBREVIATIONS LEGEND")
-        cal_title.font = Font(size=12, bold=True, color="FFFFFF")
-        cal_title.fill = PatternFill(start_color="4A5568", end_color="4A5568", fill_type="solid")
-        cal_title.alignment = Alignment(horizontal="center", vertical="center")
-        ws_summary.merge_cells(f'A{cal_start_row}:D{cal_start_row}')
-        for col in [1, 2, 3, 4]:
-            tcell = ws_summary.cell(row=cal_start_row, column=col)
-            tcell.border = Border(
-                left=Side(style='medium', color='4A5568'),
-                right=Side(style='medium', color='4A5568'),
-                top=Side(style='medium', color='4A5568'),
-                bottom=Side(style='medium', color='4A5568')
+        # Add Total Potential Savings (most important number)
+        if potential_savings_col:
+            savings_cell = ws_data.cell(row=totals_row, column=potential_savings_col, 
+                                      value=f"${self.summary_stats['total_potential_savings']:,.2f}")
+            savings_cell.font = Font(size=14, bold=True, color="FFFFFF")  # Larger font for emphasis
+            savings_cell.fill = PatternFill(start_color="27AE60", end_color="27AE60", fill_type="solid")
+            savings_cell.alignment = Alignment(horizontal="center", vertical="center")
+            savings_cell.number_format = '"$"#,##0.00'
+            savings_cell.border = Border(
+                left=Side(style='thick', color='27AE60'),  # Thicker border for emphasis
+                right=Side(style='thick', color='27AE60'),
+                top=Side(style='thick', color='27AE60'),
+                bottom=Side(style='thick', color='27AE60')
             )
+        
+        # Set height for totals row
+        ws_data.row_dimensions[totals_row].height = 25
 
-        # Headers for CAL
-        cal_hdr_row = cal_start_row + 1
-        left_hdr = ws_summary.cell(row=cal_hdr_row, column=1, value="SELECTED CARRIER")
-        left_hdr.font = Font(size=10, bold=True, color="FFFFFF")
-        left_hdr.fill = PatternFill(start_color="87CEEB", end_color="87CEEB", fill_type="solid")
-        left_hdr.alignment = Alignment(horizontal="center", vertical="center")
-        ws_summary.merge_cells(f'A{cal_hdr_row}:B{cal_hdr_row}')
-
-        right_hdr = ws_summary.cell(row=cal_hdr_row, column=3, value="LEAST COST CARRIER")
-        right_hdr.font = Font(size=10, bold=True, color="FFFFFF")
-        right_hdr.fill = PatternFill(start_color="FFB366", end_color="FFB366", fill_type="solid")
-        right_hdr.alignment = Alignment(horizontal="center", vertical="center")
-        ws_summary.merge_cells(f'C{cal_hdr_row}:D{cal_hdr_row}')
-
-        # CAL entries
-        selected_entries = [("SC", "Selected Carrier"),("SST", "Selected Service Type"),("STD", "Selected Transit Days"),("SFF", "Selected Fuel/Fees"),("STA", "Selected Accessorials"),("STC", "Selected Total Cost")]
-        least_cost_entries = [("LCC", "Least Cost Carrier"),("LCST", "Least Cost Service Type"),("LCTD", "Least Cost Transit Days"),("LCFF", "Least Cost Fuel/Fees"),("LCTA", "Least Cost Accessorials"),("LCTC", "Least Cost Total Cost")]
-
-        cal_row = cal_hdr_row
-        for i in range(max(len(selected_entries), len(least_cost_entries))):
-            cal_row += 1
-            if i < len(selected_entries):
-                abbr, desc = selected_entries[i]
-                a = ws_summary.cell(row=cal_row, column=1, value=abbr)
-                a.font = Font(size=9, bold=True, color="1A365D")
-                a.fill = PatternFill(start_color="E6F3FF", end_color="E6F3FF", fill_type="solid")
-                a.alignment = Alignment(horizontal="center", vertical="center")
-                b = ws_summary.cell(row=cal_row, column=2, value=desc)
-                b.font = Font(size=9, color="2D3748")
-                b.fill = PatternFill(start_color="F0F8FF", end_color="F0F8FF", fill_type="solid")
-                b.alignment = Alignment(horizontal="left", vertical="center")
-            if i < len(least_cost_entries):
-                abbr, desc = least_cost_entries[i]
-                c = ws_summary.cell(row=cal_row, column=3, value=abbr)
-                c.font = Font(size=9, bold=True, color="8B4513")
-                c.fill = PatternFill(start_color="FFF2E6", end_color="FFF2E6", fill_type="solid")
-                c.alignment = Alignment(horizontal="center", vertical="center")
-                d = ws_summary.cell(row=cal_row, column=4, value=desc)
-                d.font = Font(size=9, color="2D3748")
-                d.fill = PatternFill(start_color="FFF8F0", end_color="FFF8F0", fill_type="solid")
-                d.alignment = Alignment(horizontal="left", vertical="center")
-
-        # Compact auto-fit for Summary (incl. CAL)
-        try:
-            for col_idx in range(1, ws_summary.max_column + 1):
-                max_len = 0
-                col_letter = get_column_letter(col_idx)
-                for r in range(1, ws_summary.max_row + 1):
-                    val = ws_summary.cell(row=r, column=col_idx).value
-                    if val is not None:
-                        max_len = max(max_len, len(str(val)))
-                ws_summary.column_dimensions[col_letter].width = max(8, max_len + 1.5)  # Ensure content fits
-        except Exception:
-            pass
         
         # Auto-fit column widths on the Processed Data sheet (compact and consistent for all: table, CAL, PI)
         try:
@@ -859,23 +864,36 @@ class ModernTMSProcessor:
         except Exception:
             pass
 
-        # Add an outside border around the data table area
+        # Add thick outside borders around the entire data table
         try:
-            thin_side = Side(style='thin', color='A0AEC0')
-            outer_border = Border(top=thin_side, bottom=thin_side, left=thin_side, right=thin_side)
+            # Define thick border styles
+            thick_side = Side(style='medium', color='2C3E50')
+            
             header_row_idx = 5
             first_row = header_row_idx
             last_row = row
             first_col = 1
             last_col = len(headers)
-            # Top and bottom edges
-            for c in range(first_col, last_col + 1):
-                ws_data.cell(row=first_row, column=c).border = outer_border
-                ws_data.cell(row=last_row, column=c).border = outer_border
-            # Left and right edges
+            
+            # Apply thick borders to all edge cells
             for r in range(first_row, last_row + 1):
-                ws_data.cell(row=r, column=first_col).border = outer_border
-                ws_data.cell(row=r, column=last_col).border = outer_border
+                for c in range(first_col, last_col + 1):
+                    cell = ws_data.cell(row=r, column=c)
+                    current_border = cell.border or Border()
+                    
+                    # Determine which sides need thick borders
+                    left_side = thick_side if c == first_col else current_border.left
+                    right_side = thick_side if c == last_col else current_border.right
+                    top_side = thick_side if r == first_row else current_border.top
+                    bottom_side = thick_side if r == last_row else current_border.bottom
+                    
+                    # Apply the new border
+                    cell.border = Border(
+                        left=left_side,
+                        right=right_side,
+                        top=top_side,
+                        bottom=bottom_side
+                    )
         except Exception:
             pass
 

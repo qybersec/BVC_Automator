@@ -1,0 +1,70 @@
+{
+  "data_structure": {
+    "default_header_row": 8,
+    "default_data_start_row": 11,
+    "min_data_columns": 5,
+    "expected_columns": 21,
+    "header_indicators": [
+      "Load No.",
+      "Carrier",
+      "Service Type",
+      "Ship Date"
+    ],
+    "required_columns": [
+      "Load No.",
+      "Ship Date",
+      "Selected Carrier",
+      "Least Cost Carrier"
+    ]
+  },
+  "business_rules": {
+    "same_carrier_savings": 0.0,
+    "negative_savings_action": "copy_selected",
+    "min_non_empty_values": 5,
+    "empty_load_no_action": "remove"
+  },
+  "formatting": {
+    "currency_format": "\"$\"#,##0.00",
+    "date_format": "%m/%d/%y",
+    "decimal_places": 2,
+    "auto_fit_columns": true,
+    "max_column_width": 25,
+    "min_column_width": 6
+  },
+  "colors": {
+    "selected_carrier": {
+      "header": "87CEEB",
+      "data_even": "E6F3FF",
+      "data_odd": "F0F8FF"
+    },
+    "least_cost_carrier": {
+      "header": "FFB366",
+      "data_even": "FFF2E6",
+      "data_odd": "FFF8F0"
+    },
+    "potential_savings": {
+      "positive": "C6EFCE",
+      "negative": "FFCDD2",
+      "zero": "F8F9FA"
+    },
+    "headers": {
+      "main": "1F4E79",
+      "section": "4A90E2"
+    }
+  },
+  "performance": {
+    "chunk_size": 1000,
+    "memory_limit_mb": 512,
+    "enable_threading": true,
+    "max_threads": 4
+  },
+  "validation": {
+    "max_file_size_mb": 100,
+    "allowed_extensions": [
+      ".xlsx",
+      ".xls"
+    ],
+    "min_rows": 10,
+    "max_rows": 50000
+  }
+}

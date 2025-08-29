@@ -1,0 +1,469 @@
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: non_existent_file.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: invalid.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\invalid.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: large_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\large_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: non_existent_file.xlsx
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: invalid.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\invalid.xlsx | Size: 25.0B
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: large_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\large_tms_data.xlsx | Size: 8.9KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 54 | columns: 23 | non_empty_cells: 871
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 44 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 44 | invalid_load_numbers: 44 | Selected Transit Days_conversion_failures: 44 | Selected Freight Cost_conversion_failures: 44 | Least Cost Transit Days_conversion_failures: 44 | Least Cost Freight Cost_conversion_failures: 44 | Least Cost Accessorial Cost_conversion_failures: 11 | Least Cost Total Cost_conversion_failures: 11 | Potential Savings_conversion_failures: 11 | Ship Date_invalid_dates: 44
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for large_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 11 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 11 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 11 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 11 | empty_data_rule_applied: 11 | negative_savings_rule_applied: 11 | total_rows_affected: 33
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0qc_11so\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:51:51 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: non_existent_file.xlsx
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: invalid.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\invalid.xlsx | Size: 25.0B
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: large_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\large_tms_data.xlsx | Size: 8.9KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 54 | columns: 23 | non_empty_cells: 871
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 44 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 44 | invalid_load_numbers: 44 | Selected Transit Days_conversion_failures: 44 | Selected Freight Cost_conversion_failures: 44 | Least Cost Transit Days_conversion_failures: 44 | Least Cost Freight Cost_conversion_failures: 44 | Least Cost Accessorial Cost_conversion_failures: 11 | Least Cost Total Cost_conversion_failures: 11 | Potential Savings_conversion_failures: 11 | Ship Date_invalid_dates: 44
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for large_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 11 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 11 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 11 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 11 | empty_data_rule_applied: 11 | negative_savings_rule_applied: 11 | total_rows_affected: 33
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_0tg2h6fl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:52:09 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: Ferro_raw_08.18.xlsx
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.18 - 08.22 Reports\Ferro_raw_08.18.xlsx | Size: 8.5KB
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 31 | columns: 23 | non_empty_cells: 320
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 18 | total_columns: 23 | empty_rows: 0 | empty_columns: 3 | duplicate_rows: 0 | empty_load_numbers: 18 | invalid_load_numbers: 18 | Potential Savings_conversion_failures: 3 | Ship Date_invalid_dates: 18
+2025-08-29 13:54:49 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for Ferro_raw_08.18.xlsx
+2025-08-29 13:54:49 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 13:54:49 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Total Cost to numeric
+2025-08-29 13:54:49 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Potential Savings to numeric
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 3
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 6 rows
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:54:49 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 6 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 1 | total_rows_affected: 7
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: Ferro_raw_08.18.xlsx
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.18 - 08.22 Reports\Ferro_raw_08.18.xlsx | Size: 8.5KB
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 31 | columns: 23 | non_empty_cells: 320
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 18 | total_columns: 23 | empty_rows: 0 | empty_columns: 3 | duplicate_rows: 0 | empty_load_numbers: 18 | invalid_load_numbers: 18 | Potential Savings_conversion_failures: 3 | Ship Date_invalid_dates: 18
+2025-08-29 13:58:05 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for Ferro_raw_08.18.xlsx
+2025-08-29 13:58:05 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 13:58:05 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Total Cost to numeric
+2025-08-29 13:58:05 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Potential Savings to numeric
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 3
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 6 rows
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 13:58:05 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 6 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 1 | total_rows_affected: 7
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:03:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: non_existent_file.xlsx
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: invalid.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\invalid.xlsx | Size: 25.0B
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: large_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\large_tms_data.xlsx | Size: 8.9KB
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 54 | columns: 23 | non_empty_cells: 871
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 44 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 44 | invalid_load_numbers: 44 | Selected Transit Days_conversion_failures: 44 | Selected Freight Cost_conversion_failures: 44 | Least Cost Transit Days_conversion_failures: 44 | Least Cost Freight Cost_conversion_failures: 44 | Least Cost Accessorial Cost_conversion_failures: 11 | Least Cost Total Cost_conversion_failures: 11 | Potential Savings_conversion_failures: 11 | Ship Date_invalid_dates: 44
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for large_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 11 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 11 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 11 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 11 | empty_data_rule_applied: 11 | negative_savings_rule_applied: 11 | total_rows_affected: 33
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_rczs_pbl\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:03:18 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: FERROWORKS BVC 08.04.25 - 08.08.25.xlsx
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.04 - 08.08 Reports\FERROWORKS BVC 08.04.25 - 08.08.25.xlsx | Size: 16.0KB
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 42 | columns: 22 | non_empty_cells: 721
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 5 with 100.0% confidence
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 35 | total_columns: 22 | empty_rows: 0 | empty_columns: 1 | duplicate_rows: 0 | empty_load_numbers: 35 | invalid_load_numbers: 35 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 35
+2025-08-29 14:04:18 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 14:04:18 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for FERROWORKS BVC 08.04.25 - 08.08.25.xlsx
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: f_raw_8.4.xlsx
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.04 - 08.08 Reports\f_raw_8.4.xlsx | Size: 12.0KB
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 58 | columns: 23 | non_empty_cells: 740
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 41 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 41 | invalid_load_numbers: 41 | Potential Savings_conversion_failures: 6 | Ship Date_invalid_dates: 41
+2025-08-29 14:04:30 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for f_raw_8.4.xlsx
+2025-08-29 14:04:30 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 14:04:30 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 2 values in Least Cost Total Cost to numeric
+2025-08-29 14:04:30 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 2 values in Potential Savings to numeric
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 5
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 24 rows
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 3 rows
+2025-08-29 14:04:30 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 24 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 3 | total_rows_affected: 27
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: Ferro_raw_08.18.xlsx
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\Quincy Nguyen\Documents\Weekly Reports\August 2025\08.18 - 08.22 Reports\Ferro_raw_08.18.xlsx | Size: 8.5KB
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 31 | columns: 23 | non_empty_cells: 320
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 18 | total_columns: 23 | empty_rows: 0 | empty_columns: 3 | duplicate_rows: 0 | empty_load_numbers: 18 | invalid_load_numbers: 18 | Potential Savings_conversion_failures: 3 | Ship Date_invalid_dates: 18
+2025-08-29 14:05:17 | [33mWARNING[0m | TMS_DATA | warning:75 | VALIDATION: business_logic_requirements | FAIL | Found 0 carrier cols, 4 cost cols, savings: True
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for Ferro_raw_08.18.xlsx
+2025-08-29 14:05:17 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Accessorial Cost to numeric
+2025-08-29 14:05:17 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Least Cost Total Cost to numeric
+2025-08-29 14:05:17 | [33mWARNING[0m | TMS_DATA | warning:75 | Failed to convert 1 values in Potential Savings to numeric
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 3
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 6 rows
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:05:17 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 6 | empty_data_rule_applied: 0 | negative_savings_rule_applied: 1 | total_rows_affected: 7
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:08:36 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: non_existent_file.xlsx
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: invalid.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\invalid.xlsx | Size: 25.0B
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: large_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\large_tms_data.xlsx | Size: 8.9KB
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 54 | columns: 23 | non_empty_cells: 871
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 44 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 44 | invalid_load_numbers: 44 | Selected Transit Days_conversion_failures: 44 | Selected Freight Cost_conversion_failures: 44 | Least Cost Transit Days_conversion_failures: 44 | Least Cost Freight Cost_conversion_failures: 44 | Least Cost Accessorial Cost_conversion_failures: 11 | Least Cost Total Cost_conversion_failures: 11 | Potential Savings_conversion_failures: 11 | Ship Date_invalid_dates: 44
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for large_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 11 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 11 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 11 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 11 | empty_data_rule_applied: 11 | negative_savings_rule_applied: 11 | total_rows_affected: 33
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Starting full validation for: sample_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | FILE_VALIDATION: SUCCESS | C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_u_oddh9c\sample_tms_data.xlsx | Size: 6.1KB
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | EXCEL_STRUCTURE: rows: 14 | columns: 23 | non_empty_cells: 101
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: header_detection | PASS | Headers found at row 8 with 100.0% confidence
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | DATA_QUALITY: total_rows: 4 | total_columns: 23 | empty_rows: 0 | empty_columns: 2 | duplicate_rows: 0 | empty_load_numbers: 4 | invalid_load_numbers: 4 | Selected Transit Days_conversion_failures: 4 | Selected Freight Cost_conversion_failures: 4 | Least Cost Transit Days_conversion_failures: 4 | Least Cost Freight Cost_conversion_failures: 4 | Least Cost Accessorial Cost_conversion_failures: 1 | Least Cost Total Cost_conversion_failures: 1 | Potential Savings_conversion_failures: 1 | Ship Date_invalid_dates: 4
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | VALIDATION: business_logic_requirements | PASS | Found 2 carrier cols, 9 cost cols, savings: True
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Full validation PASSED for sample_tms_data.xlsx
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | TYPE_CLEANING: columns_processed: 21 | conversion_failures: 0
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied same carrier rule to 1 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied empty data rule to 1 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | Applied negative savings rule to 1 rows
+2025-08-29 14:08:37 | [32mINFO[0m | TMS_DATA | info:71 | BUSINESS_LOGIC: same_carrier_rule_applied: 1 | empty_data_rule_applied: 1 | negative_savings_rule_applied: 1 | total_rows_affected: 3

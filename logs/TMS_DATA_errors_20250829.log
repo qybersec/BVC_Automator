@@ -1,0 +1,118 @@
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\invalid.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\large_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:82 | File validation failed | file_path: C:\Users\QUINCY~1\AppData\Local\Temp\tms_test_ndyop8jm\sample_tms_data.xlsx | Exception: 'WindowsPath' object has no attribute 'readable'
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 46, in validate_file_path
+    if not path.readable():
+           ^^^^^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:26 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File validation error: 'WindowsPath' object has no attribute 'readable'
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:51:51 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 13:52:09 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:03:18 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:84 | File validation failed: File does not exist: non_existent_file.xlsx
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:82 | Excel structure validation failed | Exception: Excel file format cannot be determined, you must specify an engine manually.
+Traceback (most recent call last):
+  File "C:\Users\Quincy Nguyen\Desktop\Automation Projects\BVC_Automator\validators.py", line 63, in validate_excel_structure
+    df_raw = pd.read_excel(file_path, sheet_name=0, header=None)
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 495, in read_excel
+    io = ExcelFile(
+        io,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File "C:\Users\Quincy Nguyen\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\io\excel\_base.py", line 1554, in __init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+2025-08-29 14:08:37 | [31mERROR[0m | TMS_DATA | error:84 | Excel validation failed: Excel validation error: Excel file format cannot be determined, you must specify an engine manually.
