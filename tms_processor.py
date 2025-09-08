@@ -988,10 +988,10 @@ class ModernTMSProcessorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("TMS Data Processor Pro")
-        self.root.geometry("1000x600")
+        self.root.geometry("900x450")
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(900, 500)
-        self.root.resizable(True, False)
+        self.root.minsize(800, 400)
+        self.root.resizable(True, True)
         
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
@@ -1088,7 +1088,7 @@ class ModernTMSProcessorGUI:
                        borderwidth=0,
                        relief='flat',
                        focuscolor='none',
-                       padding=(30, 20))
+                       padding=(25, 15))
         style.map('ReportCardActive.TButton',
                  background=[('active', UI_COLORS['PRIMARY_BLUE_HOVER']), ('pressed', UI_COLORS['PRIMARY_BLUE_PRESSED'])])
         
@@ -1099,7 +1099,7 @@ class ModernTMSProcessorGUI:
                        borderwidth=1,
                        relief='solid',
                        focuscolor='none',
-                       padding=(30, 20))
+                       padding=(25, 15))
         style.map('ReportCardDisabled.TButton',
                  background=[('active', '#f1f3f4'), ('pressed', '#e8eaed')])
         
@@ -1113,23 +1113,23 @@ class ModernTMSProcessorGUI:
     
     def create_card_buttons(self, parent):
         """Create modern card-style buttons"""
-        # Create button frame with proper spacing
+        # Create button frame with compact spacing
         button_frame = tk.Frame(parent, bg='#f8f9fa')
-        button_frame.grid(row=0, column=0, pady=10)
+        button_frame.grid(row=0, column=0, pady=5)
         
         # Basic Report Button
         self.basic_button = ttk.Button(button_frame, 
                                      text="📊\nBasic Report",
                                      style='ReportCardActive.TButton',
                                      command=lambda: self.select_card('basic'))
-        self.basic_button.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
+        self.basic_button.grid(row=0, column=0, padx=15, pady=5, sticky="nsew")
         
         # Detailed Report Button
         self.detailed_button = ttk.Button(button_frame,
                                         text="📈\nDetailed Report", 
                                         style='ReportCardDisabled.TButton',
                                         command=lambda: self.select_card('detailed'))
-        self.detailed_button.grid(row=0, column=1, padx=20, pady=10, sticky="nsew")
+        self.detailed_button.grid(row=0, column=1, padx=15, pady=5, sticky="nsew")
         
         # Make columns equal width
         button_frame.grid_columnconfigure(0, weight=1, uniform="card")
@@ -1162,60 +1162,70 @@ class ModernTMSProcessorGUI:
 
     def create_widgets(self):
         """Create the main GUI widgets"""
-        # Main container with modern styling
-        main_frame = ttk.Frame(self.root, padding="25", style='Card.TFrame')
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=15, pady=15)
+        # Main container with compact styling
+        main_frame = ttk.Frame(self.root, padding="15", style='Card.TFrame')
+        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
         
         # Configure grid weights
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
         main_frame.columnconfigure(1, weight=1)
         
-        # Header section with gradient-like background
+        # Header section
         header_frame = tk.Frame(main_frame, bg='#ffffff', relief='flat')
-        header_frame.grid(row=0, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 20))
+        header_frame.grid(row=0, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10))
         header_frame.columnconfigure(0, weight=1)
         
         # Title with modern styling
         title_label = ttk.Label(header_frame, text="🚛 TMS Data Processor Pro", style='Title.TLabel')
-        title_label.grid(row=0, column=0, pady=(15, 20))
+        title_label.grid(row=0, column=0, pady=(5, 10))
         
-        # Report Type Selection with clean design
+        # Report Type Selection - compact
         report_section = tk.Frame(main_frame, bg='#f8f9fa')
-        report_section.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 25), padx=10)
+        report_section.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
         report_section.columnconfigure(0, weight=1)
         
         # Section header
-        ttk.Label(report_section, text="📋 Report Type", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(15, 10))
+        ttk.Label(report_section, text="📋 Report Type", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
         
         self.report_type = tk.StringVar(value="basic")
         report_frame = tk.Frame(report_section, bg='#f8f9fa')
-        report_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 15), padx=20)
+        report_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
         report_frame.grid_columnconfigure(0, weight=1)
         
         # Professional card-style selection
         self.create_card_buttons(report_frame)
         
-        # File Selection with clean design
+        # File Selection - compact
         file_section = tk.Frame(main_frame, bg='#f8f9fa')
-        file_section.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 25), padx=10)
+        file_section.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
         file_section.columnconfigure(0, weight=1)
         
         # Section header
-        ttk.Label(file_section, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(15, 10))
+        ttk.Label(file_section, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
         
         file_frame = tk.Frame(file_section, bg='#f8f9fa')
-        file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 15), padx=20)
+        file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
         file_frame.columnconfigure(0, weight=1)
         
-        # File display with clean styling and drag-drop support
-        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=1)
-        file_display_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=(0, 15))
-        file_display_frame.columnconfigure(0, weight=1)
+        # File display with clean styling and drag-drop support - fixed width
+        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=1, width=500)
+        file_display_frame.grid(row=0, column=0, padx=(0, 15), sticky=tk.W)
+        file_display_frame.grid_propagate(False)  # Prevent frame from shrinking
         
-        self.file_label = ttk.Label(file_display_frame, text="No file selected (or drag & drop Excel file here)", 
-                                   style='Info.TLabel', background='#ffffff')
-        self.file_label.grid(row=0, column=0, sticky=tk.W, padx=15, pady=15)
+        # Use high contrast text for visibility
+        self.file_label = tk.Label(file_display_frame, 
+                                  text="No file selected",
+                                  font=('Segoe UI', 12, 'bold'),
+                                  fg='#000000',  # Pure black for maximum contrast
+                                  bg='#ffffff',
+                                  anchor='w',
+                                  justify='left')
+        self.file_label.pack(fill='both', expand=True, padx=15, pady=12)
+        file_display_frame.grid_columnconfigure(0, weight=1)
+        
+        # Store reference to file display frame for updates
+        self.file_display_frame = file_display_frame
         
         # Enable drag and drop
         self.setup_drag_drop(file_display_frame)
@@ -1226,31 +1236,11 @@ class ModernTMSProcessorGUI:
         
         # Process Button with enhanced styling
         button_frame = tk.Frame(main_frame, bg='#ffffff')
-        button_frame.grid(row=3, column=0, columnspan=3, pady=20)
+        button_frame.grid(row=3, column=0, columnspan=3, pady=10)
         
         self.process_button = ttk.Button(button_frame, text="🚀 Process File", 
                                        command=self.process_file, style='Success.TButton', state="disabled")
-        self.process_button.grid(row=0, column=0, pady=(0, 10))
-        
-        # Progress bar (initially hidden)
-        self.progress_frame = tk.Frame(button_frame, bg='#ffffff')
-        self.progress_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(10, 0))
-        self.progress_frame.columnconfigure(0, weight=1)
-        
-        self.progress_var = tk.DoubleVar()
-        self.progress_bar = ttk.Progressbar(self.progress_frame, 
-                                          variable=self.progress_var, 
-                                          maximum=100, 
-                                          mode='indeterminate',
-                                          length=300)
-        self.progress_bar.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=50)
-        
-        self.progress_label = ttk.Label(self.progress_frame, text="", 
-                                      style='Info.TLabel', background='#ffffff')
-        self.progress_label.grid(row=1, column=0, pady=(5, 0))
-        
-        # Initially hide progress
-        self.progress_frame.grid_remove()
+        self.process_button.grid(row=0, column=0)
         
     def setup_drag_drop(self, widget):
         """Setup drag and drop functionality for file selection"""
@@ -1270,7 +1260,11 @@ class ModernTMSProcessorGUI:
                     if file_path.lower().endswith(('.xlsx', '.xls')):
                         self.input_file = file_path
                         filename = os.path.basename(file_path)
-                        self.file_label.config(text=f"✅ {filename}", foreground='#38a169', background='#ffffff')
+                        print(f"DEBUG: Drag-dropped file: {filename}")  # Debug print
+                        
+                        # Update filename display with teal color
+                        self.file_label.config(text=f"✅ {filename}", fg='#0d9488')
+                        self.file_label.update()
                         self.update_process_button_state()
                     else:
                         messagebox.showwarning("Invalid File", "Please select an Excel file (.xlsx or .xls)")
@@ -1303,7 +1297,13 @@ class ModernTMSProcessorGUI:
         if file_path:
             self.input_file = file_path
             filename = os.path.basename(file_path)
-            self.file_label.config(text=f"✅ {filename}", foreground='#38a169', background='#ffffff')
+            print(f"DEBUG: Selected file: {filename}")  # Debug print
+            
+            # Update filename display with teal color
+            self.file_label.config(text=f"✅ {filename}", fg='#0d9488')
+            self.file_label.update()
+            
+            print(f"DEBUG: Label text updated to: {filename}")  # Debug print
             self.update_process_button_state()
     
     def update_process_button_state(self):
@@ -1324,29 +1324,11 @@ class ModernTMSProcessorGUI:
         
         # Update UI for processing state
         self.process_button.config(state="disabled", text="⏳ Processing...")
-        self.show_progress("Starting file processing...")
         
         # Start processing in separate thread
         thread = threading.Thread(target=self._process_file_thread)
         thread.daemon = True
         thread.start()
-        
-    def show_progress(self, message="Processing..."):
-        """Show progress bar with message"""
-        self.progress_frame.grid()
-        self.progress_bar.start(10)  # Start animation
-        self.progress_label.config(text=message)
-        self.root.update_idletasks()
-        
-    def hide_progress(self):
-        """Hide progress bar"""
-        self.progress_bar.stop()
-        self.progress_frame.grid_remove()
-        self.root.update_idletasks()
-        
-    def update_progress_threadsafe(self, message):
-        """Thread-safe progress update helper"""
-        self.root.after(0, lambda: self.show_progress(message))
         
     def _process_file_thread(self):
         """Process file in background thread"""
@@ -1361,9 +1343,6 @@ class ModernTMSProcessorGUI:
             if not output_file:
                 self.root.after(0, self._reset_ui)
                 return
-            
-            # Update progress
-            self.update_progress_threadsafe("Loading processor...")
             
             # Select processor based on report type
             if self.report_type.get() == "basic":
@@ -1381,14 +1360,8 @@ class ModernTMSProcessorGUI:
                         return
                 processor = self.detailed_processor
             
-            # Update progress
-            self.update_progress_threadsafe("Reading and processing data...")
-            
             # Process the data
             processed_data = processor.clean_and_process_data(self.input_file)
-            
-            # Update progress
-            self.update_progress_threadsafe("Saving processed data...")
             
             # Save the processed data
             processor.save_processed_data(output_file)
@@ -1396,17 +1369,11 @@ class ModernTMSProcessorGUI:
             # Get summary statistics
             stats = processor.summary_stats
             
-            # Update progress
-            self.update_progress_threadsafe("Processing complete!")
-            time.sleep(0.5)  # Brief pause to show completion
-            
             # Show success message
             self.root.after(0, lambda: messagebox.showinfo("Success", 
                 f"🎉 File processed successfully!\n\n"
                 f"📊 Processed: {stats['total_loads']} loads\n"
-                f"💵 Potential Savings: ${stats['total_potential_savings']:,.2f}\n"
-                f"📈 Savings Rate: {stats['percentage_savings']:.2f}%\n"
-                f"🎯 Optimizable Loads: {stats['loads_with_savings']}\n\n"
+                f"💵 Potential Savings: ${stats['total_potential_savings']:,.2f}\n\n"
                 f"📁 File saved to:\n{output_file}"))
             
         except Exception as e:
@@ -1420,7 +1387,6 @@ class ModernTMSProcessorGUI:
         """Reset UI to normal state"""
         self.is_processing = False
         self.process_button.config(state="normal", text="🚀 Process File")
-        self.hide_progress()
         self.update_process_button_state()
 
 def main():
