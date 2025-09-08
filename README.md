@@ -90,6 +90,7 @@ BVC_Automator/
 - **Same Carrier Rule**: Sets savings to 0 when selected = least cost
 - **Empty Data Handling**: Copies selected data to least cost when missing
 - **Negative Savings**: Corrects negative values to 0
+- **DDI/Carrier Matching**: When Selected Carrier contains "Company/Carrier Name" and the carrier after "/" matches Least Cost Carrier, copies selected data and zeros out savings
 
 ### 3. **Formatting & Output**
 - Creates professional Excel workbook with multiple sheets

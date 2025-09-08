@@ -1,4 +1,0 @@
-2025-08-29 13:51:26 | [35mCRITICAL[0m | UNCAUGHT | critical:91 | Uncaught exception | Exception: 'charmap' codec can't encode character '\u274c' in position 2: character maps to <undefined>
-NoneType: None
-2025-08-29 13:57:11 | [35mCRITICAL[0m | UNCAUGHT | critical:91 | Uncaught exception | Exception: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
-NoneType: None

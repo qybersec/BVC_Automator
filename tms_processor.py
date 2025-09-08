@@ -388,6 +388,7 @@ class ModernTMSProcessor:
             'same_carrier_rule_applied': 0,
             'empty_data_rule_applied': 0,
             'negative_savings_rule_applied': 0,
+            'ddi_carrier_rule_applied': 0,
             'total_rows_affected': 0
         }
         
@@ -472,12 +473,66 @@ class ModernTMSProcessor:
                     self.data_logger.info(f"Applied negative savings rule to {negative_count} rows")
             else:
                 self.data_logger.warning("Cannot apply negative savings rule - Potential Savings column missing")
+
+            # Rule 4: DDI/Carrier Matching - New custom rule
+            if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
+                # Create mask for rows where Selected Carrier contains "DDI/" or similar patterns
+                # and the part after "/" matches Least Cost Carrier
+                ddi_matches = []
+                
+                for idx, row in df.iterrows():
+                    selected = str(row['Selected Carrier']).strip()
+                    least_cost = str(row['Least Cost Carrier']).strip()
+                    
+                    # Skip empty or nan values
+                    if selected in ['', 'nan', 'None'] or least_cost in ['', 'nan', 'None']:
+                        continue
+                    
+                    # Check if selected carrier has "/" and extract the part after it
+                    if '/' in selected:
+                        # Split on "/" and get the part after the last "/"
+                        carrier_after_slash = selected.split('/')[-1].strip()
+                        
+                        # Check if the carrier after "/" matches the least cost carrier
+                        # Using case-insensitive comparison and handling common variations
+                        if carrier_after_slash.upper() == least_cost.upper():
+                            ddi_matches.append(idx)
+                        # Also check for R&L Carriers vs R%L Carriers variations
+                        elif (carrier_after_slash.upper().replace('&', '%') == least_cost.upper().replace('&', '%') or
+                              carrier_after_slash.upper().replace('%', '&') == least_cost.upper().replace('%', '&')):
+                            ddi_matches.append(idx)
+                
+                ddi_match_count = len(ddi_matches)
+                business_stats['ddi_carrier_rule_applied'] = ddi_match_count
+                
+                if ddi_match_count > 0:
+                    ddi_mask = df.index.isin(ddi_matches)
+                    
+                    # Copy selected carrier data to least cost columns
+                    column_pairs = [
+                        ('Selected Carrier', 'Least Cost Carrier'), 
+                        ('Selected Service Type', 'Least Cost Service Type'), 
+                        ('Selected Transit Days', 'Least Cost Transit Days'),
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'), 
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), 
+                        ('Selected Total Cost', 'Least Cost Total Cost')
+                    ]
+                    self._copy_selected_to_least_cost(df, ddi_mask, column_pairs)
+                    
+                    # Set Potential Savings to 0
+                    if 'Potential Savings' in df.columns:
+                        df.loc[ddi_mask, 'Potential Savings'] = 0
+                    
+                    self.data_logger.info(f"Applied DDI/carrier matching rule to {ddi_match_count} rows")
+            else:
+                self.data_logger.warning("Cannot apply DDI/carrier matching rule - required columns missing")
                 
             # Calculate total affected rows
             business_stats['total_rows_affected'] = (
                 business_stats['same_carrier_rule_applied'] + 
                 business_stats['empty_data_rule_applied'] + 
-                business_stats['negative_savings_rule_applied']
+                business_stats['negative_savings_rule_applied'] +
+                business_stats['ddi_carrier_rule_applied']
             )
             
             self.data_logger.log_data_stats(business_stats, "BUSINESS_LOGIC")
