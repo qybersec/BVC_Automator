@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -11,7 +10,37 @@ import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
-from typing import Dict, List, Optional, Tuple, Any
+
+# UI Color constants for consistent theming
+UI_COLORS = {
+    # Primary colors
+    'PRIMARY_BLUE': '#4299e1',
+    'PRIMARY_BLUE_HOVER': '#3182ce',
+    'PRIMARY_BLUE_PRESSED': '#2c5aa0',
+    
+    # Background colors
+    'BACKGROUND_WHITE': '#ffffff',
+    'BACKGROUND_GRAY': '#f8f9fa',
+    'BACKGROUND_LIGHT': '#f7fafc',
+    
+    # Text colors
+    'TEXT_PRIMARY': '#2d3748',
+    'TEXT_SECONDARY': '#4a5568',
+    'TEXT_MUTED': '#718096',
+    'TEXT_DISABLED': '#a0aec0',
+    
+    # Status colors
+    'SUCCESS_GREEN': '#38a169',
+    'SUCCESS_LIGHT': '#48bb78',
+    'WARNING_ORANGE': '#ff8c42',
+    'WARNING_LIGHT': '#ffb366',
+    'ERROR_RED': '#e53e3e',
+    
+    # Interaction colors
+    'HOVER_LIGHT': '#e6fffa',
+    'BORDER_LIGHT': '#d0d0d0',
+    'ACCENT_PURPLE': '#667eea'
+}
 
 # Import our new modules
 try:
@@ -987,52 +1016,52 @@ class ModernTMSProcessorGUI:
         style = ttk.Style()
         style.theme_use('clam')
         
-        # Configure colors with modern palette
+        # Configure colors with modern palette using constants
         style.configure('Title.TLabel', 
                        font=('Segoe UI', 28, 'bold'), 
                        foreground='#1a365d',
-                       background='#f8f9fa')
+                       background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Subtitle.TLabel', 
                        font=('Segoe UI', 12), 
-                       foreground='#4a5568',
-                       background='#f8f9fa')
+                       foreground=UI_COLORS['TEXT_SECONDARY'],
+                       background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Header.TLabel', 
                        font=('Segoe UI', 13, 'bold'), 
-                       foreground='#2d3748',
-                       background='#f8f9fa')
+                       foreground=UI_COLORS['TEXT_PRIMARY'],
+                       background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Info.TLabel', 
                        font=('Segoe UI', 10), 
-                       foreground='#718096',
-                       background='#f8f9fa')
+                       foreground=UI_COLORS['TEXT_MUTED'],
+                       background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Success.TLabel', 
                        font=('Segoe UI', 10, 'bold'), 
-                       foreground='#38a169',
-                       background='#f8f9fa')
+                       foreground=UI_COLORS['SUCCESS_GREEN'],
+                       background=UI_COLORS['BACKGROUND_GRAY'])
         
-        # Configure modern buttons with hover effects
+        # Configure modern buttons with hover effects using constants
         style.configure('Primary.TButton', 
                        font=('Segoe UI', 11, 'bold'),
-                       background='#4299e1',
+                       background=UI_COLORS['PRIMARY_BLUE'],
                        foreground='white',
                        borderwidth=0,
                        focuscolor='none',
                        padding=(20, 10))
         style.map('Primary.TButton',
-                 background=[('active', '#3182ce'), ('pressed', '#2c5aa0')])
+                 background=[('active', UI_COLORS['PRIMARY_BLUE_HOVER']), ('pressed', UI_COLORS['PRIMARY_BLUE_PRESSED'])])
         
         style.configure('Success.TButton',
                        font=('Segoe UI', 12, 'bold'),
-                       background='#48bb78',
+                       background=UI_COLORS['SUCCESS_LIGHT'],
                        foreground='white',
                        borderwidth=0,
                        focuscolor='none',
                        padding=(25, 12))
         style.map('Success.TButton',
-                 background=[('active', '#38a169'), ('pressed', '#2f855a')])
+                 background=[('active', UI_COLORS['SUCCESS_GREEN']), ('pressed', '#2f855a')])
         
         style.configure('Browse.TButton',
                        font=('Segoe UI', 10),
-                       background='#667eea',
+                       background=UI_COLORS['ACCENT_PURPLE'],
                        foreground='white',
                        borderwidth=0,
                        focuscolor='none',
@@ -1040,35 +1069,35 @@ class ModernTMSProcessorGUI:
         style.map('Browse.TButton',
                  background=[('active', '#5a67d8'), ('pressed', '#4c51bf')])
         
-        # Configure modern report type buttons
+        # Configure modern report type buttons using constants
         style.configure('ReportCard.TButton',
                        font=('Segoe UI', 13, 'bold'),
-                       background='#ffffff',
-                       foreground='#4a5568',
+                       background=UI_COLORS['BACKGROUND_WHITE'],
+                       foreground=UI_COLORS['TEXT_SECONDARY'],
                        borderwidth=0,
                        relief='flat',
                        focuscolor='none',
                        padding=(30, 20))
         style.map('ReportCard.TButton',
-                 background=[('active', '#f7fafc'), ('pressed', '#edf2f7')])
+                 background=[('active', UI_COLORS['BACKGROUND_LIGHT']), ('pressed', '#edf2f7')])
         
         style.configure('ReportCardActive.TButton',
                        font=('Segoe UI', 13, 'bold'),
-                       background='#4299e1',
+                       background=UI_COLORS['PRIMARY_BLUE'],
                        foreground='white',
                        borderwidth=0,
                        relief='flat',
                        focuscolor='none',
                        padding=(30, 20))
         style.map('ReportCardActive.TButton',
-                 background=[('active', '#3182ce'), ('pressed', '#2c5aa0')])
+                 background=[('active', UI_COLORS['PRIMARY_BLUE_HOVER']), ('pressed', UI_COLORS['PRIMARY_BLUE_PRESSED'])])
         
         style.configure('ReportCardDisabled.TButton',
                        font=('Segoe UI', 13, 'bold'),
-                       background='#f8f9fa',
-                       foreground='#a0aec0',
-                       borderwidth=0,
-                       relief='flat',
+                       background=UI_COLORS['BACKGROUND_WHITE'],
+                       foreground=UI_COLORS['TEXT_DISABLED'],
+                       borderwidth=1,
+                       relief='solid',
                        focuscolor='none',
                        padding=(30, 20))
         style.map('ReportCardDisabled.TButton',
@@ -1315,6 +1344,10 @@ class ModernTMSProcessorGUI:
         self.progress_frame.grid_remove()
         self.root.update_idletasks()
         
+    def update_progress_threadsafe(self, message):
+        """Thread-safe progress update helper"""
+        self.root.after(0, lambda: self.show_progress(message))
+        
     def _process_file_thread(self):
         """Process file in background thread"""
         try:
@@ -1330,7 +1363,7 @@ class ModernTMSProcessorGUI:
                 return
             
             # Update progress
-            self.root.after(0, lambda: self.show_progress("Loading processor..."))
+            self.update_progress_threadsafe("Loading processor...")
             
             # Select processor based on report type
             if self.report_type.get() == "basic":
@@ -1349,13 +1382,13 @@ class ModernTMSProcessorGUI:
                 processor = self.detailed_processor
             
             # Update progress
-            self.root.after(0, lambda: self.show_progress("Reading and processing data..."))
+            self.update_progress_threadsafe("Reading and processing data...")
             
             # Process the data
             processed_data = processor.clean_and_process_data(self.input_file)
             
             # Update progress
-            self.root.after(0, lambda: self.show_progress("Saving processed data..."))
+            self.update_progress_threadsafe("Saving processed data...")
             
             # Save the processed data
             processor.save_processed_data(output_file)
@@ -1364,7 +1397,7 @@ class ModernTMSProcessorGUI:
             stats = processor.summary_stats
             
             # Update progress
-            self.root.after(0, lambda: self.show_progress("Processing complete!"))
+            self.update_progress_threadsafe("Processing complete!")
             time.sleep(0.5)  # Brief pause to show completion
             
             # Show success message
