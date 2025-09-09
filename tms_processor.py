@@ -988,15 +988,15 @@ class ModernTMSProcessorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("TMS Data Processor Pro")
-        self.root.geometry("900x450")
+        self.root.geometry("1000x550")
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(800, 400)
+        self.root.minsize(900, 500)
         self.root.resizable(True, True)
         
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
         self.detailed_processor = None
-        self.input_file = None
+        self.input_files = []  # Changed to list for multiple files
         self.output_file = None
         
         # Progress tracking
@@ -1058,6 +1058,30 @@ class ModernTMSProcessorGUI:
                        padding=(25, 12))
         style.map('Success.TButton',
                  background=[('active', UI_COLORS['SUCCESS_GREEN']), ('pressed', '#2f855a')])
+        
+        # Enhanced Process Button Style
+        style.configure('ProcessButton.TButton',
+                       font=('Segoe UI', 14, 'bold'),
+                       background='#28a745',
+                       foreground='white',
+                       borderwidth=0,
+                       focuscolor='none',
+                       relief='flat',
+                       padding=(35, 15))
+        style.map('ProcessButton.TButton',
+                 background=[('active', '#218838'), 
+                           ('pressed', '#1e7e34'),
+                           ('disabled', '#6c757d')])
+        
+        # Process Button Disabled Style
+        style.configure('ProcessButtonDisabled.TButton',
+                       font=('Segoe UI', 14, 'bold'),
+                       background='#6c757d',
+                       foreground='#ffffff',
+                       borderwidth=0,
+                       focuscolor='none',
+                       relief='flat',
+                       padding=(35, 15))
         
         style.configure('Browse.TButton',
                        font=('Segoe UI', 10),
@@ -1208,20 +1232,29 @@ class ModernTMSProcessorGUI:
         file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
         file_frame.columnconfigure(0, weight=1)
         
-        # File display with clean styling and drag-drop support - fixed width
-        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=1, width=500)
-        file_display_frame.grid(row=0, column=0, padx=(0, 15), sticky=tk.W)
-        file_display_frame.grid_propagate(False)  # Prevent frame from shrinking
+        # File display with clean styling and drag-drop support - expandable width
+        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=1)
+        file_display_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
         
-        # Use high contrast text for visibility
-        self.file_label = tk.Label(file_display_frame, 
-                                  text="No file selected",
-                                  font=('Segoe UI', 12, 'bold'),
-                                  fg='#000000',  # Pure black for maximum contrast
-                                  bg='#ffffff',
-                                  anchor='w',
-                                  justify='left')
-        self.file_label.pack(fill='both', expand=True, padx=15, pady=12)
+        # Create scrollable text widget for multiple file names
+        import tkinter.scrolledtext as scrolledtext
+        self.file_display = scrolledtext.ScrolledText(file_display_frame,
+                                                     height=6,
+                                                     width=70,
+                                                     font=('Segoe UI', 10),
+                                                     fg='#000000',
+                                                     bg='#ffffff',
+                                                     wrap=tk.WORD,
+                                                     state='disabled',
+                                                     borderwidth=0,
+                                                     highlightthickness=0)
+        self.file_display.pack(fill='both', expand=True, padx=10, pady=8)
+        
+        # Initialize with placeholder text
+        self.file_display.config(state='normal')
+        self.file_display.insert('1.0', "No files selected")
+        self.file_display.config(state='disabled', fg='#6c757d')
+        
         file_display_frame.grid_columnconfigure(0, weight=1)
         
         # Store reference to file display frame for updates
@@ -1238,8 +1271,8 @@ class ModernTMSProcessorGUI:
         button_frame = tk.Frame(main_frame, bg='#ffffff')
         button_frame.grid(row=3, column=0, columnspan=3, pady=10)
         
-        self.process_button = ttk.Button(button_frame, text="🚀 Process File", 
-                                       command=self.process_file, style='Success.TButton', state="disabled")
+        self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE", 
+                                       command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
         
     def setup_drag_drop(self, widget):
@@ -1256,18 +1289,15 @@ class ModernTMSProcessorGUI:
             if hasattr(event, 'data'):
                 files = event.data.split()
                 if files:
-                    file_path = files[0].strip('{}')
-                    if file_path.lower().endswith(('.xlsx', '.xls')):
-                        self.input_file = file_path
-                        filename = os.path.basename(file_path)
-                        print(f"DEBUG: Drag-dropped file: {filename}")  # Debug print
-                        
-                        # Update filename display with teal color
-                        self.file_label.config(text=f"✅ {filename}", fg='#0d9488')
-                        self.file_label.update()
+                    # Filter for valid Excel files
+                    excel_files = [f.strip('{}') for f in files if f.strip('{}').lower().endswith(('.xlsx', '.xls'))]
+                    
+                    if excel_files:
+                        self.input_files = excel_files
+                        self.update_file_display()
                         self.update_process_button_state()
                     else:
-                        messagebox.showwarning("Invalid File", "Please select an Excel file (.xlsx or .xls)")
+                        messagebox.showwarning("Invalid Files", "Please select Excel files (.xlsx or .xls)")
         
         try:
             # Try to set up tkinter DND if available
@@ -1289,41 +1319,69 @@ class ModernTMSProcessorGUI:
         self.root.geometry(f'{width}x{height}+{x}+{y}')
         
     def browse_file(self):
-        """Browse for input file"""
-        file_path = filedialog.askopenfilename(
-            title="Select TMS Excel File",
+        """Browse for multiple input files"""
+        file_paths = filedialog.askopenfilenames(
+            title="Select TMS Excel Files (Multiple Selection Allowed)",
             filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")]
         )
-        if file_path:
-            self.input_file = file_path
-            filename = os.path.basename(file_path)
-            print(f"DEBUG: Selected file: {filename}")  # Debug print
-            
-            # Update filename display with teal color
-            self.file_label.config(text=f"✅ {filename}", fg='#0d9488')
-            self.file_label.update()
-            
-            print(f"DEBUG: Label text updated to: {filename}")  # Debug print
+        if file_paths:
+            self.input_files = list(file_paths)
+            self.update_file_display()
             self.update_process_button_state()
     
-    def update_process_button_state(self):
-        """Enable process button if input file is selected"""
-        if self.input_file:
-            self.process_button.config(state="normal")
+    def update_file_display(self):
+        """Update the file display to show all selected filenames"""
+        self.file_display.config(state='normal')
+        self.file_display.delete('1.0', tk.END)
+        
+        if self.input_files:
+            file_count = len(self.input_files)
+            
+            if file_count == 1:
+                # Single file - show filename with checkmark
+                filename = os.path.basename(self.input_files[0])
+                display_text = f"✅ Selected: {filename}"
+                self.file_display.insert('1.0', display_text)
+                self.file_display.config(fg='#0d9488')
+            else:
+                # Multiple files - show count and list all filenames
+                header = f"✅ {file_count} files selected:\n\n"
+                self.file_display.insert('1.0', header)
+                
+                # Add each filename on a new line
+                for i, file_path in enumerate(self.input_files, 1):
+                    filename = os.path.basename(file_path)
+                    file_line = f"{i}. {filename}\n"
+                    self.file_display.insert(tk.END, file_line)
+                
+                self.file_display.config(fg='#0d9488')
         else:
-            self.process_button.config(state="disabled")
+            self.file_display.insert('1.0', "No files selected")
+            self.file_display.config(fg='#6c757d')
+        
+        self.file_display.config(state='disabled')
+    
+    def update_process_button_state(self):
+        """Enable process button if input files are selected"""
+        if self.input_files:
+            file_count = len(self.input_files)
+            button_text = f"🚀 PROCESS {file_count} FILE{'S' if file_count > 1 else ''}"
+            self.process_button.config(state="normal", text=button_text)
+        else:
+            self.process_button.config(state="disabled", text="🚀 PROCESS FILE")
     
     
     def process_file(self):
-        """Process the selected file in a separate thread"""
-        if not self.input_file or self.is_processing:
+        """Process the selected files in a separate thread"""
+        if not self.input_files or self.is_processing:
             return
             
         # Set processing state
         self.is_processing = True
         
         # Update UI for processing state
-        self.process_button.config(state="disabled", text="⏳ Processing...")
+        file_count = len(self.input_files)
+        self.process_button.config(state="disabled", text=f"⏳ PROCESSING {file_count} FILE{'S' if file_count > 1 else ''}...")
         
         # Start processing in separate thread
         thread = threading.Thread(target=self._process_file_thread)
@@ -1331,18 +1389,38 @@ class ModernTMSProcessorGUI:
         thread.start()
         
     def _process_file_thread(self):
-        """Process file in background thread"""
+        """Process files in background thread"""
         try:
-            # Ask user where to save the file
-            output_file = filedialog.asksaveasfilename(
-                title="Save Processed File As",
-                defaultextension=".xlsx",
-                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
-            )
-            
-            if not output_file:
-                self.root.after(0, self._reset_ui)
-                return
+            # Handle single vs multiple file processing differently
+            if len(self.input_files) == 1:
+                # Single file - ask for specific output file location
+                input_name = os.path.splitext(os.path.basename(self.input_files[0]))[0]
+                report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                default_name = f"{input_name}_processed_{report_type}.xlsx"
+                
+                output_file = filedialog.asksaveasfilename(
+                    title="Save Processed File As",
+                    defaultextension=".xlsx",
+                    initialfile=default_name,
+                    filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
+                )
+                
+                if not output_file:
+                    self.root.after(0, self._reset_ui)
+                    return
+                
+                output_folder = None  # Not used for single file
+            else:
+                # Multiple files - ask for folder selection
+                output_folder = filedialog.askdirectory(
+                    title="Select Folder to Save Processed Files"
+                )
+                
+                if not output_folder:
+                    self.root.after(0, self._reset_ui)
+                    return
+                
+                output_file = None  # Will be generated per file
             
             # Select processor based on report type
             if self.report_type.get() == "basic":
@@ -1360,21 +1438,93 @@ class ModernTMSProcessorGUI:
                         return
                 processor = self.detailed_processor
             
-            # Process the data
-            processed_data = processor.clean_and_process_data(self.input_file)
+            # Process files
+            processed_count = 0
+            total_files = len(self.input_files)
+            all_stats = []
+            processed_files = []
             
-            # Save the processed data
-            processor.save_processed_data(output_file)
-            
-            # Get summary statistics
-            stats = processor.summary_stats
+            if len(self.input_files) == 1:
+                # Single file processing
+                try:
+                    # Update button text
+                    self.root.after(0, lambda: self.process_button.config(
+                        text="⏳ PROCESSING FILE..."
+                    ))
+                    
+                    # Process the data
+                    processed_data = processor.clean_and_process_data(self.input_files[0])
+                    
+                    # Save the processed data (output_file already determined above)
+                    processor.save_processed_data(output_file)
+                    
+                    # Collect stats
+                    stats = processor.summary_stats.copy()
+                    stats['filename'] = os.path.basename(self.input_files[0])
+                    stats['output_file'] = os.path.basename(output_file)
+                    all_stats.append(stats)
+                    processed_files.append(output_file)
+                    processed_count = 1
+                    
+                except Exception as file_error:
+                    print(f"Error processing {self.input_files[0]}: {file_error}")
+            else:
+                # Multiple files processing
+                for i, input_file in enumerate(self.input_files, 1):
+                    try:
+                        # Update button text with progress
+                        self.root.after(0, lambda: self.process_button.config(
+                            text=f"⏳ PROCESSING {i}/{total_files}..."
+                        ))
+                        
+                        # Process the data
+                        processed_data = processor.clean_and_process_data(input_file)
+                        
+                        # Generate output filename for each file
+                        input_name = os.path.splitext(os.path.basename(input_file))[0]
+                        report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                        file_output = os.path.join(output_folder, f"{input_name}_processed_{report_type}.xlsx")
+                        
+                        # Save the processed data
+                        processor.save_processed_data(file_output)
+                        
+                        # Collect stats
+                        stats = processor.summary_stats.copy()
+                        stats['filename'] = os.path.basename(input_file)
+                        stats['output_file'] = os.path.basename(file_output)
+                        all_stats.append(stats)
+                        processed_files.append(file_output)
+                        processed_count += 1
+                        
+                    except Exception as file_error:
+                        print(f"Error processing {input_file}: {file_error}")
+                        continue
             
             # Show success message
-            self.root.after(0, lambda: messagebox.showinfo("Success", 
-                f"🎉 File processed successfully!\n\n"
-                f"📊 Processed: {stats['total_loads']} loads\n"
-                f"💵 Potential Savings: ${stats['total_potential_savings']:,.2f}\n\n"
-                f"📁 File saved to:\n{output_file}"))
+            if processed_count > 0:
+                total_loads = sum(stat['total_loads'] for stat in all_stats)
+                total_savings = sum(stat['total_potential_savings'] for stat in all_stats)
+                
+                if len(self.input_files) == 1:
+                    # Single file success message
+                    self.root.after(0, lambda: messagebox.showinfo("Processing Complete", 
+                        f"🎉 Successfully processed file!\n\n"
+                        f"📊 Total Loads: {total_loads:,}\n"
+                        f"💵 Total Potential Savings: ${total_savings:,.2f}\n\n"
+                        f"📁 File saved as:\n{os.path.basename(output_file)}"))
+                else:
+                    # Multiple files success message
+                    files_list = "\n".join([f"✅ {stat['output_file']}" for stat in all_stats])
+                    
+                    self.root.after(0, lambda: messagebox.showinfo("Batch Processing Complete", 
+                        f"🎉 Successfully processed {processed_count}/{total_files} files!\n\n"
+                        f"📊 Total Loads: {total_loads:,}\n"
+                        f"💵 Total Potential Savings: ${total_savings:,.2f}\n\n"
+                        f"📁 Files saved to:\n{output_folder}\n\n"
+                        f"Processed files:\n{files_list}"))
+            else:
+                self.root.after(0, lambda: messagebox.showerror("Error", 
+                    "Failed to process any files. Please check your input files."))
             
         except Exception as e:
             error_msg = str(e)
@@ -1386,7 +1536,7 @@ class ModernTMSProcessorGUI:
     def _reset_ui(self):
         """Reset UI to normal state"""
         self.is_processing = False
-        self.process_button.config(state="normal", text="🚀 Process File")
+        self.process_button.config(state="normal", text="🚀 PROCESS FILE")
         self.update_process_button_state()
 
 def main():
