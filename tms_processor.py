@@ -47,6 +47,7 @@ try:
     from config import tms_config
     from logger_config import main_logger, data_logger, gui_logger, ProgressLogger
     from validators import tms_validator, tms_cleaner
+    from marmon_bvc_template import MarmonBVCTemplateGenerator
 except ImportError as e:
     print(f"Warning: Could not import enhanced modules: {e}")
     print("Falling back to basic functionality...")
@@ -74,9 +75,14 @@ except ImportError as e:
     class MockValidator:
         def run_full_validation(self, file_path): return {'overall_valid': True, 'validation_steps': {}}
     
+    class MockTemplateGenerator:
+        def generate_template(self, date_range, output_file=None): 
+            raise RuntimeError("Template generator not available")
+    
     tms_config = MockConfig()
     main_logger = data_logger = gui_logger = MockLogger()
     tms_validator = MockValidator()
+    MarmonBVCTemplateGenerator = MockTemplateGenerator
     
     def ProgressLogger(logger, total, operation):
         class MockProgress:
@@ -996,6 +1002,7 @@ class ModernTMSProcessorGUI:
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
         self.detailed_processor = None
+        self.template_generator = MarmonBVCTemplateGenerator()
         self.input_files = []  # Changed to list for multiple files
         self.output_file = None
         
@@ -1155,80 +1162,61 @@ class ModernTMSProcessorGUI:
                                         command=lambda: self.select_card('detailed'))
         self.detailed_button.grid(row=0, column=1, padx=15, pady=5, sticky="nsew")
         
+        # Template Generator Button
+        self.template_button = ttk.Button(button_frame,
+                                        text="📋\nBVC Template", 
+                                        style='ReportCardDisabled.TButton',
+                                        command=lambda: self.select_card('template'))
+        self.template_button.grid(row=0, column=2, padx=15, pady=5, sticky="nsew")
+        
         # Make columns equal width
         button_frame.grid_columnconfigure(0, weight=1, uniform="card")
         button_frame.grid_columnconfigure(1, weight=1, uniform="card")
+        button_frame.grid_columnconfigure(2, weight=1, uniform="card")
         
         # Store references for updating styles
         self.cards = {
             'basic': {'button': self.basic_button},
-            'detailed': {'button': self.detailed_button}
+            'detailed': {'button': self.detailed_button},
+            'template': {'button': self.template_button}
         }
         
-        # Set initial selection
-        self.select_card('basic')
+        # Don't set initial selection here - will be set after sections are created
     
     def select_card(self, card_type):
         """Handle card selection with visual feedback"""
         self.report_type.set(card_type)
         
-        # Update button styles
-        if card_type == 'basic':
-            # Activate Basic button
-            self.cards['basic']['button'].configure(style='ReportCardActive.TButton')
-            # Deactivate Detailed button  
-            self.cards['detailed']['button'].configure(style='ReportCardDisabled.TButton')
+        # Reset all buttons to disabled state
+        for card in self.cards.values():
+            card['button'].configure(style='ReportCardDisabled.TButton')
+        
+        # Activate selected button
+        if card_type in self.cards:
+            self.cards[card_type]['button'].configure(style='ReportCardActive.TButton')
+        
+        # Update UI based on selection
+        self.update_ui_for_selection(card_type)
+    
+    def update_ui_for_selection(self, card_type):
+        """Update UI elements based on selected card type"""
+        if card_type == 'template':
+            # Show date input instead of file input for template generation
+            self.show_date_input_ui()
         else:
-            # Activate Detailed button
-            self.cards['detailed']['button'].configure(style='ReportCardActive.TButton')
-            # Deactivate Basic button
-            self.cards['basic']['button'].configure(style='ReportCardDisabled.TButton')
-
-    def create_widgets(self):
-        """Create the main GUI widgets"""
-        # Main container with compact styling
-        main_frame = ttk.Frame(self.root, padding="15", style='Card.TFrame')
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
-        
-        # Configure grid weights
-        self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=1)
-        
-        # Header section
-        header_frame = tk.Frame(main_frame, bg='#ffffff', relief='flat')
-        header_frame.grid(row=0, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10))
-        header_frame.columnconfigure(0, weight=1)
-        
-        # Title with modern styling
-        title_label = ttk.Label(header_frame, text="🚛 TMS Data Processor Pro", style='Title.TLabel')
-        title_label.grid(row=0, column=0, pady=(5, 10))
-        
-        # Report Type Selection - compact
-        report_section = tk.Frame(main_frame, bg='#f8f9fa')
-        report_section.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
-        report_section.columnconfigure(0, weight=1)
+            # Show normal file input UI
+            self.show_file_input_ui()
+    
+    def create_file_input_section(self):
+        """Create the file input UI section"""
+        self.file_section = tk.Frame(self.input_section, bg='#f8f9fa')
+        self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        self.file_section.columnconfigure(0, weight=1)
         
         # Section header
-        ttk.Label(report_section, text="📋 Report Type", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
+        ttk.Label(self.file_section, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
         
-        self.report_type = tk.StringVar(value="basic")
-        report_frame = tk.Frame(report_section, bg='#f8f9fa')
-        report_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
-        report_frame.grid_columnconfigure(0, weight=1)
-        
-        # Professional card-style selection
-        self.create_card_buttons(report_frame)
-        
-        # File Selection - compact
-        file_section = tk.Frame(main_frame, bg='#f8f9fa')
-        file_section.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
-        file_section.columnconfigure(0, weight=1)
-        
-        # Section header
-        ttk.Label(file_section, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
-        
-        file_frame = tk.Frame(file_section, bg='#f8f9fa')
+        file_frame = tk.Frame(self.file_section, bg='#f8f9fa')
         file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
         file_frame.columnconfigure(0, weight=1)
         
@@ -1266,6 +1254,157 @@ class ModernTMSProcessorGUI:
         browse_button = ttk.Button(file_frame, text="📂 Browse", 
                                  command=self.browse_file, style='Browse.TButton')
         browse_button.grid(row=0, column=1)
+    
+    def create_date_input_section(self):
+        """Create the date input UI section for template generation"""
+        self.date_section = tk.Frame(self.input_section, bg='#f8f9fa')
+        self.date_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        self.date_section.columnconfigure(0, weight=1)
+        
+        # Section header
+        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
+        
+        date_frame = tk.Frame(self.date_section, bg='#f8f9fa')
+        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
+        date_frame.columnconfigure(0, weight=1)
+        
+        # Date input with clean styling
+        date_input_frame = tk.Frame(date_frame, bg='#ffffff', relief='flat', bd=1)
+        date_input_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
+        date_input_frame.grid_columnconfigure(0, weight=1)
+        
+        # Date input field
+        self.date_entry = tk.Entry(date_input_frame,
+                                  font=('Segoe UI', 12),
+                                  fg='#2d3748',
+                                  bg='#ffffff',
+                                  borderwidth=0,
+                                  highlightthickness=0)
+        self.date_entry.pack(fill='x', expand=True, padx=15, pady=12)
+        
+        # Add placeholder text
+        self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
+        self.date_entry.config(fg='#a0aec0')
+        
+        # Bind events for placeholder behavior
+        self.date_entry.bind('<FocusIn>', self.on_date_entry_focus_in)
+        self.date_entry.bind('<FocusOut>', self.on_date_entry_focus_out)
+        self.date_entry.bind('<KeyRelease>', self.on_date_entry_change)
+        
+        # Generate template button
+        generate_button = ttk.Button(date_frame, text="📋 Generate Template", 
+                                   command=self.generate_template, style='Browse.TButton')
+        generate_button.grid(row=0, column=1)
+        
+        # Initially hide the date section
+        self.date_section.grid_remove()
+    
+    def show_file_input_ui(self):
+        """Show file input UI and hide date input UI"""
+        self.file_section.grid()
+        self.date_section.grid_remove()
+        self.update_process_button_state()
+    
+    def show_date_input_ui(self):
+        """Show date input UI and hide file input UI"""
+        self.date_section.grid()
+        self.file_section.grid_remove()
+        self.update_process_button_state()
+    
+    def on_date_entry_focus_in(self, event):
+        """Handle date entry focus in"""
+        if self.date_entry.get() == "Enter date range (e.g., 08.04.25 - 08.08.25)":
+            self.date_entry.delete(0, tk.END)
+            self.date_entry.config(fg='#2d3748')
+    
+    def on_date_entry_focus_out(self, event):
+        """Handle date entry focus out"""
+        if not self.date_entry.get():
+            self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
+            self.date_entry.config(fg='#a0aec0')
+    
+    def on_date_entry_change(self, event):
+        """Handle date entry text change"""
+        self.update_process_button_state()
+    
+    def generate_template(self):
+        """Generate BVC template with the specified date range"""
+        date_range = self.date_entry.get().strip()
+        
+        # Check if placeholder text
+        if date_range == "Enter date range (e.g., 08.04.25 - 08.08.25)" or not date_range:
+            messagebox.showwarning("Date Range Required", "Please enter a date range for the template.")
+            return
+        
+        # Validate date format
+        if not self.template_generator.validate_date_format(date_range):
+            messagebox.showwarning("Invalid Format", "Please enter a valid date range (e.g., 08.04.25 - 08.08.25)")
+            return
+        
+        try:
+            # Ask user where to save the template
+            default_name = f"MARMON BVC {date_range}.xlsx"
+            output_file = filedialog.asksaveasfilename(
+                title="Save Template As",
+                defaultextension=".xlsx",
+                initialfile=default_name,
+                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
+            )
+            
+            if output_file:
+                # Generate the template
+                file_path = self.template_generator.generate_template(date_range, output_file)
+                messagebox.showinfo("Template Generated", 
+                    f"✅ BVC Template created successfully!\n\n"
+                    f"📁 File saved as:\n{os.path.basename(file_path)}")
+        
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to generate template:\n{str(e)}")
+
+    def create_widgets(self):
+        """Create the main GUI widgets"""
+        # Main container with compact styling
+        main_frame = ttk.Frame(self.root, padding="15", style='Card.TFrame')
+        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
+        
+        # Configure grid weights
+        self.root.columnconfigure(0, weight=1)
+        self.root.rowconfigure(0, weight=1)
+        main_frame.columnconfigure(1, weight=1)
+        
+        # Header section
+        header_frame = tk.Frame(main_frame, bg='#ffffff', relief='flat')
+        header_frame.grid(row=0, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10))
+        header_frame.columnconfigure(0, weight=1)
+        
+        # Title with modern styling
+        title_label = ttk.Label(header_frame, text="🚛 TMS Data Processor Pro", style='Title.TLabel')
+        title_label.grid(row=0, column=0, pady=(5, 10))
+        
+        # Report Type Selection - compact
+        report_section = tk.Frame(main_frame, bg='#f8f9fa')
+        report_section.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        report_section.columnconfigure(0, weight=1)
+        
+        # Section header
+        ttk.Label(report_section, text="📋 Report Type", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
+        
+        self.report_type = tk.StringVar(value="basic")
+        report_frame = tk.Frame(report_section, bg='#f8f9fa')
+        report_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
+        report_frame.grid_columnconfigure(0, weight=1)
+        
+        # Professional card-style selection
+        self.create_card_buttons(report_frame)
+        
+        # Input Section - Dynamic (File or Date input based on selection)
+        self.input_section = tk.Frame(main_frame, bg='#f8f9fa')
+        self.input_section.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        self.input_section.columnconfigure(0, weight=1)
+        
+        # Create both file input and date input sections
+        self.create_file_input_section()
+        self.create_date_input_section()
         
         # Process Button with enhanced styling
         button_frame = tk.Frame(main_frame, bg='#ffffff')
@@ -1274,6 +1413,9 @@ class ModernTMSProcessorGUI:
         self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE", 
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
+        
+        # Set initial selection after all components are created
+        self.select_card('basic')
         
     def setup_drag_drop(self, widget):
         """Setup drag and drop functionality for file selection"""
@@ -1362,31 +1504,52 @@ class ModernTMSProcessorGUI:
         self.file_display.config(state='disabled')
     
     def update_process_button_state(self):
-        """Enable process button if input files are selected"""
-        if self.input_files:
-            file_count = len(self.input_files)
-            button_text = f"🚀 PROCESS {file_count} FILE{'S' if file_count > 1 else ''}"
-            self.process_button.config(state="normal", text=button_text)
+        """Enable process button based on current selection and input state"""
+        if self.report_type.get() == 'template':
+            # Template mode - check date input
+            date_text = self.date_entry.get().strip()
+            if date_text and date_text != "Enter date range (e.g., 08.04.25 - 08.08.25)":
+                self.process_button.config(state="normal", text="📋 GENERATE TEMPLATE")
+            else:
+                self.process_button.config(state="disabled", text="📋 GENERATE TEMPLATE")
         else:
-            self.process_button.config(state="disabled", text="🚀 PROCESS FILE")
+            # File processing mode - check files
+            if self.input_files:
+                file_count = len(self.input_files)
+                button_text = f"🚀 PROCESS {file_count} FILE{'S' if file_count > 1 else ''}"
+                self.process_button.config(state="normal", text=button_text)
+            else:
+                self.process_button.config(state="disabled", text="🚀 PROCESS FILE")
     
     
     def process_file(self):
-        """Process the selected files in a separate thread"""
-        if not self.input_files or self.is_processing:
+        """Process the selected files or generate template based on current mode"""
+        if self.is_processing:
             return
             
-        # Set processing state
-        self.is_processing = True
-        
-        # Update UI for processing state
-        file_count = len(self.input_files)
-        self.process_button.config(state="disabled", text=f"⏳ PROCESSING {file_count} FILE{'S' if file_count > 1 else ''}...")
-        
-        # Start processing in separate thread
-        thread = threading.Thread(target=self._process_file_thread)
-        thread.daemon = True
-        thread.start()
+        # Check current mode
+        if self.report_type.get() == 'template':
+            # Template generation mode
+            date_text = self.date_entry.get().strip()
+            if not date_text or date_text == "Enter date range (e.g., 08.04.25 - 08.08.25)":
+                return
+            self.generate_template()
+        else:
+            # File processing mode
+            if not self.input_files:
+                return
+                
+            # Set processing state
+            self.is_processing = True
+            
+            # Update UI for processing state
+            file_count = len(self.input_files)
+            self.process_button.config(state="disabled", text=f"⏳ PROCESSING {file_count} FILE{'S' if file_count > 1 else ''}...")
+            
+            # Start processing in separate thread
+            thread = threading.Thread(target=self._process_file_thread)
+            thread.daemon = True
+            thread.start()
         
     def _process_file_thread(self):
         """Process files in background thread"""
