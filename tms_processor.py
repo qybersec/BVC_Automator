@@ -11,43 +11,55 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 
-# UI Color constants for consistent theming
-UI_COLORS = {
-    # Primary colors
-    'PRIMARY_BLUE': '#4299e1',
-    'PRIMARY_BLUE_HOVER': '#3182ce',
-    'PRIMARY_BLUE_PRESSED': '#2c5aa0',
-    
-    # Background colors
-    'BACKGROUND_WHITE': '#ffffff',
-    'BACKGROUND_GRAY': '#f8f9fa',
-    'BACKGROUND_LIGHT': '#f7fafc',
-    
-    # Text colors
-    'TEXT_PRIMARY': '#2d3748',
-    'TEXT_SECONDARY': '#4a5568',
-    'TEXT_MUTED': '#718096',
-    'TEXT_DISABLED': '#a0aec0',
-    
-    # Status colors
-    'SUCCESS_GREEN': '#38a169',
-    'SUCCESS_LIGHT': '#48bb78',
-    'WARNING_ORANGE': '#ff8c42',
-    'WARNING_LIGHT': '#ffb366',
-    'ERROR_RED': '#e53e3e',
-    
-    # Interaction colors
-    'HOVER_LIGHT': '#e6fffa',
-    'BORDER_LIGHT': '#d0d0d0',
-    'ACCENT_PURPLE': '#667eea'
-}
+# Try to import calendar widget - fallback to text entry if not available
+try:
+    from tkcalendar import DateEntry, Calendar
+    CALENDAR_AVAILABLE = True
+except ImportError:
+    CALENDAR_AVAILABLE = False
+    print("Note: tkcalendar not available. Install with 'pip install tkcalendar' for calendar widgets.")
+
+# Import UI styles from the new modular UI components
+try:
+    from ui import COLORS as UI_COLORS
+except ImportError:
+    # Fallback UI color constants for consistent theming
+    UI_COLORS = {
+        # Primary colors
+        'PRIMARY_BLUE': '#4299e1',
+        'PRIMARY_BLUE_HOVER': '#3182ce',
+        'PRIMARY_BLUE_PRESSED': '#2c5aa0',
+        
+        # Background colors
+        'BACKGROUND_WHITE': '#ffffff',
+        'BACKGROUND_GRAY': '#f8f9fa',
+        'BACKGROUND_LIGHT': '#f7fafc',
+        
+        # Text colors
+        'TEXT_PRIMARY': '#2d3748',
+        'TEXT_SECONDARY': '#4a5568',
+        'TEXT_MUTED': '#718096',
+        'TEXT_DISABLED': '#a0aec0',
+        
+        # Status colors
+        'SUCCESS_GREEN': '#38a169',
+        'SUCCESS_LIGHT': '#48bb78',
+        'WARNING_ORANGE': '#ff8c42',
+        'WARNING_LIGHT': '#ffb366',
+        'ERROR_RED': '#e53e3e',
+        
+        # Interaction colors
+        'HOVER_LIGHT': '#e6fffa',
+        'BORDER_LIGHT': '#d0d0d0',
+        'ACCENT_PURPLE': '#667eea'
+    }
 
 # Import our new modules
 try:
     from config import tms_config
     from logger_config import main_logger, data_logger, gui_logger, ProgressLogger
     from validators import tms_validator, tms_cleaner
-    from marmon_bvc_template import MarmonBVCTemplateGenerator
+    from src.generators import create_bvc_generator
 except ImportError as e:
     print(f"Warning: Could not import enhanced modules: {e}")
     print("Falling back to basic functionality...")
@@ -75,14 +87,17 @@ except ImportError as e:
     class MockValidator:
         def run_full_validation(self, file_path): return {'overall_valid': True, 'validation_steps': {}}
     
-    class MockTemplateGenerator:
-        def generate_template(self, date_range, output_file=None): 
-            raise RuntimeError("Template generator not available")
+    def create_bvc_generator():
+        class MockTemplateGenerator:
+            def generate_template(self, date_range, output_file=None): 
+                raise RuntimeError("Template generator not available")
+            def validate_input(self, date_range): 
+                return True
+        return MockTemplateGenerator()
     
     tms_config = MockConfig()
     main_logger = data_logger = gui_logger = MockLogger()
     tms_validator = MockValidator()
-    MarmonBVCTemplateGenerator = MockTemplateGenerator
     
     def ProgressLogger(logger, total, operation):
         class MockProgress:
@@ -994,15 +1009,15 @@ class ModernTMSProcessorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("TMS Data Processor Pro")
-        self.root.geometry("1000x550")
+        self.root.geometry("1200x650")
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(900, 500)
+        self.root.minsize(1100, 600)
         self.root.resizable(True, True)
         
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
         self.detailed_processor = None
-        self.template_generator = MarmonBVCTemplateGenerator()
+        self.template_generator = create_bvc_generator()
         self.input_files = []  # Changed to list for multiple files
         self.output_file = None
         
@@ -1148,34 +1163,43 @@ class ModernTMSProcessorGUI:
         button_frame = tk.Frame(parent, bg='#f8f9fa')
         button_frame.grid(row=0, column=0, pady=5)
         
+        # Home Button
+        self.home_button = ttk.Button(button_frame, 
+                                     text="🏠\nHome",
+                                     style='ReportCardActive.TButton',
+                                     command=lambda: self.select_card('home'))
+        self.home_button.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        
         # Basic Report Button
         self.basic_button = ttk.Button(button_frame, 
                                      text="📊\nBasic Report",
-                                     style='ReportCardActive.TButton',
+                                     style='ReportCardDisabled.TButton',
                                      command=lambda: self.select_card('basic'))
-        self.basic_button.grid(row=0, column=0, padx=15, pady=5, sticky="nsew")
+        self.basic_button.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
         
         # Detailed Report Button
         self.detailed_button = ttk.Button(button_frame,
                                         text="📈\nDetailed Report", 
                                         style='ReportCardDisabled.TButton',
                                         command=lambda: self.select_card('detailed'))
-        self.detailed_button.grid(row=0, column=1, padx=15, pady=5, sticky="nsew")
+        self.detailed_button.grid(row=0, column=2, padx=10, pady=5, sticky="nsew")
         
         # Template Generator Button
         self.template_button = ttk.Button(button_frame,
                                         text="📋\nBVC Template", 
                                         style='ReportCardDisabled.TButton',
                                         command=lambda: self.select_card('template'))
-        self.template_button.grid(row=0, column=2, padx=15, pady=5, sticky="nsew")
+        self.template_button.grid(row=0, column=3, padx=10, pady=5, sticky="nsew")
         
         # Make columns equal width
         button_frame.grid_columnconfigure(0, weight=1, uniform="card")
         button_frame.grid_columnconfigure(1, weight=1, uniform="card")
         button_frame.grid_columnconfigure(2, weight=1, uniform="card")
+        button_frame.grid_columnconfigure(3, weight=1, uniform="card")
         
         # Store references for updating styles
         self.cards = {
+            'home': {'button': self.home_button},
             'basic': {'button': self.basic_button},
             'detailed': {'button': self.detailed_button},
             'template': {'button': self.template_button}
@@ -1187,16 +1211,43 @@ class ModernTMSProcessorGUI:
         """Handle card selection with visual feedback"""
         self.report_type.set(card_type)
         
-        # Reset all buttons to disabled state
-        for card in self.cards.values():
-            card['button'].configure(style='ReportCardDisabled.TButton')
-        
-        # Activate selected button
-        if card_type in self.cards:
-            self.cards[card_type]['button'].configure(style='ReportCardActive.TButton')
+        # Update navigation button states
+        self.update_nav_button_states(card_type)
         
         # Update UI based on selection
         self.update_ui_for_selection(card_type)
+    
+    def update_nav_button_states(self, active_card):
+        """Update navigation button visual states"""
+        if not hasattr(self, 'nav_buttons'):
+            return
+            
+        # Reset all buttons to inactive state
+        for card_name, button in self.nav_buttons.items():
+            if card_name == 'basic':
+                if card_name == active_card:
+                    # Active basic button
+                    button.configure(bg='#4299e1', fg='white', font=('Segoe UI', 11, 'bold'))
+                else:
+                    # Inactive basic button  
+                    button.configure(bg='#f7fafc', fg='#4a5568', font=('Segoe UI', 11))
+            else:
+                if card_name == active_card:
+                    # Active secondary button
+                    button.configure(bg='#4299e1', fg='white', font=('Segoe UI', 10, 'bold'))
+                else:
+                    # Inactive secondary button
+                    button.configure(bg='#ffffff', fg='#4a5568', font=('Segoe UI', 10))
+    
+    def get_report_description(self):
+        """Get contextual description text for the current report type"""
+        report_type = self.report_type.get()
+        if report_type == 'basic':
+            return "For M&T and Marmon Reports"
+        elif report_type == 'detailed':
+            return "For Cast Nylons Reports"
+        else:
+            return ""
     
     def update_ui_for_selection(self, card_type):
         """Update UI elements based on selected card type"""
@@ -1206,15 +1257,27 @@ class ModernTMSProcessorGUI:
         else:
             # Show normal file input UI
             self.show_file_input_ui()
+        
     
     def create_file_input_section(self):
         """Create the file input UI section"""
         self.file_section = tk.Frame(self.input_section, bg='#f8f9fa')
-        self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        # Don't grid it initially - let the initial state logic handle visibility
         self.file_section.columnconfigure(0, weight=1)
         
-        # Section header
-        ttk.Label(self.file_section, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
+        # Section header with context-specific description
+        self.header_container = tk.Frame(self.file_section, bg='#f8f9fa')
+        self.header_container.grid(row=0, column=0, pady=(10, 5))
+        
+        ttk.Label(self.header_container, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').pack()
+        
+        # Add descriptive text based on report type
+        description_text = self.get_report_description()
+        if description_text:
+            self.desc_label = tk.Label(self.header_container, text=description_text, 
+                                 font=('Segoe UI', 9, 'italic'), 
+                                 fg='#4a5568', bg='#f8f9fa')
+            self.desc_label.pack(pady=(2, 0))
         
         file_frame = tk.Frame(self.file_section, bg='#f8f9fa')
         file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
@@ -1228,15 +1291,15 @@ class ModernTMSProcessorGUI:
         import tkinter.scrolledtext as scrolledtext
         self.file_display = scrolledtext.ScrolledText(file_display_frame,
                                                      height=6,
-                                                     width=70,
-                                                     font=('Segoe UI', 10),
+                                                     width=50,
+                                                     font=('Segoe UI', 9),
                                                      fg='#000000',
                                                      bg='#ffffff',
                                                      wrap=tk.WORD,
                                                      state='disabled',
                                                      borderwidth=0,
                                                      highlightthickness=0)
-        self.file_display.pack(fill='both', expand=True, padx=10, pady=8)
+        self.file_display.pack(fill='both', expand=True, padx=6, pady=4)
         
         # Initialize with placeholder text
         self.file_display.config(state='normal')
@@ -1258,18 +1321,231 @@ class ModernTMSProcessorGUI:
     def create_date_input_section(self):
         """Create the date input UI section for template generation"""
         self.date_section = tk.Frame(self.input_section, bg='#f8f9fa')
-        self.date_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        # Don't grid it initially - let the initial state logic handle visibility
         self.date_section.columnconfigure(0, weight=1)
         
         # Section header
-        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
+        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(5, 3))
         
         date_frame = tk.Frame(self.date_section, bg='#f8f9fa')
-        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
+        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 5), padx=8)
         date_frame.columnconfigure(0, weight=1)
         
+        # Date selection with calendar widgets
+        if CALENDAR_AVAILABLE:
+            self._create_calendar_widgets(date_frame)
+        else:
+            self._create_fallback_date_entry(date_frame)
+        
+        # No separate button needed - main process button handles template generation
+        
+        # Initially hide the date section
+        self.date_section.grid_remove()
+    
+   
+            
+    def show_file_input_ui(self):
+        """Show file input UI and hide other sections"""
+        if hasattr(self, 'file_section'):
+            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+            # Refresh the description text for the current mode
+            self.refresh_file_section_description()
+        if hasattr(self, 'date_section'):
+            self.date_section.grid_remove()
+        # Show process button and navigation bar for file input
+        if hasattr(self, 'process_button'):
+            self.process_button.grid()
+        if hasattr(self, 'nav_bar'):
+            self.nav_bar.grid()
+        self.update_process_button_state()
+    
+    def refresh_file_section_description(self):
+        """Refresh the description text in the file section header"""
+        if not hasattr(self, 'file_section') or not hasattr(self, 'header_container'):
+            return
+        
+        # Remove existing description label if it exists
+        if hasattr(self, 'desc_label'):
+            self.desc_label.destroy()
+        
+        # Add new description text based on current report type
+        description_text = self.get_report_description()
+        if description_text:
+            self.desc_label = tk.Label(self.header_container, text=description_text, 
+                                     font=('Segoe UI', 9, 'italic'), 
+                                     fg='#4a5568', bg='#f8f9fa')
+            self.desc_label.pack(pady=(2, 0))
+    
+    def _create_calendar_widgets(self, parent_frame):
+        """Create compact horizontal calendar layout"""
+        # Configure parent frame for better alignment
+        parent_frame.grid_columnconfigure(0, weight=1)
+        parent_frame.grid_rowconfigure(0, weight=1)
+        
+        # Main horizontal container with improved layout
+        main_container = tk.Frame(parent_frame, bg='#ffffff')
+        main_container.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=0, pady=0)
+        main_container.grid_columnconfigure(0, weight=5)  # Calendars get more space
+        main_container.grid_columnconfigure(1, weight=3)  # Controls get proportional space
+        
+        # Left side: Calendar container with enhanced layout
+        calendar_section = tk.Frame(main_container, bg='#f8f9fa')
+        calendar_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 15), pady=0)
+        calendar_section.grid_columnconfigure(0, weight=1)
+        calendar_section.grid_columnconfigure(1, weight=1)
+        calendar_section.grid_rowconfigure(0, weight=1)
+        
+        # Set default dates first
+        from datetime import timedelta
+        today = datetime.now()
+        default_start = today
+        default_end = today + timedelta(days=4)
+        
+        # FROM Calendar (Left side)
+        from_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
+        from_shadow.grid(row=0, column=0, padx=(8, 4), pady=8, sticky='nsew')
+        
+        from_frame = tk.Frame(from_shadow, bg='#ffffff', relief='flat', bd=0)
+        from_frame.pack(padx=0, pady=0, fill='both', expand=True)
+        
+        from_header = tk.Frame(from_frame, bg='#4299e1', height=35)
+        from_header.pack(fill='both', expand=True, pady=0)
+        from_header.pack_propagate(False)
+        
+        tk.Label(from_header, text="✨ FROM DATE", font=('Segoe UI', 11, 'bold'), 
+                fg='white', bg='#4299e1').pack(pady=8)
+        
+        self.start_calendar = Calendar(from_frame,
+                                     selectmode='day',
+                                     year=default_start.year,
+                                     month=default_start.month,
+                                     day=default_start.day,
+                                     background='#4299e1',
+                                     foreground='white',
+                                     selectbackground='#ffd700',
+                                     selectforeground='#1a202c',
+                                     normalbackground='#ffffff',
+                                     normalforeground='#2d3748',
+                                     weekendbackground='#ebf8ff',
+                                     weekendforeground='#2b6cb0',
+                                     othermonthforeground='#a0aec0',
+                                     othermonthbackground='#f7fafc',
+                                     headersbackground='#bee3f8',
+                                     headersforeground='#1a365d',
+                                     font=('Segoe UI', 9),
+                                     borderwidth=1,
+                                     bordercolor='#e2e8f0',
+                                     cursor='hand2')
+        self.start_calendar.pack(padx=4, pady=(0, 4), fill='both', expand=True)
+        self.start_calendar.bind('<<CalendarSelected>>', self.on_start_date_select)
+        
+        # TO Calendar (Right side)
+        to_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
+        to_shadow.grid(row=0, column=1, padx=(4, 8), pady=8, sticky='nsew')
+        
+        to_frame = tk.Frame(to_shadow, bg='#ffffff', relief='flat', bd=0)
+        to_frame.pack(padx=0, pady=0, fill='both', expand=True)
+        
+        to_header = tk.Frame(to_frame, bg='#38a169', height=35)
+        to_header.pack(fill='both', expand=True, pady=0)
+        to_header.pack_propagate(False)
+        
+        tk.Label(to_header, text="🎯 TO DATE", font=('Segoe UI', 11, 'bold'), 
+                fg='white', bg='#38a169').pack(pady=8)
+        
+        self.end_calendar = Calendar(to_frame,
+                                   selectmode='day',
+                                   year=default_end.year,
+                                   month=default_end.month,
+                                   day=default_end.day,
+                                   background='#38a169',
+                                   foreground='white',
+                                   selectbackground='#ffd700',
+                                   selectforeground='#1a202c',
+                                   normalbackground='#ffffff',
+                                   normalforeground='#2d3748',
+                                   weekendbackground='#f0fff4',
+                                   weekendforeground='#276749',
+                                   othermonthforeground='#a0aec0',
+                                   othermonthbackground='#f7fafc',
+                                   headersbackground='#9ae6b4',
+                                   headersforeground='#1a365d',
+                                   font=('Segoe UI', 10, 'bold'),
+                                   borderwidth=1,
+                                   bordercolor='#e2e8f0',
+                                   cursor='hand2')
+        self.end_calendar.pack(padx=8, pady=(0, 8), fill='both', expand=True)
+        self.end_calendar.bind('<<CalendarSelected>>', self.on_end_date_select)
+        
+        # Right side: Controls container with proper weights
+        controls_section = tk.Frame(main_container, bg='#f8f9fa')
+        controls_section.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(5, 0), pady=0)
+        controls_section.grid_columnconfigure(0, weight=1)
+        controls_section.grid_rowconfigure(3, weight=1)  # Spacer row
+        
+        # Header
+        header_frame = tk.Frame(controls_section, bg='#3182ce', height=50)
+        header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=0, pady=0)
+        header_frame.grid_propagate(False)
+        
+        tk.Label(header_frame, text="📅 Select Date Range", 
+                font=('Segoe UI', 13, 'bold'), fg='white', bg='#3182ce').pack(pady=15)
+        
+        # Date range text box with enhanced styling
+        text_frame = tk.Frame(controls_section, bg='#f8f9fa')
+        text_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=15, pady=(25, 15))
+        
+        # Enhanced label with icon
+        label_frame = tk.Frame(text_frame, bg='#f8f9fa')
+        label_frame.pack(fill='x', pady=(0, 8))
+        
+        tk.Label(label_frame, text="📅", font=('Segoe UI', 14), 
+                fg='#4299e1', bg='#f8f9fa').pack(side='left', padx=(0, 5))
+        
+        tk.Label(label_frame, text="Date Range:", font=('Segoe UI', 12, 'bold'), 
+                fg='#2d3748', bg='#f8f9fa').pack(side='left')
+        
+        # Enhanced textbox with better styling - no black border
+        textbox_container = tk.Frame(text_frame, bg='#e2e8f0', relief='flat', bd=1)
+        textbox_container.pack(fill='x', pady=(0, 5))
+        
+        self.date_range_entry = tk.Entry(textbox_container,
+                                        font=('Segoe UI', 13, 'bold'),
+                                        fg='#1a365d',
+                                        bg='#ffffff',
+                                        justify='center',
+                                        relief='flat',
+                                        bd=0,
+                                        highlightthickness=2,
+                                        highlightcolor='#4299e1',
+                                        highlightbackground='#e2e8f0',
+                                        insertbackground='#4299e1')
+        self.date_range_entry.pack(fill='x', padx=6, pady=6)
+        self.date_range_entry.bind('<KeyRelease>', self.on_date_range_text_change)
+        self.date_range_entry.bind('<Return>', self.on_date_range_enter)
+        self.date_range_entry.bind('<FocusIn>', self.on_date_range_focus_in)
+        self.date_range_entry.bind('<FocusOut>', self.on_date_range_focus_out)
+        
+        # Generate button (moved here from bottom)
+        button_frame = tk.Frame(controls_section, bg='#f8f9fa')
+        button_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=15, pady=(20, 15))
+        
+        # Create the template button for this layout
+        self.template_button = ttk.Button(button_frame, text="📋 GENERATE TEMPLATE", 
+                                         command=self.generate_template, style='ProcessButton.TButton', 
+                                         state="disabled")
+        self.template_button.pack(fill='x', pady=5)
+        
+        # Spacer row to push everything up
+        tk.Frame(controls_section, bg='#f8f9fa').grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        
+        # Initialize the date range display
+        self.update_date_range_display()
+    
+    def _create_fallback_date_entry(self, parent_frame):
+        """Create fallback text entry if calendar widget not available"""
         # Date input with clean styling
-        date_input_frame = tk.Frame(date_frame, bg='#ffffff', relief='flat', bd=1)
+        date_input_frame = tk.Frame(parent_frame, bg='#ffffff', relief='flat', bd=1)
         date_input_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
         date_input_frame.grid_columnconfigure(0, weight=1)
         
@@ -1286,29 +1562,23 @@ class ModernTMSProcessorGUI:
         self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
         self.date_entry.config(fg='#a0aec0')
         
-        # Bind events for placeholder behavior
+        # Bind events for placeholder behavior and Enter key
         self.date_entry.bind('<FocusIn>', self.on_date_entry_focus_in)
         self.date_entry.bind('<FocusOut>', self.on_date_entry_focus_out)
         self.date_entry.bind('<KeyRelease>', self.on_date_entry_change)
-        
-        # Generate template button
-        generate_button = ttk.Button(date_frame, text="📋 Generate Template", 
-                                   command=self.generate_template, style='Browse.TButton')
-        generate_button.grid(row=0, column=1)
-        
-        # Initially hide the date section
-        self.date_section.grid_remove()
-    
-    def show_file_input_ui(self):
-        """Show file input UI and hide date input UI"""
-        self.file_section.grid()
-        self.date_section.grid_remove()
-        self.update_process_button_state()
-    
+        self.date_entry.bind('<Return>', self.on_date_entry_enter)
+
     def show_date_input_ui(self):
-        """Show date input UI and hide file input UI"""
-        self.date_section.grid()
-        self.file_section.grid_remove()
+        """Show date input UI and hide other sections"""
+        if hasattr(self, 'date_section'):
+            self.date_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 5), padx=3)
+        if hasattr(self, 'file_section'):
+            self.file_section.grid_remove()
+        # Hide main process button (template has its own), but show nav bar
+        if hasattr(self, 'process_button'):
+            self.process_button.grid_remove()
+        if hasattr(self, 'nav_bar'):
+            self.nav_bar.grid()
         self.update_process_button_state()
     
     def on_date_entry_focus_in(self, event):
@@ -1323,21 +1593,149 @@ class ModernTMSProcessorGUI:
             self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
             self.date_entry.config(fg='#a0aec0')
     
-    def on_date_entry_change(self, event):
-        """Handle date entry text change"""
+    def on_start_date_select(self, event=None):
+        """Handle start date selection from calendar"""
+        self.update_date_range_display()
         self.update_process_button_state()
+    
+    def on_end_date_select(self, event=None):
+        """Handle end date selection from calendar"""
+        self.update_date_range_display()
+        self.update_process_button_state()
+    
+    def update_date_range_display(self):
+        """Update the date range display in the text box"""
+        if hasattr(self, 'start_calendar') and hasattr(self, 'end_calendar') and hasattr(self, 'date_range_entry'):
+            try:
+                start_date = self.start_calendar.selection_get()
+                end_date = self.end_calendar.selection_get()
+                
+                # Format as MM.DD.YY - MM.DD.YY
+                start_str = start_date.strftime('%m.%d.%y')
+                end_str = end_date.strftime('%m.%d.%y')
+                range_text = f"{start_str} - {end_str}"
+                
+                # Update text box without triggering events
+                self.date_range_entry.delete(0, tk.END)
+                self.date_range_entry.insert(0, range_text)
+                self.date_range_entry.config(fg='#2d3748')
+            except:
+                self.date_range_entry.delete(0, tk.END)
+                self.date_range_entry.insert(0, "Select dates")
+                self.date_range_entry.config(fg='#a0aec0')
+    
+    def on_date_range_text_change(self, event=None):
+        """Handle manual text changes in date range entry"""
+        # Only parse if user typed a complete date range
+        text = self.date_range_entry.get().strip()
+        if " - " in text and len(text) >= 15:  # Basic format check
+            try:
+                self.parse_and_update_calendars(text)
+            except:
+                pass  # Invalid format, ignore
+        self.update_process_button_state()
+    
+    def on_date_range_enter(self, event=None):
+        """Handle Enter key in date range entry"""
+        text = self.date_range_entry.get().strip()
+        try:
+            self.parse_and_update_calendars(text)
+            if self.report_type.get() == 'template':
+                self.generate_template()
+        except:
+            # Reset to calendar values if invalid
+            self.update_date_range_display()
+    
+    def on_date_range_focus_in(self, event=None):
+        """Handle focus in on date range entry"""
+        if self.date_range_entry.get() == "Select dates":
+            self.date_range_entry.delete(0, tk.END)
+            self.date_range_entry.config(fg='#2d3748')
+    
+    def on_date_range_focus_out(self, event=None):
+        """Handle focus out on date range entry"""
+        if not self.date_range_entry.get().strip():
+            self.update_date_range_display()
+    
+    def parse_and_update_calendars(self, text):
+        """Parse date range text and update calendars"""
+        if " - " in text:
+            parts = text.split(" - ")
+            if len(parts) == 2:
+                from datetime import datetime
+                try:
+                    # Try multiple date formats
+                    formats = ['%m.%d.%y', '%m/%d/%y', '%m-%d-%y', '%m.%d.%Y', '%m/%d/%Y']
+                    start_date = None
+                    end_date = None
+                    
+                    for fmt in formats:
+                        try:
+                            start_date = datetime.strptime(parts[0].strip(), fmt)
+                            end_date = datetime.strptime(parts[1].strip(), fmt)
+                            break
+                        except:
+                            continue
+                    
+                    if start_date and end_date:
+                        # Update calendars
+                        self.start_calendar.selection_set(start_date.date())
+                        self.end_calendar.selection_set(end_date.date())
+                        return True
+                except:
+                    pass
+        raise ValueError("Invalid date format")
+    
+    def on_date_change(self, event=None):
+        """Handle date change from calendar widgets or text entry (fallback)"""
+        self.update_process_button_state()
+    
+    def on_date_entry_change(self, event):
+        """Handle date entry text change (fallback mode)"""
+        self.update_process_button_state()
+    
+    def on_date_entry_enter(self, event):
+        """Handle Enter key press in date entry field (fallback mode)"""
+        # Trigger template generation if valid input
+        if self.report_type.get() == 'template':
+            date_text = self.date_entry.get().strip()
+            if date_text and date_text != "Enter date range (e.g., 08.04.25 - 08.08.25)":
+                self.generate_template()
+    
+    def get_date_range_string(self):
+        """Get formatted date range string from text box or calendar widgets"""
+        if CALENDAR_AVAILABLE and hasattr(self, 'date_range_entry'):
+            # Get from the synced text box
+            text = self.date_range_entry.get().strip()
+            if text and text != "Select dates":
+                return text
+            # Fallback to calendar if text box is empty
+            elif hasattr(self, 'start_calendar') and hasattr(self, 'end_calendar'):
+                try:
+                    start = self.start_calendar.selection_get()
+                    end = self.end_calendar.selection_get()
+                    start_str = start.strftime('%m.%d.%y')
+                    end_str = end.strftime('%m.%d.%y')
+                    return f"{start_str} - {end_str}"
+                except:
+                    return ""
+        elif hasattr(self, 'date_entry'):
+            # Fallback to old text entry
+            return self.date_entry.get().strip()
+        else:
+            return ""
     
     def generate_template(self):
         """Generate BVC template with the specified date range"""
-        date_range = self.date_entry.get().strip()
+        date_range = self.get_date_range_string()
         
-        # Check if placeholder text
-        if date_range == "Enter date range (e.g., 08.04.25 - 08.08.25)" or not date_range:
-            messagebox.showwarning("Date Range Required", "Please enter a date range for the template.")
+        # Check if valid date range
+        if not date_range or date_range == "Enter date range (e.g., 08.04.25 - 08.08.25)":
+            messagebox.showwarning("Date Range Required", "Please select or enter a date range for the template.")
             return
         
         # Validate date format
-        if not self.template_generator.validate_date_format(date_range):
+        if not self.template_generator.validate_input(date_range):
             messagebox.showwarning("Invalid Format", "Please enter a valid date range (e.g., 08.04.25 - 08.08.25)")
             return
         
@@ -1355,8 +1753,8 @@ class ModernTMSProcessorGUI:
                 # Generate the template
                 file_path = self.template_generator.generate_template(date_range, output_file)
                 messagebox.showinfo("Template Generated", 
-                    f"✅ BVC Template created successfully!\n\n"
-                    f"📁 File saved as:\n{os.path.basename(file_path)}")
+                    f"BVC Template created successfully!\n\n"
+                    f"File saved as:\n{os.path.basename(file_path)}")
         
         except Exception as e:
             messagebox.showerror("Error", f"Failed to generate template:\n{str(e)}")
@@ -1378,24 +1776,17 @@ class ModernTMSProcessorGUI:
         header_frame.columnconfigure(0, weight=1)
         
         # Title with modern styling
-        title_label = ttk.Label(header_frame, text="🚛 TMS Data Processor Pro", style='Title.TLabel')
+        title_label = ttk.Label(header_frame, text="🚛 TMS Data Processor", style='Title.TLabel')
         title_label.grid(row=0, column=0, pady=(5, 10))
         
-        # Report Type Selection - compact
-        report_section = tk.Frame(main_frame, bg='#f8f9fa')
-        report_section.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
-        report_section.columnconfigure(0, weight=1)
-        
-        # Section header
-        ttk.Label(report_section, text="📋 Report Type", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(10, 5))
-        
+        # Initialize report type variable
         self.report_type = tk.StringVar(value="basic")
-        report_frame = tk.Frame(report_section, bg='#f8f9fa')
-        report_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
-        report_frame.grid_columnconfigure(0, weight=1)
         
-        # Professional card-style selection
-        self.create_card_buttons(report_frame)
+        # Compact Navigation Bar (always visible)
+        self.nav_bar = tk.Frame(main_frame, bg='#e2e8f0', height=45)
+        self.nav_bar.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 5), padx=5)
+        self.nav_bar.grid_columnconfigure(0, weight=1)
+        self.create_navigation_bar()
         
         # Input Section - Dynamic (File or Date input based on selection)
         self.input_section = tk.Frame(main_frame, bg='#f8f9fa')
@@ -1406,6 +1797,12 @@ class ModernTMSProcessorGUI:
         self.create_file_input_section()
         self.create_date_input_section()
         
+        # Set correct initial state (start with file input visible, date input hidden)
+        if hasattr(self, 'file_section'):
+            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        if hasattr(self, 'date_section'):
+            self.date_section.grid_remove()
+        
         # Process Button with enhanced styling
         button_frame = tk.Frame(main_frame, bg='#ffffff')
         button_frame.grid(row=3, column=0, columnspan=3, pady=10)
@@ -1414,8 +1811,37 @@ class ModernTMSProcessorGUI:
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
         
-        # Set initial selection after all components are created
-        self.select_card('basic')
+        # Create main landing page
+        # Set initial selection to basic report page
+        self.root.after(1, lambda: self.select_card('basic'))
+    
+    def create_navigation_bar(self):
+        """Create compact navigation bar for switching between pages"""
+        nav_container = tk.Frame(self.nav_bar, bg='#e2e8f0')
+        nav_container.pack(pady=8, padx=15)
+        
+        # Store button references for active state management
+        self.nav_buttons = {}
+        
+        # Primary: Basic Report (larger, more prominent)
+        self.nav_buttons['basic'] = tk.Button(nav_container, text="📊 Basic", font=('Segoe UI', 11, 'bold'), 
+                            bg='#4299e1', fg='white', relief='flat', bd=0,
+                            cursor='hand2', command=lambda: self.select_card('basic'),
+                            activebackground='#3182ce', padx=15, pady=6)
+        self.nav_buttons['basic'].pack(side='left', padx=(0, 8))
+        
+        # Secondary: Other options (smaller)
+        self.nav_buttons['detailed'] = tk.Button(nav_container, text="📈 Detailed", font=('Segoe UI', 10), 
+                               bg='#ffffff', fg='#4a5568', relief='flat', bd=1,
+                               cursor='hand2', command=lambda: self.select_card('detailed'),
+                               activebackground='#f7fafc', padx=10, pady=4)
+        self.nav_buttons['detailed'].pack(side='left', padx=(0, 5))
+        
+        self.nav_buttons['template'] = tk.Button(nav_container, text="📋 Template", font=('Segoe UI', 10), 
+                               bg='#ffffff', fg='#4a5568', relief='flat', bd=1,
+                               cursor='hand2', command=lambda: self.select_card('template'),
+                               activebackground='#f7fafc', padx=10, pady=4)
+        self.nav_buttons['template'].pack(side='left')
         
     def setup_drag_drop(self, widget):
         """Setup drag and drop functionality for file selection"""
@@ -1451,6 +1877,32 @@ class ModernTMSProcessorGUI:
             # DND not available, continue without it
             pass
             
+    def auto_resize_window(self):
+        """Dynamically resize window to fit content with padding"""
+        self.root.update_idletasks()
+        
+        # Get the required size of all content
+        required_width = self.root.winfo_reqwidth() + 40  # Add padding
+        required_height = self.root.winfo_reqheight() + 60  # Add padding
+        
+        # Set reasonable limits
+        min_width = 1100
+        max_width = int(self.root.winfo_screenwidth() * 0.9)
+        min_height = 600
+        max_height = int(self.root.winfo_screenheight() * 0.85)
+        
+        # Constrain to limits
+        width = max(min_width, min(required_width, max_width))
+        height = max(min_height, min(required_height, max_height))
+        
+        # Center on screen
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        
+        # Apply new size
+        self.root.geometry(f'{width}x{height}+{x}+{y}')
+        self.root.minsize(min_width, min_height)
+        
     def center_window(self):
         """Center the window on screen"""
         self.root.update_idletasks()
@@ -1472,7 +1924,7 @@ class ModernTMSProcessorGUI:
             self.update_process_button_state()
     
     def update_file_display(self):
-        """Update the file display to show all selected filenames"""
+        """Update the file display to show all selected filenames with auto-sizing"""
         self.file_display.config(state='normal')
         self.file_display.delete('1.0', tk.END)
         
@@ -1485,6 +1937,8 @@ class ModernTMSProcessorGUI:
                 display_text = f"✅ Selected: {filename}"
                 self.file_display.insert('1.0', display_text)
                 self.file_display.config(fg='#0d9488')
+                # Set height for single file
+                optimal_height = 3
             else:
                 # Multiple files - show count and list all filenames
                 header = f"✅ {file_count} files selected:\n\n"
@@ -1497,23 +1951,44 @@ class ModernTMSProcessorGUI:
                     self.file_display.insert(tk.END, file_line)
                 
                 self.file_display.config(fg='#0d9488')
+                # Calculate optimal height: header (2 lines) + files + padding
+                optimal_height = min(max(file_count + 3, 5), 15)  # Min 5, max 15 lines
+            
+            # Auto-resize the display based on content
+            self.file_display.config(height=optimal_height)
         else:
             self.file_display.insert('1.0', "No files selected")
-            self.file_display.config(fg='#6c757d')
+            self.file_display.config(fg='#6c757d', height=3)
         
         self.file_display.config(state='disabled')
     
     def update_process_button_state(self):
         """Enable process button based on current selection and input state"""
         if self.report_type.get() == 'template':
-            # Template mode - check date input
-            date_text = self.date_entry.get().strip()
-            if date_text and date_text != "Enter date range (e.g., 08.04.25 - 08.08.25)":
-                self.process_button.config(state="normal", text="📋 GENERATE TEMPLATE")
-            else:
-                self.process_button.config(state="disabled", text="📋 GENERATE TEMPLATE")
+            # Template mode - hide main process button completely
+            if hasattr(self, 'process_button'):
+                self.process_button.grid_remove()  # Hide the button
+            
+            # Update dedicated template button state
+            if hasattr(self, 'template_button'):
+                date_range = self.get_date_range_string()
+                if CALENDAR_AVAILABLE and hasattr(self, 'date_range_entry'):
+                    # Enhanced calendar mode with text box - check for valid input
+                    if date_range and date_range not in ["Select dates", "Enter date range (e.g., 08.04.25 - 08.08.25)"]:
+                        self.template_button.config(state="normal")
+                    else:
+                        self.template_button.config(state="disabled")
+                elif date_range and date_range != "Enter date range (e.g., 08.04.25 - 08.08.25)":
+                    # Fallback text entry mode - check for valid input
+                    self.template_button.config(state="normal")
+                else:
+                    self.template_button.config(state="disabled")
         else:
-            # File processing mode - check files
+            # File processing mode - show main process button
+            if hasattr(self, 'process_button'):
+                self.process_button.grid()  # Show the button
+            
+            # Check files
             if self.input_files:
                 file_count = len(self.input_files)
                 button_text = f"🚀 PROCESS {file_count} FILE{'S' if file_count > 1 else ''}"
@@ -1523,18 +1998,12 @@ class ModernTMSProcessorGUI:
     
     
     def process_file(self):
-        """Process the selected files or generate template based on current mode"""
+        """Process the selected files (template generation now handled by dedicated button)"""
         if self.is_processing:
             return
             
-        # Check current mode
-        if self.report_type.get() == 'template':
-            # Template generation mode
-            date_text = self.date_entry.get().strip()
-            if not date_text or date_text == "Enter date range (e.g., 08.04.25 - 08.08.25)":
-                return
-            self.generate_template()
-        else:
+        # Only handle file processing mode (template has its own button now)
+        if self.report_type.get() != 'template':
             # File processing mode
             if not self.input_files:
                 return
@@ -1574,14 +2043,35 @@ class ModernTMSProcessorGUI:
                 
                 output_folder = None  # Not used for single file
             else:
-                # Multiple files - ask for folder selection
-                output_folder = filedialog.askdirectory(
-                    title="Select Folder to Save Processed Files"
-                )
+                # Multiple files - auto-create timestamped folder
+                from datetime import datetime
+                import os
                 
-                if not output_folder:
-                    self.root.after(0, self._reset_ui)
-                    return
+                # Get base directory (use Desktop by default, or same location as first input file)
+                if self.input_files:
+                    base_dir = os.path.dirname(self.input_files[0])
+                else:
+                    base_dir = os.path.join(os.path.expanduser("~"), "Desktop")
+                
+                # Create timestamped folder name
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+                report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                folder_name = f"TMS_Processed_{report_type}_{timestamp}"
+                output_folder = os.path.join(base_dir, folder_name)
+                
+                # Create the folder
+                try:
+                    os.makedirs(output_folder, exist_ok=True)
+                    print(f"Created output folder: {output_folder}")
+                except Exception as e:
+                    print(f"Error creating folder: {e}")
+                    # Fallback to user selection if auto-creation fails
+                    output_folder = filedialog.askdirectory(
+                        title="Auto-folder creation failed. Select Folder to Save Processed Files"
+                    )
+                    if not output_folder:
+                        self.root.after(0, self._reset_ui)
+                        return
                 
                 output_file = None  # Will be generated per file
             
