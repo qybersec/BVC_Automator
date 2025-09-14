@@ -34,6 +34,7 @@ except ImportError:
         'BACKGROUND_WHITE': '#ffffff',
         'BACKGROUND_GRAY': '#f8f9fa',
         'BACKGROUND_LIGHT': '#f7fafc',
+        'BACKGROUND_BORDER': '#e2e8f0',
         
         # Text colors
         'TEXT_PRIMARY': '#2d3748',
@@ -43,14 +44,15 @@ except ImportError:
         
         # Status colors
         'SUCCESS_GREEN': '#38a169',
-        'SUCCESS_LIGHT': '#48bb78',
-        'WARNING_ORANGE': '#ff8c42',
-        'WARNING_LIGHT': '#ffb366',
+        'SUCCESS_LIGHT': '#e6fffa',
+        'WARNING_YELLOW': '#ffd700',
         'ERROR_RED': '#e53e3e',
         
-        # Interaction colors
-        'HOVER_LIGHT': '#e6fffa',
-        'BORDER_LIGHT': '#d0d0d0',
+        # Navigation colors
+        'NAV_INACTIVE': '#ffffff',
+        'NAV_ACTIVE': '#4299e1',
+        
+        # Legacy colors for backward compatibility
         'ACCENT_PURPLE': '#667eea'
     }
 
@@ -2045,7 +2047,6 @@ class ModernTMSProcessorGUI:
             else:
                 # Multiple files - auto-create timestamped folder
                 from datetime import datetime
-                import os
                 
                 # Get base directory (use Desktop by default, or same location as first input file)
                 if self.input_files:

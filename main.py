@@ -11,6 +11,18 @@ import sys
 import os
 from pathlib import Path
 
+# Fix Windows console encoding issues
+if sys.platform == "win32":
+    try:
+        # Try to set UTF-8 encoding for console output
+        import locale
+        import codecs
+        sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+        sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
+    except Exception:
+        # Fallback: just continue without UTF-8 encoding
+        pass
+
 # Add project root to Python path for imports
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))

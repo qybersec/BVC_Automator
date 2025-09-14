@@ -31,6 +31,9 @@ COLORS = {
     # Navigation colors
     'NAV_INACTIVE': '#ffffff',
     'NAV_ACTIVE': '#4299e1',
+
+    # Legacy colors for backward compatibility
+    'ACCENT_PURPLE': '#667eea'
 }
 
 # Typography
