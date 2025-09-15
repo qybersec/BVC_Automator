@@ -28,9 +28,9 @@ class FileInputComponent:
         # Section header
         header_style = {'background': COLORS['BACKGROUND_GRAY']}
         ttk.Label(
-            self.file_section, 
-            text="📁 Input File", 
-            style='Header.TLabel', 
+            self.file_section,
+            text="📁 Input Files (Multi-Select)",
+            style='Header.TLabel',
             **header_style
         ).grid(row=0, column=0, pady=(10, 5))
         
@@ -59,7 +59,7 @@ class FileInputComponent:
         
         # Initialize with placeholder text
         self.file_display.config(state='normal')
-        self.file_display.insert('1.0', "No files selected")
+        self.file_display.insert('1.0', "No files selected\n\nTip: Hold Ctrl/Cmd to select multiple files")
         self.file_display.config(state='disabled', fg=COLORS['TEXT_MUTED'])
         
         self.file_display_frame.grid_columnconfigure(0, weight=1)
@@ -70,9 +70,9 @@ class FileInputComponent:
         
         # Browse button
         browse_button = ttk.Button(
-            file_frame, 
-            text="📂 Browse", 
-            command=self.browse_callback, 
+            file_frame,
+            text="📂 Browse Files",
+            command=self.browse_callback,
             style='Browse.TButton'
         )
         browse_button.grid(row=0, column=1)

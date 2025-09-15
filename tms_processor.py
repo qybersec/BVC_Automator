@@ -2295,7 +2295,12 @@ class ModernTMSProcessorGUI:
                     upload_date = datetime.fromisoformat(entry['timestamp']).strftime('%m/%d %I:%M%p')
                     report_type = entry['report_type'].title()
                     file_count = entry['file_count']
-                    file_text = f"{file_count} file{'s' if file_count > 1 else ''}"
+
+                    # Only show file count if more than 1 file
+                    if file_count > 1:
+                        date_text = f"🕒 {upload_date} • {report_type} • {file_count} files"
+                    else:
+                        date_text = f"🕒 {upload_date} • {report_type}"
 
                     # Create frame for each upload record
                     record_frame = tk.Frame(self.stats_display_frame, bg=UI_COLORS['BACKGROUND_WHITE'])
@@ -2304,7 +2309,7 @@ class ModernTMSProcessorGUI:
                     # Date and type
                     date_label = tk.Label(
                         record_frame,
-                        text=f"🕒 {upload_date} • {report_type} • {file_text}",
+                        text=date_text,
                         font=('Segoe UI', 8),
                         bg=UI_COLORS['BACKGROUND_WHITE'],
                         fg=UI_COLORS['TEXT_MUTED'],
