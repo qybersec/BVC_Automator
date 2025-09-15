@@ -2264,50 +2264,53 @@ class ModernTMSProcessorGUI:
                 widget.destroy()
 
             if self.savings_history:
-                # Calculate recent totals
-                recent_savings = sum(entry['total_potential_savings'] for entry in self.savings_history)
-                recent_loads = sum(entry['total_loads'] for entry in self.savings_history)
-
-                # Create stats display
-                stats_label = tk.Label(
+                # Header
+                header_label = tk.Label(
                     self.stats_display_frame,
-                    text=f"📊 Recent Stats (Last {len(self.savings_history)} uploads)",
+                    text=f"📊 Recent Uploads (Last {len(self.savings_history)})",
                     font=('Segoe UI', 10, 'bold'),
                     bg=UI_COLORS['BACKGROUND_WHITE'],
                     fg=UI_COLORS['TEXT_PRIMARY']
                 )
-                stats_label.pack(pady=(5, 2))
+                header_label.pack(pady=(5, 5))
 
-                savings_label = tk.Label(
-                    self.stats_display_frame,
-                    text=f"💵 Total Potential Savings: ${recent_savings:,.2f}",
-                    font=('Segoe UI', 9),
-                    bg=UI_COLORS['BACKGROUND_WHITE'],
-                    fg=UI_COLORS['SUCCESS_GREEN']
-                )
-                savings_label.pack()
+                # Show individual upload records
+                for i, entry in enumerate(self.savings_history):
+                    upload_date = datetime.fromisoformat(entry['timestamp']).strftime('%m/%d %I:%M%p')
+                    report_type = entry['report_type'].title()
+                    file_count = entry['file_count']
+                    file_text = f"{file_count} file{'s' if file_count > 1 else ''}"
 
-                loads_label = tk.Label(
-                    self.stats_display_frame,
-                    text=f"📦 Total Loads Processed: {recent_loads:,}",
-                    font=('Segoe UI', 9),
-                    bg=UI_COLORS['BACKGROUND_WHITE'],
-                    fg=UI_COLORS['TEXT_SECONDARY']
-                )
-                loads_label.pack()
+                    # Create frame for each upload record
+                    record_frame = tk.Frame(self.stats_display_frame, bg=UI_COLORS['BACKGROUND_WHITE'])
+                    record_frame.pack(fill='x', padx=5, pady=1)
 
-                # Show last upload info
-                if self.savings_history:
-                    last_upload = self.savings_history[0]
-                    last_date = datetime.fromisoformat(last_upload['timestamp']).strftime('%m/%d %I:%M%p')
-                    last_label = tk.Label(
-                        self.stats_display_frame,
-                        text=f"🕒 Last Upload: {last_date} (${last_upload['total_potential_savings']:,.2f})",
+                    # Date and type
+                    date_label = tk.Label(
+                        record_frame,
+                        text=f"🕒 {upload_date} • {report_type} • {file_text}",
                         font=('Segoe UI', 8),
                         bg=UI_COLORS['BACKGROUND_WHITE'],
-                        fg=UI_COLORS['TEXT_MUTED']
+                        fg=UI_COLORS['TEXT_MUTED'],
+                        anchor='w'
                     )
-                    last_label.pack()
+                    date_label.pack(fill='x')
+
+                    # Savings amount
+                    savings_label = tk.Label(
+                        record_frame,
+                        text=f"💵 Potential Savings: ${entry['total_potential_savings']:,.2f}",
+                        font=('Segoe UI', 9),
+                        bg=UI_COLORS['BACKGROUND_WHITE'],
+                        fg=UI_COLORS['SUCCESS_GREEN'],
+                        anchor='w'
+                    )
+                    savings_label.pack(fill='x', padx=(10, 0))
+
+                    # Add separator line if not the last item
+                    if i < len(self.savings_history) - 1:
+                        separator = tk.Frame(record_frame, height=1, bg=UI_COLORS['BACKGROUND_BORDER'])
+                        separator.pack(fill='x', pady=(3, 0))
 
 def main():
     root = tk.Tk()
