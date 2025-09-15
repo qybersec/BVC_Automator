@@ -1845,17 +1845,31 @@ class ModernTMSProcessorGUI:
         self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
 
         # Create scrollable canvas for stats
-        stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=120, highlightthickness=0)
-        stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=stats_canvas.yview)
-        self.stats_display_frame = tk.Frame(stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
+        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=120, highlightthickness=0)
+        stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=self.stats_canvas.yview)
+        self.stats_display_frame = tk.Frame(self.stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
 
         # Configure canvas scrolling
-        self.stats_display_frame.bind("<Configure>", lambda e: stats_canvas.configure(scrollregion=stats_canvas.bbox("all")))
-        stats_canvas.create_window((0, 0), window=self.stats_display_frame, anchor="nw")
-        stats_canvas.configure(yscrollcommand=stats_scrollbar.set)
+        self.stats_display_frame.bind("<Configure>", lambda e: self.stats_canvas.configure(scrollregion=self.stats_canvas.bbox("all")))
+        self.stats_canvas.create_window((0, 0), window=self.stats_display_frame, anchor="nw")
+        self.stats_canvas.configure(yscrollcommand=stats_scrollbar.set)
+
+        # Enable mouse wheel scrolling
+        def _on_mousewheel(event):
+            self.stats_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+        def _bind_mousewheel(event):
+            self.stats_canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+        def _unbind_mousewheel(event):
+            self.stats_canvas.unbind_all("<MouseWheel>")
+
+        # Bind mouse wheel events when mouse enters/leaves the canvas
+        self.stats_canvas.bind('<Enter>', _bind_mousewheel)
+        self.stats_canvas.bind('<Leave>', _unbind_mousewheel)
 
         # Pack scrollable components
-        stats_canvas.pack(side="left", fill="both", expand=True)
+        self.stats_canvas.pack(side="left", fill="both", expand=True)
         stats_scrollbar.pack(side="right", fill="y")
 
         # Initialize stats display
@@ -2246,15 +2260,18 @@ class ModernTMSProcessorGUI:
                 total_loads = sum(stat['total_loads'] for stat in all_stats)
                 total_savings = sum(stat['total_potential_savings'] for stat in all_stats)
 
-                # Save to savings history
-                combined_stats = {
-                    'total_potential_savings': total_savings,
-                    'total_loads': total_loads,
-                    'percentage_savings': sum(stat['percentage_savings'] for stat in all_stats) / len(all_stats) if all_stats else 0,
-                    'loads_with_savings': sum(stat['loads_with_savings'] for stat in all_stats)
-                }
+                # Save individual file stats to history
                 report_type = "basic" if self.report_type.get() == "basic" else "detailed"
-                self.save_savings_history(combined_stats, report_type, len(self.input_files))
+                for i, stat in enumerate(all_stats):
+                    file_stats = {
+                        'total_potential_savings': stat['total_potential_savings'],
+                        'total_loads': stat['total_loads'],
+                        'percentage_savings': stat['percentage_savings'],
+                        'loads_with_savings': stat['loads_with_savings']
+                    }
+                    file_name = stat.get('filename', f'file_{i+1}')
+                    self.save_savings_history(file_stats, report_type, 1, file_names=[file_name],
+                                           file_index=i+1, total_files=len(all_stats))
                 
                 if len(self.input_files) == 1:
                     # Single file success message
@@ -2301,7 +2318,7 @@ class ModernTMSProcessorGUI:
             print(f"Warning: Could not load savings history: {e}")
             return []
 
-    def save_savings_history(self, stats, report_type, file_count, file_names=None):
+    def save_savings_history(self, stats, report_type, file_count, file_names=None, file_index=None, total_files=None):
         """Save current processing stats to history"""
         try:
             # Get file names from the current input files
@@ -2316,6 +2333,8 @@ class ModernTMSProcessorGUI:
                 'report_type': report_type,
                 'file_count': file_count,
                 'file_names': file_names,
+                'file_index': file_index,
+                'total_files': total_files,
                 'total_potential_savings': stats.get('total_potential_savings', 0),
                 'total_loads': stats.get('total_loads', 0),
                 'percentage_savings': stats.get('percentage_savings', 0),
@@ -2346,25 +2365,41 @@ class ModernTMSProcessorGUI:
                 widget.destroy()
 
             if self.savings_history:
-                # Header
+                # Header with clear button
+                header_frame = tk.Frame(self.stats_display_frame, bg=UI_COLORS['BACKGROUND_WHITE'])
+                header_frame.pack(fill='x', pady=(5, 5), padx=5)
+
                 header_label = tk.Label(
-                    self.stats_display_frame,
+                    header_frame,
                     text=f"📊 Recent Uploads (Last {len(self.savings_history)})",
                     font=('Segoe UI', 10, 'bold'),
                     bg=UI_COLORS['BACKGROUND_WHITE'],
                     fg=UI_COLORS['TEXT_PRIMARY']
                 )
-                header_label.pack(pady=(5, 5))
+                header_label.pack(side='left')
+
+                clear_button = tk.Button(
+                    header_frame,
+                    text="🗑️ Clear",
+                    font=('Segoe UI', 8),
+                    fg=UI_COLORS['ERROR_RED'],
+                    bg=UI_COLORS['BACKGROUND_WHITE'],
+                    relief='flat',
+                    cursor='hand2',
+                    command=self.clear_savings_history
+                )
+                clear_button.pack(side='right')
 
                 # Show individual upload records
                 for i, entry in enumerate(self.savings_history):
                     upload_date = datetime.fromisoformat(entry['timestamp']).strftime('%m/%d %I:%M%p')
                     report_type = entry['report_type'].title()
-                    file_count = entry['file_count']
+                    file_index = entry.get('file_index')
+                    total_files = entry.get('total_files')
 
-                    # Only show file count if more than 1 file
-                    if file_count > 1:
-                        date_text = f"🕒 {upload_date} • {report_type} • {file_count} files"
+                    # Build date text with file index if available
+                    if file_index and total_files and total_files > 1:
+                        date_text = f"🕒 {upload_date} • {report_type} • {file_index} of {total_files}"
                     else:
                         date_text = f"🕒 {upload_date} • {report_type}"
 
@@ -2418,6 +2453,32 @@ class ModernTMSProcessorGUI:
                     if i < len(self.savings_history) - 1:
                         separator = tk.Frame(record_frame, height=1, bg=UI_COLORS['BACKGROUND_BORDER'])
                         separator.pack(fill='x', pady=(3, 0))
+
+    def clear_savings_history(self):
+        """Clear all savings history with confirmation"""
+        if not self.savings_history:
+            return
+
+        result = messagebox.askyesno(
+            "Clear Recent Uploads",
+            f"Are you sure you want to clear all {len(self.savings_history)} recent upload records?\n\n"
+            "This action cannot be undone.",
+            icon='warning'
+        )
+
+        if result:
+            self.savings_history = []
+            # Delete the history file
+            try:
+                if self.savings_history_file.exists():
+                    self.savings_history_file.unlink()
+            except Exception as e:
+                print(f"Warning: Could not delete history file: {e}")
+
+            # Update the display
+            self.update_savings_display()
+
+            messagebox.showinfo("Cleared", "Recent uploads history has been cleared.")
 
 def main():
     root = tk.Tk()
