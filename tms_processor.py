@@ -5,6 +5,7 @@ from tkinter import filedialog, messagebox, ttk
 import os
 import threading
 import time
+import json
 from pathlib import Path
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -1025,7 +1026,11 @@ class ModernTMSProcessorGUI:
         
         # Progress tracking
         self.is_processing = False
-        
+
+        # Savings history tracking
+        self.savings_history_file = Path.home() / "Desktop" / "tms_savings_history.json"
+        self.savings_history = self.load_savings_history()
+
         # Configure style
         self.setup_styles()
         
@@ -1809,10 +1814,17 @@ class ModernTMSProcessorGUI:
         button_frame = tk.Frame(main_frame, bg='#ffffff')
         button_frame.grid(row=3, column=0, columnspan=3, pady=10)
         
-        self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE", 
+        self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE",
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
-        
+
+        # Stats Display Frame (below process button)
+        self.stats_display_frame = tk.Frame(main_frame, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
+        self.stats_display_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
+
+        # Initialize stats display
+        self.update_savings_display()
+
         # Create main landing page
         # Set initial selection to basic report page
         self.root.after(1, lambda: self.select_card('basic'))
@@ -2158,6 +2170,16 @@ class ModernTMSProcessorGUI:
             if processed_count > 0:
                 total_loads = sum(stat['total_loads'] for stat in all_stats)
                 total_savings = sum(stat['total_potential_savings'] for stat in all_stats)
+
+                # Save to savings history
+                combined_stats = {
+                    'total_potential_savings': total_savings,
+                    'total_loads': total_loads,
+                    'percentage_savings': sum(stat['percentage_savings'] for stat in all_stats) / len(all_stats) if all_stats else 0,
+                    'loads_with_savings': sum(stat['loads_with_savings'] for stat in all_stats)
+                }
+                report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                self.save_savings_history(combined_stats, report_type, len(self.input_files))
                 
                 if len(self.input_files) == 1:
                     # Single file success message
@@ -2192,6 +2214,100 @@ class ModernTMSProcessorGUI:
         self.is_processing = False
         self.process_button.config(state="normal", text="🚀 PROCESS FILE")
         self.update_process_button_state()
+
+    def load_savings_history(self):
+        """Load savings history from JSON file"""
+        try:
+            if self.savings_history_file.exists():
+                with open(self.savings_history_file, 'r') as f:
+                    return json.load(f)
+            return []
+        except Exception as e:
+            print(f"Warning: Could not load savings history: {e}")
+            return []
+
+    def save_savings_history(self, stats, report_type, file_count):
+        """Save current processing stats to history"""
+        try:
+            # Create new entry
+            entry = {
+                'timestamp': datetime.now().isoformat(),
+                'report_type': report_type,
+                'file_count': file_count,
+                'total_potential_savings': stats.get('total_potential_savings', 0),
+                'total_loads': stats.get('total_loads', 0),
+                'percentage_savings': stats.get('percentage_savings', 0),
+                'loads_with_savings': stats.get('loads_with_savings', 0)
+            }
+
+            # Add to history
+            self.savings_history.insert(0, entry)  # Add to beginning
+
+            # Keep only last 10 entries
+            self.savings_history = self.savings_history[:10]
+
+            # Save to file
+            with open(self.savings_history_file, 'w') as f:
+                json.dump(self.savings_history, f, indent=2)
+
+            # Update UI display
+            self.update_savings_display()
+
+        except Exception as e:
+            print(f"Warning: Could not save savings history: {e}")
+
+    def update_savings_display(self):
+        """Update the savings statistics display"""
+        if hasattr(self, 'stats_display_frame'):
+            # Clear existing content
+            for widget in self.stats_display_frame.winfo_children():
+                widget.destroy()
+
+            if self.savings_history:
+                # Calculate recent totals
+                recent_savings = sum(entry['total_potential_savings'] for entry in self.savings_history)
+                recent_loads = sum(entry['total_loads'] for entry in self.savings_history)
+
+                # Create stats display
+                stats_label = tk.Label(
+                    self.stats_display_frame,
+                    text=f"📊 Recent Stats (Last {len(self.savings_history)} uploads)",
+                    font=('Segoe UI', 10, 'bold'),
+                    bg=UI_COLORS['BACKGROUND_WHITE'],
+                    fg=UI_COLORS['TEXT_PRIMARY']
+                )
+                stats_label.pack(pady=(5, 2))
+
+                savings_label = tk.Label(
+                    self.stats_display_frame,
+                    text=f"💵 Total Potential Savings: ${recent_savings:,.2f}",
+                    font=('Segoe UI', 9),
+                    bg=UI_COLORS['BACKGROUND_WHITE'],
+                    fg=UI_COLORS['SUCCESS_GREEN']
+                )
+                savings_label.pack()
+
+                loads_label = tk.Label(
+                    self.stats_display_frame,
+                    text=f"📦 Total Loads Processed: {recent_loads:,}",
+                    font=('Segoe UI', 9),
+                    bg=UI_COLORS['BACKGROUND_WHITE'],
+                    fg=UI_COLORS['TEXT_SECONDARY']
+                )
+                loads_label.pack()
+
+                # Show last upload info
+                if self.savings_history:
+                    last_upload = self.savings_history[0]
+                    last_date = datetime.fromisoformat(last_upload['timestamp']).strftime('%m/%d %I:%M%p')
+                    last_label = tk.Label(
+                        self.stats_display_frame,
+                        text=f"🕒 Last Upload: {last_date} (${last_upload['total_potential_savings']:,.2f})",
+                        font=('Segoe UI', 8),
+                        bg=UI_COLORS['BACKGROUND_WHITE'],
+                        fg=UI_COLORS['TEXT_MUTED']
+                    )
+                    last_label.pack()
 
 def main():
     root = tk.Tk()
