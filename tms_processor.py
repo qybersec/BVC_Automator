@@ -1964,14 +1964,53 @@ class ModernTMSProcessorGUI:
         
     def browse_file(self):
         """Browse for multiple input files"""
-        file_paths = filedialog.askopenfilenames(
-            title="Select TMS Excel Files (Multiple Selection Allowed)",
-            filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")]
-        )
+        try:
+            # Ensure the parent window is active
+            self.root.focus_force()
+            self.root.lift()
+
+            file_paths = filedialog.askopenfilenames(
+                parent=self.root,
+                title="Select TMS Excel Files (Hold Ctrl+Click for Multiple Selection)",
+                initialdir=os.path.expanduser("~"),
+                filetypes=[
+                    ("Excel files", "*.xlsx *.xls"),
+                    ("All files", "*.*")
+                ]
+            )
+        except Exception as e:
+            print(f"File dialog error: {e}")
+            # Fallback to single file selection
+            file_path = filedialog.askopenfilename(
+                parent=self.root,
+                title="Select TMS Excel File (Single Selection Only - Dialog Issue)",
+                initialdir=os.path.expanduser("~"),
+                filetypes=[
+                    ("Excel files", "*.xlsx *.xls"),
+                    ("All files", "*.*")
+                ]
+            )
+            file_paths = (file_path,) if file_path else ()
+
+        # Debug: Log the selection results
         if file_paths:
+            print(f"Selected {len(file_paths)} files:")
+            for i, path in enumerate(file_paths):
+                print(f"  {i+1}. {os.path.basename(path)}")
+
             self.input_files = list(file_paths)
             self.update_file_display()
             self.update_process_button_state()
+
+            # Show success message for multi-file selection
+            if len(file_paths) > 1:
+                messagebox.showinfo(
+                    "Multi-File Selection Successful",
+                    f"✅ Successfully selected {len(file_paths)} files for processing:\n\n" +
+                    "\n".join([f"• {os.path.basename(f)}" for f in file_paths])
+                )
+        else:
+            print("No files selected")
     
     def update_file_display(self):
         """Update the file display to show all selected filenames with auto-sizing"""
