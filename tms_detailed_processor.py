@@ -233,16 +233,24 @@ class TMSDetailedDataProcessor:
             data_df = data_df.iloc[:, relevant_columns]
             
             # Step 7: Set proper column names for detailed reports
+            # Based on debug analysis, the Excel export appears to be missing Least Cost Service Type
+            # Adjusting column mapping to match actual data structure
             detailed_column_names = [
                 'Load No.', 'Ship Date', 'Origin Name', 'Origin City', 'Origin State', 'Origin Postal',
                 'Destination City', 'Destination State', 'Destination Postal', 'Created By',
                 'Selected Carrier', 'Selected Service Type', 'Selected Transit Days', 'Selected Freight Cost', 'Selected Accessorial Cost', 'Selected Total Cost',
-                'Least Cost Carrier', 'Least Cost Service Type', 'Least Cost Transit Days', 'Least Cost Freight Cost', 
+                'Least Cost Carrier', 'Least Cost Transit Days', 'Least Cost Freight Cost',  # Service Type appears to be missing from export
                 'Empty_W_Column',  # This is the problematic W column (22) - always empty
                 'Least Cost Accessorial Cost', 'Least Cost Total Cost',
-                'Empty_Z_Column',  # This is the problematic Z column (25) - always empty  
+                'Empty_Z_Column',  # This is the problematic Z column (25) - always empty
                 'Potential Savings'
             ]
+
+            # Add a placeholder Least Cost Service Type column with empty values
+            print("DEBUG - Adding placeholder Least Cost Service Type column")
+            placeholder_service_type = [''] * len(data_df)
+
+            # We need to insert this after processing to maintain the expected column structure
             
             # Ensure column names match the actual extracted columns
             if len(detailed_column_names) != len(data_df.columns):
@@ -258,6 +266,13 @@ class TMSDetailedDataProcessor:
                 column_names = detailed_column_names
             
             data_df.columns = column_names
+
+            # Insert placeholder Least Cost Service Type column after Least Cost Carrier
+            if 'Least Cost Carrier' in data_df.columns and 'Least Cost Service Type' not in data_df.columns:
+                carrier_index = data_df.columns.get_loc('Least Cost Carrier')
+                # Insert empty service type column after carrier
+                data_df.insert(carrier_index + 1, 'Least Cost Service Type', '')
+                print(f"DEBUG - Inserted placeholder 'Least Cost Service Type' column at position {carrier_index + 1}")
 
             # Debug: Log sample data for least cost columns BEFORE cleaning
             if len(data_df) > 0:
