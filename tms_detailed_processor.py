@@ -220,6 +220,16 @@ class TMSDetailedDataProcessor:
             
             # Extract columns C through AA (2 through 26) - skip the empty A and B columns
             relevant_columns = list(range(2, min(self.EXPECTED_COLUMNS, len(data_df.columns))))
+
+            # Debug: Show what columns we're extracting
+            print(f"DEBUG - COLUMN EXTRACTION:")
+            print(f"  Total columns in raw data: {len(data_df.columns)}")
+            print(f"  Extracting columns: {relevant_columns}")
+            if len(data_df) > 0:
+                print(f"  Raw column P (index 15) sample: {data_df.iloc[:5, 15].tolist() if len(data_df.columns) > 15 else 'N/A'}")
+                print(f"  Raw column Q (index 16) sample: {data_df.iloc[:5, 16].tolist() if len(data_df.columns) > 16 else 'N/A'}")
+                print(f"  Raw column R (index 17) sample: {data_df.iloc[:5, 17].tolist() if len(data_df.columns) > 17 else 'N/A'}")
+
             data_df = data_df.iloc[:, relevant_columns]
             
             # Step 7: Set proper column names for detailed reports
@@ -249,13 +259,22 @@ class TMSDetailedDataProcessor:
             
             data_df.columns = column_names
 
-            # Debug: Log sample data for least cost columns
+            # Debug: Log sample data for least cost columns BEFORE cleaning
             if len(data_df) > 0:
                 least_cost_cols = ['Least Cost Carrier', 'Least Cost Service Type']
                 for col in least_cost_cols:
                     if col in data_df.columns:
                         sample_values = data_df[col].head(5).tolist()
                         unique_values = data_df[col].nunique()
+                        value_types = [type(v).__name__ for v in data_df[col].head(5)]
+                        zero_count = (data_df[col] == 0).sum()
+                        na_count = data_df[col].isna().sum()
+                        print(f"DEBUG - BEFORE CLEANING - Column {col}:")
+                        print(f"  Sample values: {sample_values}")
+                        print(f"  Value types: {value_types}")
+                        print(f"  Unique count: {unique_values}")
+                        print(f"  Zero count: {zero_count}")
+                        print(f"  NA count: {na_count}")
                         self.data_logger.info(f"Column {col} sample values: {sample_values}, unique count: {unique_values}")
 
             # Step 8: Remove the problematic W and Z columns that are always empty
@@ -410,12 +429,26 @@ class TMSDetailedDataProcessor:
                     # Log the cleaning results for debugging
                     zero_count = (before_cleaning == 0).sum()
                     nan_count = before_cleaning.isna().sum()
+                    print(f"DEBUG - AFTER CLEANING - Column {col}:")
+                    print(f"  Before cleaning sample: {before_cleaning.head(5).tolist()}")
+                    print(f"  After cleaning sample: {df[col].head(5).tolist()}")
+                    print(f"  Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
                     if zero_count > 0 or nan_count > 0:
                         self.data_logger.info(f"Column {col}: Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
                 else:
                     df[col] = df[col].astype(str).str.strip()
                     df[col] = df[col].replace('nan', '')
         
+        # Final debug: Show final state of least cost columns
+        least_cost_cols = ['Least Cost Carrier', 'Least Cost Service Type']
+        for col in least_cost_cols:
+            if col in df.columns:
+                non_empty_count = (df[col] != '').sum()
+                total_rows = len(df)
+                print(f"DEBUG - FINAL STATE - Column {col}:")
+                print(f"  Non-empty values: {non_empty_count} out of {total_rows}")
+                print(f"  Sample final values: {df[col].head(10).tolist()}")
+
         self.data_logger.log_data_stats(cleaning_stats, "DETAILED_TYPE_CLEANING")
         return df
     
