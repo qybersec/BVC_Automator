@@ -1277,9 +1277,15 @@ class ModernTMSProcessorGUI:
         if card_type == 'template':
             # Show date input instead of file input for template generation
             self.show_date_input_ui()
+            # Hide stats display for template page
+            if hasattr(self, 'stats_outer_frame'):
+                self.stats_outer_frame.grid_remove()
         else:
             # Show normal file input UI
             self.show_file_input_ui()
+            # Show stats display for processing pages
+            if hasattr(self, 'stats_outer_frame'):
+                self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
         
     
     def create_file_input_section(self):
@@ -1834,9 +1840,23 @@ class ModernTMSProcessorGUI:
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
 
-        # Stats Display Frame (below process button)
-        self.stats_display_frame = tk.Frame(main_frame, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
-        self.stats_display_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
+        # Stats Display Frame (below process button) - Scrollable
+        self.stats_outer_frame = tk.Frame(main_frame, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
+        self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
+
+        # Create scrollable canvas for stats
+        stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=120, highlightthickness=0)
+        stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=stats_canvas.yview)
+        self.stats_display_frame = tk.Frame(stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
+
+        # Configure canvas scrolling
+        self.stats_display_frame.bind("<Configure>", lambda e: stats_canvas.configure(scrollregion=stats_canvas.bbox("all")))
+        stats_canvas.create_window((0, 0), window=self.stats_display_frame, anchor="nw")
+        stats_canvas.configure(yscrollcommand=stats_scrollbar.set)
+
+        # Pack scrollable components
+        stats_canvas.pack(side="left", fill="both", expand=True)
+        stats_scrollbar.pack(side="right", fill="y")
 
         # Initialize stats display
         self.update_savings_display()
@@ -2242,14 +2262,21 @@ class ModernTMSProcessorGUI:
             print(f"Warning: Could not load savings history: {e}")
             return []
 
-    def save_savings_history(self, stats, report_type, file_count):
+    def save_savings_history(self, stats, report_type, file_count, file_names=None):
         """Save current processing stats to history"""
         try:
+            # Get file names from the current input files
+            if file_names is None and hasattr(self, 'input_files') and self.input_files:
+                file_names = [os.path.basename(f) for f in self.input_files]
+            elif file_names is None:
+                file_names = []
+
             # Create new entry
             entry = {
                 'timestamp': datetime.now().isoformat(),
                 'report_type': report_type,
                 'file_count': file_count,
+                'file_names': file_names,
                 'total_potential_savings': stats.get('total_potential_savings', 0),
                 'total_loads': stats.get('total_loads', 0),
                 'percentage_savings': stats.get('percentage_savings', 0),
@@ -2316,6 +2343,26 @@ class ModernTMSProcessorGUI:
                         anchor='w'
                     )
                     date_label.pack(fill='x')
+
+                    # File names (if available)
+                    file_names = entry.get('file_names', [])
+                    if file_names:
+                        if len(file_names) == 1:
+                            file_text = f"📄 {file_names[0]}"
+                        elif len(file_names) <= 3:
+                            file_text = f"📄 {', '.join(file_names)}"
+                        else:
+                            file_text = f"📄 {', '.join(file_names[:2])}, +{len(file_names)-2} more"
+
+                        file_label = tk.Label(
+                            record_frame,
+                            text=file_text,
+                            font=('Segoe UI', 8),
+                            bg=UI_COLORS['BACKGROUND_WHITE'],
+                            fg=UI_COLORS['TEXT_SECONDARY'],
+                            anchor='w'
+                        )
+                        file_label.pack(fill='x', padx=(10, 0))
 
                     # Savings amount
                     savings_label = tk.Label(
