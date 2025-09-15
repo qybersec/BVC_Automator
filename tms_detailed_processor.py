@@ -248,7 +248,16 @@ class TMSDetailedDataProcessor:
                 column_names = detailed_column_names
             
             data_df.columns = column_names
-            
+
+            # Debug: Log sample data for least cost columns
+            if len(data_df) > 0:
+                least_cost_cols = ['Least Cost Carrier', 'Least Cost Service Type']
+                for col in least_cost_cols:
+                    if col in data_df.columns:
+                        sample_values = data_df[col].head(5).tolist()
+                        unique_values = data_df[col].nunique()
+                        self.data_logger.info(f"Column {col} sample values: {sample_values}, unique count: {unique_values}")
+
             # Step 8: Remove the problematic W and Z columns that are always empty
             self.logger.log_processing_step("Removing empty W and Z columns")
             columns_to_drop = ['Empty_W_Column', 'Empty_Z_Column']
@@ -388,8 +397,24 @@ class TMSDetailedDataProcessor:
         for col in string_columns:
             if col in df.columns:
                 cleaning_stats['columns_processed'] += 1
-                df[col] = df[col].astype(str).str.strip()
-                df[col] = df[col].replace('nan', '')
+
+                # Special handling for Least Cost Carrier and Service Type
+                if col in ['Least Cost Carrier', 'Least Cost Service Type']:
+                    # Check for numeric zeros that should be converted to empty strings
+                    before_cleaning = df[col].copy()
+                    df[col] = df[col].astype(str).str.strip()
+
+                    # Convert numeric zeros to empty strings
+                    df[col] = df[col].replace(['0', '0.0', 'nan', 'None'], '')
+
+                    # Log the cleaning results for debugging
+                    zero_count = (before_cleaning == 0).sum()
+                    nan_count = before_cleaning.isna().sum()
+                    if zero_count > 0 or nan_count > 0:
+                        self.data_logger.info(f"Column {col}: Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
+                else:
+                    df[col] = df[col].astype(str).str.strip()
+                    df[col] = df[col].replace('nan', '')
         
         self.data_logger.log_data_stats(cleaning_stats, "DETAILED_TYPE_CLEANING")
         return df

@@ -428,8 +428,24 @@ class ModernTMSProcessor:
         for col in string_columns:
             if col in df.columns:
                 cleaning_stats['columns_processed'] += 1
-                df[col] = df[col].astype(str).str.strip()
-                df[col] = df[col].replace('nan', '')
+
+                # Special handling for Least Cost Carrier and Service Type
+                if col in ['Least Cost Carrier', 'Least Cost Service Type']:
+                    # Check for numeric zeros that should be converted to empty strings
+                    before_cleaning = df[col].copy()
+                    df[col] = df[col].astype(str).str.strip()
+
+                    # Convert numeric zeros to empty strings
+                    df[col] = df[col].replace(['0', '0.0', 'nan', 'None'], '')
+
+                    # Log the cleaning results for debugging
+                    zero_count = (before_cleaning == 0).sum()
+                    nan_count = before_cleaning.isna().sum()
+                    if zero_count > 0 or nan_count > 0:
+                        self.data_logger.info(f"Column {col}: Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
+                else:
+                    df[col] = df[col].astype(str).str.strip()
+                    df[col] = df[col].replace('nan', '')
         
         self.data_logger.log_data_stats(cleaning_stats, "TYPE_CLEANING")
         return df
