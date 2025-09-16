@@ -1068,13 +1068,13 @@ class ModernTMSProcessorGUI:
         self.root.title("TMS Data Processor Pro")
 
         # Calculate center position immediately
-        width, height = 1200, 650
+        width, height = 1200, 730
         x = (self.root.winfo_screenwidth() // 2) - (width // 2)
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
         self.root.geometry(f'{width}x{height}+{x}+{y}')
 
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(1100, 600)
+        self.root.minsize(1100, 680)
         self.root.resizable(True, True)
         
         # Initialize processors
