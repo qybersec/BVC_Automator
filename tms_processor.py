@@ -1068,13 +1068,13 @@ class ModernTMSProcessorGUI:
         self.root.title("TMS Data Processor Pro")
 
         # Calculate center position immediately
-        width, height = 1200, 730
+        width, height = 1200, 780
         x = (self.root.winfo_screenwidth() // 2) - (width // 2)
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
         self.root.geometry(f'{width}x{height}+{x}+{y}')
 
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(1100, 680)
+        self.root.minsize(1100, 730)
         self.root.resizable(True, True)
         
         # Initialize processors
@@ -1360,8 +1360,8 @@ class ModernTMSProcessorGUI:
         # Create scrollable text widget for multiple file names
         import tkinter.scrolledtext as scrolledtext
         self.file_display = scrolledtext.ScrolledText(file_display_frame,
-                                                     height=4,
-                                                     width=40,
+                                                     height=3,
+                                                     width=30,
                                                      font=('Segoe UI', 9),
                                                      fg='#000000',
                                                      bg='#ffffff',
@@ -1861,8 +1861,8 @@ class ModernTMSProcessorGUI:
         # Create horizontal layout container for input and recent uploads
         self.content_container = tk.Frame(main_frame, bg='#f8f9fa')
         self.content_container.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10), padx=5)
-        self.content_container.grid_columnconfigure(0, weight=1)  # Input section (left)
-        self.content_container.grid_columnconfigure(1, weight=1)  # Recent uploads (right)
+        self.content_container.grid_columnconfigure(0, weight=1)  # Input section (left) - 25%
+        self.content_container.grid_columnconfigure(1, weight=3)  # Recent uploads (right) - 75%
 
         # Input Section - Dynamic (File or Date input based on selection) - LEFT SIDE
         self.input_section = tk.Frame(self.content_container, bg='#f8f9fa')
@@ -1892,7 +1892,7 @@ class ModernTMSProcessorGUI:
         self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(10, 0), pady=0)
 
         # Create scrollable canvas for stats
-        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=200, highlightthickness=0)
+        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=350, highlightthickness=0)
         stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=self.stats_canvas.yview)
         self.stats_display_frame = tk.Frame(self.stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
 
@@ -2102,7 +2102,7 @@ class ModernTMSProcessorGUI:
                 
                 self.file_display.config(fg='#0d9488')
                 # Calculate optimal height: header (2 lines) + files + padding
-                optimal_height = min(max(file_count + 2, 4), 8)  # Min 4, max 8 lines
+                optimal_height = min(max(file_count + 1, 3), 6)  # Min 3, max 6 lines (compact for max 10 files)
             
             # Auto-resize the display based on content
             self.file_display.config(height=optimal_height)
