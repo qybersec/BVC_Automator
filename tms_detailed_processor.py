@@ -86,9 +86,16 @@ class TMSDetailedDataProcessor:
         
         # Detailed report specific settings
         self.EXPECTED_COLUMNS = 27
-        self.DEFAULT_HEADER_ROW = 8
-        self.DEFAULT_DATA_START_ROW = 9
-        
+        self.DEFAULT_HEADER_ROW = 8   # Row 9 in Excel (column headers)
+        self.DEFAULT_DATA_START_ROW = 9  # Row 10 in Excel (first data row)
+
+        # Carrier lists for special processing
+        # TL carriers that require copy-paste and zero-out logic
+        self.TL_CARRIERS = {
+            'LANDSTAR RANGER INC',
+            'SMARTWAY TRANSPORTATION INC'
+        }
+
         self.logger.info("TMSDetailedDataProcessor initialized for detailed reports with 27 columns")
         
     def _extract_title_info(self, df_raw):
@@ -115,23 +122,40 @@ class TMSDetailedDataProcessor:
     
     def _detect_data_structure(self, df_raw):
         """Intelligently detect header and data start positions for detailed reports"""
-        header_row = self.DEFAULT_HEADER_ROW
-        data_start_row = self.DEFAULT_DATA_START_ROW
-        
-        # Look for header indicators specific to detailed reports
-        header_indicators = ['Load No.', 'Origin Name', 'Created By', 'Carrier', 'Service Type']
-        
-        for row_idx in range(5, min(15, len(df_raw))):
-            row_data = df_raw.iloc[row_idx].dropna().astype(str).tolist()
-            row_str = ' '.join(row_data).lower()
-            
-            # Check if this row contains header-like content
-            matches = sum(1 for indicator in header_indicators if indicator.lower() in row_str)
-            if matches >= 3:  # Found at least 3 header indicators for detailed reports
-                header_row = row_idx
-                data_start_row = row_idx + 1  # Data starts immediately after headers in detailed
-                break
-        
+        # For detailed reports, headers span two rows: 8 (section) + 9 (columns)
+        header_row = 8  # Row 9 in Excel (0-based index 8)
+        data_start_row = 9  # Row 10 in Excel (0-based index 9)
+
+        # Verify the structure by checking for key indicators
+        try:
+            # Check row 8 for section headers
+            section_row = df_raw.iloc[7]  # Row 8 in Excel
+            column_row = df_raw.iloc[8]   # Row 9 in Excel
+
+            # Look for section indicators in row 8
+            section_indicators = ['Selected Carrier', 'Least Cost Carrier']
+            section_found = any(str(val) in str(section_row.values) for val in section_indicators)
+
+            # Look for column indicators in row 9
+            column_indicators = ['Load No.', 'Origin Name', 'Created By', 'Carrier']
+            column_found = any(str(val) in str(column_row.values) for val in column_indicators)
+
+            if not (section_found and column_found):
+                self.logger.warning("Expected two-row header structure not found, using fallback detection")
+                # Fallback to original logic
+                for row_idx in range(5, min(15, len(df_raw))):
+                    row_data = df_raw.iloc[row_idx].dropna().astype(str).tolist()
+                    row_str = ' '.join(row_data).lower()
+
+                    matches = sum(1 for indicator in column_indicators if indicator.lower() in row_str)
+                    if matches >= 3:
+                        header_row = row_idx
+                        data_start_row = row_idx + 1
+                        break
+
+        except (IndexError, KeyError):
+            self.logger.warning("Error detecting header structure, using defaults")
+
         return header_row, data_start_row
     
     def _remove_duplicate_headers(self, df):
@@ -221,37 +245,40 @@ class TMSDetailedDataProcessor:
             # Extract columns C through AA (2 through 26) - skip the empty A and B columns
             relevant_columns = list(range(2, min(self.EXPECTED_COLUMNS, len(data_df.columns))))
 
-            # Debug: Show what columns we're extracting
-            print(f"DEBUG - COLUMN EXTRACTION:")
-            print(f"  Total columns in raw data: {len(data_df.columns)}")
-            print(f"  Extracting columns: {relevant_columns}")
-            if len(data_df) > 0:
-                print(f"  Raw column P (index 15) sample: {data_df.iloc[:5, 15].tolist() if len(data_df.columns) > 15 else 'N/A'}")
-                print(f"  Raw column Q (index 16) sample: {data_df.iloc[:5, 16].tolist() if len(data_df.columns) > 16 else 'N/A'}")
-                print(f"  Raw column R (index 17) sample: {data_df.iloc[:5, 17].tolist() if len(data_df.columns) > 17 else 'N/A'}")
 
             data_df = data_df.iloc[:, relevant_columns]
             
-            # Step 7: Set proper column names for detailed reports
-            # Based on debug analysis, the Excel export appears to be missing Least Cost Service Type
-            # Adjusting column mapping to match actual data structure
+            # Step 7: Set proper column names based on actual Excel structure
+            # Map columns based on analysis: C=Load No., D=Ship Date, etc.
+            # Columns extracted: 2-26 (C through AA, skipping empty columns)
             detailed_column_names = [
-                'Load No.', 'Ship Date', 'Origin Name', 'Origin City', 'Origin State', 'Origin Postal',
-                'Destination City', 'Destination State', 'Destination Postal', 'Created By',
-                'Selected Carrier', 'Selected Service Type', 'Selected Transit Days', 'Selected Freight Cost', 'Selected Accessorial Cost', 'Selected Total Cost',
-                'Least Cost Carrier', 'Least Cost Transit Days', 'Least Cost Freight Cost',  # Service Type appears to be missing from export
-                'Empty_W_Column',  # This is the problematic W column (22) - always empty
-                'Least Cost Accessorial Cost', 'Least Cost Total Cost',
-                'Empty_Z_Column',  # This is the problematic Z column (25) - always empty
-                'Potential Savings'
+                'Load No.',                    # C (index 2)
+                'Ship Date',                   # D (index 3)
+                'Origin Name',                 # E (index 4)
+                'Origin City',                 # F (index 5)
+                'Origin State',               # G (index 6)
+                'Origin Postal',              # H (index 7)
+                'Destination City',           # I (index 8)
+                'Destination State',          # J (index 9)
+                'Destination Postal',         # K (index 10)
+                'Created By',                 # L (index 11)
+                'Selected Carrier',           # M (index 12)
+                'Selected Service Type',      # N (index 13)
+                'Selected Transit Days',      # O (index 14)
+                'Selected Freight Cost',      # P (index 15)
+                'Selected Accessorial Cost',  # Q (index 16)
+                'Selected Total Cost',        # R (index 17)
+                'Least Cost Carrier',         # S (index 18)
+                'Least Cost Service Type',    # T (index 19)
+                'Least Cost Transit Days',    # U (index 20)
+                'Least Cost Freight Cost',    # V (index 21)
+                'Empty_W_Column',            # W (index 22) - empty
+                'Least Cost Accessorial Cost', # X (index 23)
+                'Least Cost Total Cost',      # Y (index 24)
+                'Empty_Z_Column',            # Z (index 25) - empty
+                'Potential Savings'           # AA (index 26)
             ]
 
-            # Add a placeholder Least Cost Service Type column with empty values
-            print("DEBUG - Adding placeholder Least Cost Service Type column")
-            placeholder_service_type = [''] * len(data_df)
-
-            # We need to insert this after processing to maintain the expected column structure
-            
             # Ensure column names match the actual extracted columns
             if len(detailed_column_names) != len(data_df.columns):
                 self.logger.warning(f"Column count mismatch. Expected {len(detailed_column_names)}, got {len(data_df.columns)}")
@@ -264,33 +291,10 @@ class TMSDetailedDataProcessor:
                     column_names = detailed_column_names + extra_columns
             else:
                 column_names = detailed_column_names
-            
+
             data_df.columns = column_names
 
-            # Insert placeholder Least Cost Service Type column after Least Cost Carrier
-            if 'Least Cost Carrier' in data_df.columns and 'Least Cost Service Type' not in data_df.columns:
-                carrier_index = data_df.columns.get_loc('Least Cost Carrier')
-                # Insert empty service type column after carrier
-                data_df.insert(carrier_index + 1, 'Least Cost Service Type', '')
-                print(f"DEBUG - Inserted placeholder 'Least Cost Service Type' column at position {carrier_index + 1}")
 
-            # Debug: Log sample data for least cost columns BEFORE cleaning
-            if len(data_df) > 0:
-                least_cost_cols = ['Least Cost Carrier', 'Least Cost Service Type']
-                for col in least_cost_cols:
-                    if col in data_df.columns:
-                        sample_values = data_df[col].head(5).tolist()
-                        unique_values = data_df[col].nunique()
-                        value_types = [type(v).__name__ for v in data_df[col].head(5)]
-                        zero_count = (data_df[col] == 0).sum()
-                        na_count = data_df[col].isna().sum()
-                        print(f"DEBUG - BEFORE CLEANING - Column {col}:")
-                        print(f"  Sample values: {sample_values}")
-                        print(f"  Value types: {value_types}")
-                        print(f"  Unique count: {unique_values}")
-                        print(f"  Zero count: {zero_count}")
-                        print(f"  NA count: {na_count}")
-                        self.data_logger.info(f"Column {col} sample values: {sample_values}, unique count: {unique_values}")
 
             # Step 8: Remove the problematic W and Z columns that are always empty
             self.logger.log_processing_step("Removing empty W and Z columns")
@@ -395,12 +399,22 @@ class TMSDetailedDataProcessor:
             'Selected Transit Days', 'Selected Freight Cost', 'Selected Accessorial Cost', 'Selected Total Cost',
             'Least Cost Transit Days', 'Least Cost Freight Cost', 'Least Cost Accessorial Cost', 'Least Cost Total Cost', 'Potential Savings'
         ]
-        
+
         for col in numeric_columns:
             if col in df.columns:
                 cleaning_stats['columns_processed'] += 1
                 original_nulls = df[col].isnull().sum()
-                df[col] = pd.to_numeric(df[col], errors='coerce')
+
+                # Enhanced cleaning for numeric columns
+                col_series = df[col].copy()
+                if col_series.dtype == 'object':
+                    # Clean string representations
+                    col_series = col_series.astype(str)
+                    col_series = col_series.str.replace('[$,]', '', regex=True)
+                    col_series = col_series.str.strip()
+                    col_series = col_series.replace(['nan', 'None', '', 'N/A', '#N/A'], '0')
+
+                df[col] = pd.to_numeric(col_series, errors='coerce').fillna(0)
                 new_nulls = df[col].isnull().sum()
                 conversion_failures = new_nulls - original_nulls
                 if conversion_failures > 0:
@@ -438,31 +452,36 @@ class TMSDetailedDataProcessor:
                     before_cleaning = df[col].copy()
                     df[col] = df[col].astype(str).str.strip()
 
-                    # Convert numeric zeros to empty strings
+                    # Only convert actual zeros and NaN to empty strings, keep real carrier names
                     df[col] = df[col].replace(['0', '0.0', 'nan', 'None'], '')
 
                     # Log the cleaning results for debugging
                     zero_count = (before_cleaning == 0).sum()
                     nan_count = before_cleaning.isna().sum()
-                    print(f"DEBUG - AFTER CLEANING - Column {col}:")
-                    print(f"  Before cleaning sample: {before_cleaning.head(5).tolist()}")
-                    print(f"  After cleaning sample: {df[col].head(5).tolist()}")
-                    print(f"  Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
                     if zero_count > 0 or nan_count > 0:
                         self.data_logger.info(f"Column {col}: Found {zero_count} zeros and {nan_count} NaN values - converted to empty strings")
                 else:
                     df[col] = df[col].astype(str).str.strip()
                     df[col] = df[col].replace('nan', '')
         
-        # Final debug: Show final state of least cost columns
-        least_cost_cols = ['Least Cost Carrier', 'Least Cost Service Type']
-        for col in least_cost_cols:
-            if col in df.columns:
-                non_empty_count = (df[col] != '').sum()
-                total_rows = len(df)
-                print(f"DEBUG - FINAL STATE - Column {col}:")
-                print(f"  Non-empty values: {non_empty_count} out of {total_rows}")
-                print(f"  Sample final values: {df[col].head(10).tolist()}")
+
+        # Calculate Potential Savings = Selected Total Cost - Least Cost Total Cost
+        if 'Selected Total Cost' in df.columns and 'Least Cost Total Cost' in df.columns:
+            selected_costs = pd.to_numeric(df['Selected Total Cost'], errors='coerce').fillna(0)
+            least_costs = pd.to_numeric(df['Least Cost Total Cost'], errors='coerce').fillna(0)
+
+            # Calculate savings
+            calculated_savings = selected_costs - least_costs
+
+            # Only update if Potential Savings column exists
+            if 'Potential Savings' in df.columns:
+                # Update with calculated values
+                df['Potential Savings'] = calculated_savings
+                self.data_logger.info(f"Recalculated Potential Savings for {len(df)} rows")
+            else:
+                # Add the column if it doesn't exist
+                df['Potential Savings'] = calculated_savings
+                self.data_logger.info(f"Added calculated Potential Savings column for {len(df)} rows")
 
         self.data_logger.log_data_stats(cleaning_stats, "DETAILED_TYPE_CLEANING")
         return df
@@ -474,26 +493,29 @@ class TMSDetailedDataProcessor:
             'same_carrier_rule_applied': 0,
             'empty_data_rule_applied': 0,
             'negative_savings_rule_applied': 0,
+            'tl_carrier_rule_applied': 0,
             'ddi_carrier_rule_applied': 0,
             'total_rows_affected': 0
         }
         
         try:
-            # Rule 1: Same Carriers - Set Potential Savings to 0
+            # Rule 1: Same Carriers - Set Potential Savings to 0 (but don't copy data)
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
                 same_carrier_mask = (
-                    (df['Selected Carrier'].astype(str) == df['Least Cost Carrier'].astype(str)) & 
-                    (df['Selected Carrier'].notna()) & 
+                    (df['Selected Carrier'].astype(str) == df['Least Cost Carrier'].astype(str)) &
+                    (df['Selected Carrier'].notna()) &
                     (df['Least Cost Carrier'].notna()) &
-                    (df['Selected Carrier'].astype(str) != '') & 
+                    (df['Selected Carrier'].astype(str) != '') &
                     (df['Least Cost Carrier'].astype(str) != '') &
-                    (df['Selected Carrier'].astype(str) != 'nan') & 
-                    (df['Least Cost Carrier'].astype(str) != 'nan')
+                    (df['Selected Carrier'].astype(str) != 'nan') &
+                    (df['Least Cost Carrier'].astype(str) != 'nan') &
+                    (df['Selected Carrier'].astype(str) != '0') &
+                    (df['Least Cost Carrier'].astype(str) != '0')
                 )
-                
+
                 same_carrier_count = same_carrier_mask.sum()
                 business_stats['same_carrier_rule_applied'] = same_carrier_count
-                
+
                 if 'Potential Savings' in df.columns and same_carrier_count > 0:
                     df.loc[same_carrier_mask, 'Potential Savings'] = 0.0
                     self.data_logger.info(f"Applied same carrier rule to {same_carrier_count} rows")
@@ -545,7 +567,36 @@ class TMSDetailedDataProcessor:
                     df.loc[negative_savings_mask, 'Potential Savings'] = 0
                     self.data_logger.info(f"Applied negative savings rule to {negative_count} rows")
 
-            # Rule 4: DDI/Carrier Matching - New custom rule for detailed reports
+            # Rule 4: TL Carriers - Copy selected to least cost and zero out savings
+            if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
+                # Find rows where Selected Carrier or Least Cost Carrier is in TL list
+                tl_mask = (
+                    df['Selected Carrier'].astype(str).str.upper().isin([carrier.upper() for carrier in self.TL_CARRIERS]) |
+                    df['Least Cost Carrier'].astype(str).str.upper().isin([carrier.upper() for carrier in self.TL_CARRIERS])
+                )
+
+                tl_count = tl_mask.sum()
+                business_stats['tl_carrier_rule_applied'] = tl_count
+
+                if tl_count > 0:
+                    # Copy selected carrier data to least cost columns
+                    column_pairs = [
+                        ('Selected Carrier', 'Least Cost Carrier'),
+                        ('Selected Service Type', 'Least Cost Service Type'),
+                        ('Selected Transit Days', 'Least Cost Transit Days'),
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'),
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'),
+                        ('Selected Total Cost', 'Least Cost Total Cost')
+                    ]
+                    self._copy_selected_to_least_cost(df, tl_mask, column_pairs)
+
+                    # Set Potential Savings to 0
+                    if 'Potential Savings' in df.columns:
+                        df.loc[tl_mask, 'Potential Savings'] = 0
+
+                    self.data_logger.info(f"Applied TL carrier rule to {tl_count} rows (LANDSTAR/SMARTWAY)")
+
+            # Rule 5: DDI/Carrier Matching - New custom rule for detailed reports
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
                 # Create mask for rows where Selected Carrier contains "DDI/" or similar patterns
                 # and the part after "/" matches Least Cost Carrier
@@ -600,9 +651,10 @@ class TMSDetailedDataProcessor:
                     
             # Calculate total affected rows
             business_stats['total_rows_affected'] = (
-                business_stats['same_carrier_rule_applied'] + 
-                business_stats['empty_data_rule_applied'] + 
+                business_stats['same_carrier_rule_applied'] +
+                business_stats['empty_data_rule_applied'] +
                 business_stats['negative_savings_rule_applied'] +
+                business_stats['tl_carrier_rule_applied'] +
                 business_stats['ddi_carrier_rule_applied']
             )
             
@@ -636,39 +688,72 @@ class TMSDetailedDataProcessor:
                 'report_type': 'detailed'
             }
             return
-        
-        # Basic stats
+
+        # Clean the Potential Savings column for stats calculation
+        if 'Potential Savings' in df.columns:
+            # Clean the Potential Savings column more thoroughly
+            ps_series = df['Potential Savings'].copy()
+
+            # Convert to string first to handle mixed types
+            ps_series = ps_series.astype(str)
+
+            # Clean common non-numeric values
+            ps_series = ps_series.replace(['nan', 'None', '', 'N/A', '#N/A'], '0')
+
+            # Remove any currency symbols and commas
+            ps_series = ps_series.str.replace('$', '', regex=False)
+            ps_series = ps_series.str.replace(',', '', regex=False)
+            ps_series = ps_series.str.strip()
+
+            # Convert to numeric
+            ps_numeric = pd.to_numeric(ps_series, errors='coerce').fillna(0)
+        else:
+            ps_numeric = pd.Series([0] * len(df))
+
+        # Basic stats with improved numeric conversion
         total_loads = len(df)
-        total_selected_cost = pd.to_numeric(df['Selected Total Cost'], errors='coerce').fillna(0).sum()
-        total_least_cost = pd.to_numeric(df['Least Cost Total Cost'], errors='coerce').fillna(0).sum()
-        total_potential_savings = pd.to_numeric(df['Potential Savings'], errors='coerce').fillna(0).sum()
-        
+
+        # Clean cost columns the same way
+        if 'Selected Total Cost' in df.columns:
+            selected_cost_series = df['Selected Total Cost'].astype(str).str.replace('[$,]', '', regex=True).str.strip()
+            total_selected_cost = pd.to_numeric(selected_cost_series, errors='coerce').fillna(0).sum()
+        else:
+            total_selected_cost = 0
+
+        if 'Least Cost Total Cost' in df.columns:
+            least_cost_series = df['Least Cost Total Cost'].astype(str).str.replace('[$,]', '', regex=True).str.strip()
+            total_least_cost = pd.to_numeric(least_cost_series, errors='coerce').fillna(0).sum()
+        else:
+            total_least_cost = 0
+
+        total_potential_savings = ps_numeric.sum()
+
         # Advanced stats
-        ps_numeric = pd.to_numeric(df['Potential Savings'], errors='coerce').fillna(0)
-        savings_df = df[ps_numeric > 0]
-        loads_with_savings = len(savings_df)
-        total_savings_opportunity = pd.to_numeric(savings_df['Potential Savings'], errors='coerce').fillna(0).sum()
-        
+        savings_mask = ps_numeric > 0
+        loads_with_savings = int(savings_mask.sum())  # Convert to Python int
+        total_savings_opportunity = float(ps_numeric[savings_mask].sum())  # Convert to Python float
+
         # Calculate percentages
         if total_selected_cost > 0:
             percentage_savings = (total_potential_savings / total_selected_cost) * 100
         else:
             percentage_savings = 0
-        
+
         if total_loads > 0:
             average_savings_per_load = total_potential_savings / total_loads
         else:
             average_savings_per_load = 0
-        
+
+
         self.summary_stats = {
-            'total_loads': total_loads,
-            'total_selected_cost': total_selected_cost,
-            'total_least_cost': total_least_cost,
-            'total_potential_savings': total_potential_savings,
-            'average_savings_per_load': average_savings_per_load,
-            'percentage_savings': percentage_savings,
-            'loads_with_savings': loads_with_savings,
-            'total_savings_opportunity': total_savings_opportunity,
+            'total_loads': int(total_loads),
+            'total_selected_cost': float(total_selected_cost),
+            'total_least_cost': float(total_least_cost),
+            'total_potential_savings': float(total_potential_savings),
+            'average_savings_per_load': float(average_savings_per_load),
+            'percentage_savings': float(percentage_savings),
+            'loads_with_savings': loads_with_savings,  # Already converted above
+            'total_savings_opportunity': total_savings_opportunity,  # Already converted above
             'report_type': 'detailed'
         }
     
@@ -817,7 +902,8 @@ class TMSDetailedDataProcessor:
         
         # Ensure all data is properly typed
         for col in clean_data.columns:
-            if any(x in col for x in ['Transit Days', 'Cost', 'Savings']):
+            # Only convert actual cost/numeric columns, not carrier columns that contain "Cost" in the name
+            if any(x in col for x in ['Transit Days', 'Freight Cost', 'Accessorial Cost', 'Total Cost', 'Savings']) and 'Carrier' not in col:
                 clean_data[col] = pd.to_numeric(clean_data[col], errors='coerce').fillna(0)
             else:
                 clean_data[col] = clean_data[col].astype(str).fillna('')

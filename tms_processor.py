@@ -122,6 +122,13 @@ class ModernTMSProcessor:
         self.summary_stats = {}
         self.title_info = {}
         self.validation_results = None
+
+        # Carrier lists for special processing
+        # TL carriers that require copy-paste and zero-out logic
+        self.TL_CARRIERS = {
+            'LANDSTAR RANGER INC',
+            'SMARTWAY TRANSPORTATION INC'
+        }
         
         # Performance tracking
         self.processing_start_time = None
@@ -457,6 +464,7 @@ class ModernTMSProcessor:
             'same_carrier_rule_applied': 0,
             'empty_data_rule_applied': 0,
             'negative_savings_rule_applied': 0,
+            'tl_carrier_rule_applied': 0,
             'ddi_carrier_rule_applied': 0,
             'total_rows_affected': 0
         }
@@ -543,7 +551,36 @@ class ModernTMSProcessor:
             else:
                 self.data_logger.warning("Cannot apply negative savings rule - Potential Savings column missing")
 
-            # Rule 4: DDI/Carrier Matching - New custom rule
+            # Rule 4: TL Carriers - Copy selected to least cost and zero out savings
+            if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
+                # Find rows where Selected Carrier or Least Cost Carrier is in TL list
+                tl_mask = (
+                    df['Selected Carrier'].astype(str).str.upper().isin([carrier.upper() for carrier in self.TL_CARRIERS]) |
+                    df['Least Cost Carrier'].astype(str).str.upper().isin([carrier.upper() for carrier in self.TL_CARRIERS])
+                )
+
+                tl_count = tl_mask.sum()
+                business_stats['tl_carrier_rule_applied'] = tl_count
+
+                if tl_count > 0:
+                    # Copy selected carrier data to least cost columns
+                    column_pairs = [
+                        ('Selected Carrier', 'Least Cost Carrier'),
+                        ('Selected Service Type', 'Least Cost Service Type'),
+                        ('Selected Transit Days', 'Least Cost Transit Days'),
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'),
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'),
+                        ('Selected Total Cost', 'Least Cost Total Cost')
+                    ]
+                    self._copy_selected_to_least_cost(df, tl_mask, column_pairs)
+
+                    # Set Potential Savings to 0
+                    if 'PS' in df.columns:
+                        df.loc[tl_mask, 'PS'] = 0
+
+                    self.data_logger.info(f"Applied TL carrier rule to {tl_count} rows (LANDSTAR/SMARTWAY)")
+
+            # Rule 5: DDI/Carrier Matching - New custom rule
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
                 # Create mask for rows where Selected Carrier contains "DDI/" or similar patterns
                 # and the part after "/" matches Least Cost Carrier
@@ -598,9 +635,10 @@ class ModernTMSProcessor:
                 
             # Calculate total affected rows
             business_stats['total_rows_affected'] = (
-                business_stats['same_carrier_rule_applied'] + 
-                business_stats['empty_data_rule_applied'] + 
+                business_stats['same_carrier_rule_applied'] +
+                business_stats['empty_data_rule_applied'] +
                 business_stats['negative_savings_rule_applied'] +
+                business_stats['tl_carrier_rule_applied'] +
                 business_stats['ddi_carrier_rule_applied']
             )
             
@@ -1986,7 +2024,7 @@ class ModernTMSProcessorGUI:
             file_paths = filedialog.askopenfilenames(
                 parent=self.root,
                 title="Select TMS Excel Files (Hold Ctrl+Click for Multiple Selection)",
-                initialdir=os.path.expanduser("~"),
+                initialdir=os.path.expanduser("~/Documents/"),
                 filetypes=[
                     ("Excel files", "*.xlsx *.xls"),
                     ("All files", "*.*")
@@ -1998,7 +2036,7 @@ class ModernTMSProcessorGUI:
             file_path = filedialog.askopenfilename(
                 parent=self.root,
                 title="Select TMS Excel File (Single Selection Only - Dialog Issue)",
-                initialdir=os.path.expanduser("~"),
+                initialdir=os.path.expanduser("~/Documents"),
                 filetypes=[
                     ("Excel files", "*.xlsx *.xls"),
                     ("All files", "*.*")
@@ -2327,18 +2365,18 @@ class ModernTMSProcessorGUI:
             elif file_names is None:
                 file_names = []
 
-            # Create new entry
+            # Create new entry with proper type conversion
             entry = {
                 'timestamp': datetime.now().isoformat(),
-                'report_type': report_type,
-                'file_count': file_count,
-                'file_names': file_names,
-                'file_index': file_index,
-                'total_files': total_files,
-                'total_potential_savings': stats.get('total_potential_savings', 0),
-                'total_loads': stats.get('total_loads', 0),
-                'percentage_savings': stats.get('percentage_savings', 0),
-                'loads_with_savings': stats.get('loads_with_savings', 0)
+                'report_type': str(report_type),
+                'file_count': int(file_count),
+                'file_names': file_names if file_names else [],
+                'file_index': int(file_index) if file_index is not None else None,
+                'total_files': int(total_files) if total_files is not None else None,
+                'total_potential_savings': float(stats.get('total_potential_savings', 0)),
+                'total_loads': int(stats.get('total_loads', 0)),
+                'percentage_savings': float(stats.get('percentage_savings', 0)),
+                'loads_with_savings': int(stats.get('loads_with_savings', 0))
             }
 
             # Add to history
