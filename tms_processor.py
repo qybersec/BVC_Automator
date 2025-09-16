@@ -62,7 +62,6 @@ try:
     from config import tms_config
     from logger_config import main_logger, data_logger, gui_logger, ProgressLogger
     from validators import tms_validator, tms_cleaner
-    from src.generators import create_bvc_generator
 except ImportError as e:
     print(f"Warning: Could not import enhanced modules: {e}")
     print("Falling back to basic functionality...")
@@ -90,23 +89,24 @@ except ImportError as e:
     class MockValidator:
         def run_full_validation(self, file_path): return {'overall_valid': True, 'validation_steps': {}}
     
-    def create_bvc_generator():
-        class MockTemplateGenerator:
-            def generate_template(self, date_range, output_file=None): 
-                raise RuntimeError("Template generator not available")
-            def validate_input(self, date_range): 
-                return True
-        return MockTemplateGenerator()
-    
     tms_config = MockConfig()
     main_logger = data_logger = gui_logger = MockLogger()
     tms_validator = MockValidator()
-    
+
     def ProgressLogger(logger, total, operation):
         class MockProgress:
             def update(self, inc=1): pass
             def complete(self): pass
         return MockProgress()
+
+# Define template generator function (fallback for removed src module)
+def create_bvc_generator():
+    class MockTemplateGenerator:
+        def generate_template(self, date_range, output_file=None):
+            raise RuntimeError("Template generator not available")
+        def validate_input(self, date_range):
+            return True
+    return MockTemplateGenerator()
 
 class ModernTMSProcessor:
     """Enhanced TMS Processor with comprehensive validation and error handling"""
