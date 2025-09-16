@@ -1213,11 +1213,31 @@ class ModernTMSProcessorGUI:
         style.map('ReportCardDisabled.TButton',
                  background=[('active', '#f1f3f4'), ('pressed', '#e8eaed')])
         
-        # Configure frames
+        # Configure frames with modern styling
         style.configure('Card.TFrame',
                        background='#ffffff',
-                       relief='flat',
-                       borderwidth=1)
+                       relief='solid',
+                       borderwidth=1,
+                       lightcolor='#e2e8f0',
+                       darkcolor='#e2e8f0')
+
+        # Add modern input styling
+        style.configure('Modern.TEntry',
+                       fieldbackground='#ffffff',
+                       borderwidth=2,
+                       relief='solid',
+                       lightcolor='#e2e8f0',
+                       darkcolor='#e2e8f0',
+                       focuscolor=UI_COLORS['PRIMARY_BLUE'],
+                       font=('Segoe UI', 10))
+
+        # Enhanced calendar and container styling
+        style.configure('Calendar.TFrame',
+                       background='#ffffff',
+                       relief='solid',
+                       borderwidth=1,
+                       lightcolor='#cbd5e0',
+                       darkcolor='#cbd5e0')
         
 
     
@@ -1326,7 +1346,7 @@ class ModernTMSProcessorGUI:
             self.show_file_input_ui()
             # Show stats display for processing pages
             if hasattr(self, 'stats_outer_frame'):
-                self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(10, 0), pady=0)
+                self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
         
     
     def create_file_input_section(self):
@@ -1852,21 +1872,28 @@ class ModernTMSProcessorGUI:
         # Initialize report type variable
         self.report_type = tk.StringVar(value="basic")
         
-        # Compact Navigation Bar (always visible)
-        self.nav_bar = tk.Frame(main_frame, bg='#e2e8f0', height=45)
-        self.nav_bar.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 5), padx=5)
+        # Modern Navigation Bar with enhanced styling
+        nav_container = tk.Frame(main_frame, bg='#ffffff', relief='solid', bd=1, highlightbackground='#e2e8f0')
+        nav_container.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 8), padx=3)
+
+        self.nav_bar = tk.Frame(nav_container, bg='#f8fafc', height=50)
+        self.nav_bar.pack(fill='both', expand=True, padx=1, pady=1)
         self.nav_bar.grid_columnconfigure(0, weight=1)
         self.create_navigation_bar()
         
-        # Create horizontal layout container for input and recent uploads
-        self.content_container = tk.Frame(main_frame, bg='#f8f9fa')
-        self.content_container.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10), padx=5)
-        self.content_container.grid_columnconfigure(0, weight=1)  # Input section (left) - 25%
-        self.content_container.grid_columnconfigure(1, weight=3)  # Recent uploads (right) - 75%
+        # Create modern horizontal layout container for input and recent uploads
+        self.content_container = tk.Frame(main_frame, bg='#ffffff', relief='solid', bd=1, highlightbackground='#e2e8f0')
+        self.content_container.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 8), padx=3)
+
+        # Inner container with subtle background
+        self.content_inner = tk.Frame(self.content_container, bg='#f8fafc')
+        self.content_inner.pack(fill='both', expand=True, padx=2, pady=2)
+        self.content_inner.grid_columnconfigure(0, weight=1)  # Input section (left) - 25%
+        self.content_inner.grid_columnconfigure(1, weight=3)  # Recent uploads (right) - 75%
 
         # Input Section - Dynamic (File or Date input based on selection) - LEFT SIDE
-        self.input_section = tk.Frame(self.content_container, bg='#f8f9fa')
-        self.input_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=0, padx=(0, 10))
+        self.input_section = tk.Frame(self.content_inner, bg='#f8fafc')
+        self.input_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5, padx=(5, 8))
         self.input_section.columnconfigure(0, weight=1)
         
         # Create both file input and date input sections
@@ -1879,17 +1906,20 @@ class ModernTMSProcessorGUI:
         if hasattr(self, 'date_section'):
             self.date_section.grid_remove()
         
-        # Process Button with enhanced styling
-        button_frame = tk.Frame(main_frame, bg='#ffffff')
-        button_frame.grid(row=3, column=0, columnspan=3, pady=10)
+        # Process Button with modern container styling
+        button_container = tk.Frame(main_frame, bg='#f8fafc', relief='solid', bd=1, highlightbackground='#e2e8f0')
+        button_container.grid(row=3, column=0, columnspan=3, pady=(8, 12), padx=3, sticky=(tk.W, tk.E))
+
+        button_frame = tk.Frame(button_container, bg='#f8fafc')
+        button_frame.pack(pady=12)
         
         self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE",
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
 
-        # Stats Display Frame (right side of content) - Scrollable
-        self.stats_outer_frame = tk.Frame(self.content_container, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
-        self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(10, 0), pady=0)
+        # Stats Display Frame (right side of content) - Modern styling
+        self.stats_outer_frame = tk.Frame(self.content_inner, bg=UI_COLORS['BACKGROUND_WHITE'], relief='solid', bd=1, highlightbackground='#cbd5e0')
+        self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
 
         # Create scrollable canvas for stats
         self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=350, highlightthickness=0)
