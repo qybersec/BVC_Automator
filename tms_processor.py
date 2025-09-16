@@ -1886,7 +1886,7 @@ class ModernTMSProcessorGUI:
         self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
 
         # Create scrollable canvas for stats
-        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=120, highlightthickness=0)
+        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=200, highlightthickness=0)
         stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=self.stats_canvas.yview)
         self.stats_display_frame = tk.Frame(self.stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
 
