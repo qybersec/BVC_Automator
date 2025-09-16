@@ -1360,8 +1360,8 @@ class ModernTMSProcessorGUI:
         # Create scrollable text widget for multiple file names
         import tkinter.scrolledtext as scrolledtext
         self.file_display = scrolledtext.ScrolledText(file_display_frame,
-                                                     height=6,
-                                                     width=50,
+                                                     height=4,
+                                                     width=40,
                                                      font=('Segoe UI', 9),
                                                      fg='#000000',
                                                      bg='#ffffff',
@@ -2082,7 +2082,7 @@ class ModernTMSProcessorGUI:
                 self.file_display.insert('1.0', display_text)
                 self.file_display.config(fg='#0d9488')
                 # Set height for single file
-                optimal_height = 3
+                optimal_height = 2
             else:
                 # Multiple files - show count and list all filenames
                 header = f"✅ {file_count} files selected:\n\n"
@@ -2096,13 +2096,13 @@ class ModernTMSProcessorGUI:
                 
                 self.file_display.config(fg='#0d9488')
                 # Calculate optimal height: header (2 lines) + files + padding
-                optimal_height = min(max(file_count + 3, 5), 15)  # Min 5, max 15 lines
+                optimal_height = min(max(file_count + 2, 4), 8)  # Min 4, max 8 lines
             
             # Auto-resize the display based on content
             self.file_display.config(height=optimal_height)
         else:
             self.file_display.insert('1.0', "No files selected")
-            self.file_display.config(fg='#6c757d', height=3)
+            self.file_display.config(fg='#6c757d', height=2)
         
         self.file_display.config(state='disabled')
     
