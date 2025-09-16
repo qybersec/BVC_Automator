@@ -1066,7 +1066,13 @@ class ModernTMSProcessorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("TMS Data Processor Pro")
-        self.root.geometry("1200x650")
+
+        # Calculate center position immediately
+        width, height = 1200, 650
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f'{width}x{height}+{x}+{y}')
+
         self.root.configure(bg='#f8f9fa')
         self.root.minsize(1100, 600)
         self.root.resizable(True, True)
@@ -1090,9 +1096,6 @@ class ModernTMSProcessorGUI:
         
         # Create GUI
         self.create_widgets()
-        
-        # Center window
-        self.center_window()
         
     def setup_styles(self):
         """Setup modern styling for the application"""
@@ -1499,11 +1502,11 @@ class ModernTMSProcessorGUI:
                                      othermonthbackground='#f7fafc',
                                      headersbackground='#bee3f8',
                                      headersforeground='#1a365d',
-                                     font=('Segoe UI', 9),
+                                     font=('Segoe UI', 10),
                                      borderwidth=1,
                                      bordercolor='#e2e8f0',
                                      cursor='hand2')
-        self.start_calendar.pack(padx=4, pady=(0, 4), fill='both', expand=True)
+        self.start_calendar.pack(padx=8, pady=(0, 8), fill='both', expand=True)
         self.start_calendar.bind('<<CalendarSelected>>', self.on_start_date_select)
         
         # TO Calendar (Right side)
@@ -1537,7 +1540,7 @@ class ModernTMSProcessorGUI:
                                    othermonthbackground='#f7fafc',
                                    headersbackground='#9ae6b4',
                                    headersforeground='#1a365d',
-                                   font=('Segoe UI', 10, 'bold'),
+                                   font=('Segoe UI', 10),
                                    borderwidth=1,
                                    bordercolor='#e2e8f0',
                                    cursor='hand2')
