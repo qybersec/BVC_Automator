@@ -1326,7 +1326,7 @@ class ModernTMSProcessorGUI:
             self.show_file_input_ui()
             # Show stats display for processing pages
             if hasattr(self, 'stats_outer_frame'):
-                self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
+                self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(10, 0), pady=0)
         
     
     def create_file_input_section(self):
@@ -1858,9 +1858,15 @@ class ModernTMSProcessorGUI:
         self.nav_bar.grid_columnconfigure(0, weight=1)
         self.create_navigation_bar()
         
-        # Input Section - Dynamic (File or Date input based on selection)
-        self.input_section = tk.Frame(main_frame, bg='#f8f9fa')
-        self.input_section.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+        # Create horizontal layout container for input and recent uploads
+        self.content_container = tk.Frame(main_frame, bg='#f8f9fa')
+        self.content_container.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10), padx=5)
+        self.content_container.grid_columnconfigure(0, weight=1)  # Input section (left)
+        self.content_container.grid_columnconfigure(1, weight=1)  # Recent uploads (right)
+
+        # Input Section - Dynamic (File or Date input based on selection) - LEFT SIDE
+        self.input_section = tk.Frame(self.content_container, bg='#f8f9fa')
+        self.input_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=0, padx=(0, 10))
         self.input_section.columnconfigure(0, weight=1)
         
         # Create both file input and date input sections
@@ -1881,9 +1887,9 @@ class ModernTMSProcessorGUI:
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.grid(row=0, column=0)
 
-        # Stats Display Frame (below process button) - Scrollable
-        self.stats_outer_frame = tk.Frame(main_frame, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
-        self.stats_outer_frame.grid(row=4, column=0, columnspan=3, pady=(10, 0), padx=10, sticky=(tk.W, tk.E))
+        # Stats Display Frame (right side of content) - Scrollable
+        self.stats_outer_frame = tk.Frame(self.content_container, bg=UI_COLORS['BACKGROUND_WHITE'], relief='ridge', bd=1)
+        self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(10, 0), pady=0)
 
         # Create scrollable canvas for stats
         self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=200, highlightthickness=0)
