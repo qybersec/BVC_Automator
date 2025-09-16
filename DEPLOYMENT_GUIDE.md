@@ -11,21 +11,24 @@ This guide explains how to set up and run the BVC Automator on any Windows compu
 
 ### Installation Steps
 
+#### Option 1: Easy Setup (Recommended)
 1. **Download the project** - Extract the ZIP file to any folder (e.g., `C:\BVC_Automator\`)
+2. **Double-click** `setup_and_run.bat` - This will automatically install dependencies and run the app
 
+#### Option 2: Manual Setup
+1. **Download the project** - Extract the ZIP file to any folder (e.g., `C:\BVC_Automator\`)
 2. **Install dependencies** - Open Command Prompt in the project folder and run:
    ```bash
    pip install -r requirements.txt
    ```
-   Or manually install:
-   ```bash
-   pip install pandas openpyxl numpy tkcalendar
-   ```
-
 3. **Run the application**:
    ```bash
    python main.py
    ```
+   Or double-click `run_bvc_automator.bat`
+
+### Running After Setup
+After the first setup, you can simply double-click `run_bvc_automator.bat` to start the application.
 
 ### What You Get
 
