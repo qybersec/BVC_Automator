@@ -13,7 +13,21 @@
       "Bash(del marmon_bvc_template.py)",
       "Bash(pip install:*)",
       "Bash(taskkill:*)",
-      "Bash(del nul)"
+      "Bash(del nul)",
+      "Bash(chcp 65001)",
+      "Read(//c/Users/Quincy Nguyen/Documents/**)",
+      "Read(//c/Users/Quincy Nguyen/**)",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_detailed_fix.py\")",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_carrier_debug.py\")",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_processing_debug.py\")",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_app_simulation.py\")",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_stats_display.py\")",
+      "Bash(del \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\test_stats_save.py\")",
+      "WebSearch",
+      "Bash(dir \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\icon\")",
+      "Bash(del requirements.txt)",
+      "Bash(dir:*)",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []
