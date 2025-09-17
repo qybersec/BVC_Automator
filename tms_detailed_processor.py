@@ -93,7 +93,8 @@ class TMSDetailedDataProcessor:
         # TL carriers that require copy-paste and zero-out logic
         self.TL_CARRIERS = {
             'LANDSTAR RANGER INC',
-            'SMARTWAY TRANSPORTATION INC'
+            'SMARTWAY TRANSPORTATION INC',
+            'SMARTWAY CORPORATION INC'
         }
 
         self.logger.info("TMSDetailedDataProcessor initialized for detailed reports with 27 columns")

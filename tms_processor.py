@@ -127,7 +127,8 @@ class ModernTMSProcessor:
         # TL carriers that require copy-paste and zero-out logic
         self.TL_CARRIERS = {
             'LANDSTAR RANGER INC',
-            'SMARTWAY TRANSPORTATION INC'
+            'SMARTWAY TRANSPORTATION INC',
+            'SMARTWAY CORPORATION INC'
         }
         
         # Performance tracking
@@ -563,6 +564,10 @@ class ModernTMSProcessor:
                 business_stats['tl_carrier_rule_applied'] = tl_count
 
                 if tl_count > 0:
+                    # Debug: Log which carriers were found
+                    tl_carriers_found = df.loc[tl_mask, ['Selected Carrier', 'Least Cost Carrier']].drop_duplicates()
+                    self.data_logger.info(f"TL carriers found: {tl_carriers_found.to_dict('records')}")
+
                     # Copy selected carrier data to least cost columns
                     column_pairs = [
                         ('Selected Carrier', 'Least Cost Carrier'),
@@ -575,10 +580,18 @@ class ModernTMSProcessor:
                     self._copy_selected_to_least_cost(df, tl_mask, column_pairs)
 
                     # Set Potential Savings to 0
-                    if 'PS' in df.columns:
-                        df.loc[tl_mask, 'PS'] = 0
+                    if 'Potential Savings' in df.columns:
+                        # Debug: Log before and after values
+                        before_savings = df.loc[tl_mask, 'Potential Savings'].tolist()
+                        df.loc[tl_mask, 'Potential Savings'] = 0
+                        after_savings = df.loc[tl_mask, 'Potential Savings'].tolist()
+                        self.data_logger.info(f"TL Carrier savings - Before: {before_savings}, After: {after_savings}")
+                    else:
+                        self.data_logger.warning("Potential Savings column not found for TL carrier rule")
 
                     self.data_logger.info(f"Applied TL carrier rule to {tl_count} rows (LANDSTAR/SMARTWAY)")
+                else:
+                    self.data_logger.info("No TL carriers found in data")
 
             # Rule 5: DDI/Carrier Matching - New custom rule
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
@@ -1067,15 +1080,10 @@ class ModernTMSProcessorGUI:
         self.root = root
         self.root.title("TMS Data Processor Pro")
 
-        # Calculate center position immediately
-        width, height = 1200, 780
-        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.root.winfo_screenheight() // 2) - (height // 2)
-        self.root.geometry(f'{width}x{height}+{x}+{y}')
-
+        # Auto-size window to content
         self.root.configure(bg='#f8f9fa')
-        self.root.minsize(1100, 730)
         self.root.resizable(True, True)
+        # Let content determine size initially
         
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
@@ -1104,15 +1112,15 @@ class ModernTMSProcessorGUI:
         
         # Configure colors with modern palette using constants
         style.configure('Title.TLabel', 
-                       font=('Segoe UI', 28, 'bold'), 
+                       font=('Segoe UI', 20, 'bold'), 
                        foreground='#1a365d',
                        background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Subtitle.TLabel', 
-                       font=('Segoe UI', 12), 
+                       font=('Segoe UI', 10), 
                        foreground=UI_COLORS['TEXT_SECONDARY'],
                        background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Header.TLabel', 
-                       font=('Segoe UI', 13, 'bold'), 
+                       font=('Segoe UI', 11, 'bold'), 
                        foreground=UI_COLORS['TEXT_PRIMARY'],
                        background=UI_COLORS['BACKGROUND_GRAY'])
         style.configure('Info.TLabel', 
@@ -1147,7 +1155,7 @@ class ModernTMSProcessorGUI:
         
         # Enhanced Process Button Style
         style.configure('ProcessButton.TButton',
-                       font=('Segoe UI', 14, 'bold'),
+                       font=('Segoe UI', 11, 'bold'),
                        background='#28a745',
                        foreground='white',
                        borderwidth=0,
@@ -1161,7 +1169,7 @@ class ModernTMSProcessorGUI:
         
         # Process Button Disabled Style
         style.configure('ProcessButtonDisabled.TButton',
-                       font=('Segoe UI', 14, 'bold'),
+                       font=('Segoe UI', 11, 'bold'),
                        background='#6c757d',
                        foreground='#ffffff',
                        borderwidth=0,
@@ -1181,7 +1189,7 @@ class ModernTMSProcessorGUI:
         
         # Configure modern report type buttons using constants
         style.configure('ReportCard.TButton',
-                       font=('Segoe UI', 13, 'bold'),
+                       font=('Segoe UI', 11, 'bold'),
                        background=UI_COLORS['BACKGROUND_WHITE'],
                        foreground=UI_COLORS['TEXT_SECONDARY'],
                        borderwidth=0,
@@ -1192,7 +1200,7 @@ class ModernTMSProcessorGUI:
                  background=[('active', UI_COLORS['BACKGROUND_LIGHT']), ('pressed', '#edf2f7')])
         
         style.configure('ReportCardActive.TButton',
-                       font=('Segoe UI', 13, 'bold'),
+                       font=('Segoe UI', 11, 'bold'),
                        background=UI_COLORS['PRIMARY_BLUE'],
                        foreground='white',
                        borderwidth=0,
@@ -1203,7 +1211,7 @@ class ModernTMSProcessorGUI:
                  background=[('active', UI_COLORS['PRIMARY_BLUE_HOVER']), ('pressed', UI_COLORS['PRIMARY_BLUE_PRESSED'])])
         
         style.configure('ReportCardDisabled.TButton',
-                       font=('Segoe UI', 13, 'bold'),
+                       font=('Segoe UI', 11, 'bold'),
                        background=UI_COLORS['BACKGROUND_WHITE'],
                        foreground=UI_COLORS['TEXT_DISABLED'],
                        borderwidth=1,
@@ -1245,35 +1253,35 @@ class ModernTMSProcessorGUI:
         """Create modern card-style buttons"""
         # Create button frame with compact spacing
         button_frame = tk.Frame(parent, bg='#f8f9fa')
-        button_frame.grid(row=0, column=0, pady=5)
+        button_frame.grid(row=0, column=0, pady=1)
         
         # Home Button
         self.home_button = ttk.Button(button_frame, 
                                      text="🏠\nHome",
                                      style='ReportCardActive.TButton',
                                      command=lambda: self.select_card('home'))
-        self.home_button.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        self.home_button.grid(row=0, column=0, padx=2, pady=2, sticky="nsew")
         
         # Basic Report Button
         self.basic_button = ttk.Button(button_frame, 
                                      text="📊\nBasic Report",
                                      style='ReportCardDisabled.TButton',
                                      command=lambda: self.select_card('basic'))
-        self.basic_button.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        self.basic_button.grid(row=0, column=1, padx=2, pady=2, sticky="nsew")
         
         # Detailed Report Button
         self.detailed_button = ttk.Button(button_frame,
                                         text="📈\nDetailed Report", 
                                         style='ReportCardDisabled.TButton',
                                         command=lambda: self.select_card('detailed'))
-        self.detailed_button.grid(row=0, column=2, padx=10, pady=5, sticky="nsew")
+        self.detailed_button.grid(row=0, column=2, padx=2, pady=2, sticky="nsew")
         
         # Template Generator Button
         self.template_button = ttk.Button(button_frame,
                                         text="📋\nBVC Template", 
                                         style='ReportCardDisabled.TButton',
                                         command=lambda: self.select_card('template'))
-        self.template_button.grid(row=0, column=3, padx=10, pady=5, sticky="nsew")
+        self.template_button.grid(row=0, column=3, padx=2, pady=2, sticky="nsew")
         
         # Make columns equal width
         button_frame.grid_columnconfigure(0, weight=1, uniform="card")
@@ -1357,7 +1365,7 @@ class ModernTMSProcessorGUI:
         
         # Section header with context-specific description
         self.header_container = tk.Frame(self.file_section, bg='#f8f9fa')
-        self.header_container.grid(row=0, column=0, pady=(10, 5))
+        self.header_container.grid(row=0, column=0, pady=(2, 1))
         
         ttk.Label(self.header_container, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').pack()
         
@@ -1367,34 +1375,54 @@ class ModernTMSProcessorGUI:
             self.desc_label = tk.Label(self.header_container, text=description_text, 
                                  font=('Segoe UI', 9, 'italic'), 
                                  fg='#4a5568', bg='#f8f9fa')
-            self.desc_label.pack(pady=(2, 0))
+            self.desc_label.pack(pady=(1, 0))
         
         file_frame = tk.Frame(self.file_section, bg='#f8f9fa')
-        file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=15)
+        file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=3)
         file_frame.columnconfigure(0, weight=1)
         
         # File display with clean styling and drag-drop support - expandable width
-        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=1)
-        file_display_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
+        file_display_frame = tk.Frame(file_frame, bg='#ffffff', relief='flat', bd=0)
+        file_display_frame.grid(row=0, column=0, padx=(0, 3), sticky=(tk.W, tk.E))
         
-        # Create scrollable text widget for multiple file names
-        import tkinter.scrolledtext as scrolledtext
-        self.file_display = scrolledtext.ScrolledText(file_display_frame,
-                                                     height=3,
-                                                     width=30,
-                                                     font=('Segoe UI', 9),
-                                                     fg='#000000',
-                                                     bg='#ffffff',
-                                                     wrap=tk.WORD,
-                                                     state='disabled',
-                                                     borderwidth=0,
-                                                     highlightthickness=0)
-        self.file_display.pack(fill='both', expand=True, padx=6, pady=4)
+        # Create custom scrollable text widget with cooler scroller
+        scroll_container = tk.Frame(file_display_frame, bg='#ffffff')
+        scroll_container.pack(fill='both', expand=True, padx=2, pady=1)
+
+        # Text widget
+        self.file_display = tk.Text(scroll_container,
+                                   height=3,
+                                   width=30,
+                                   font=('Segoe UI', 10),
+                                   fg='#000000',
+                                   bg='#ffffff',
+                                   wrap=tk.WORD,
+                                   state='disabled',
+                                   borderwidth=0,
+                                   highlightthickness=0,
+                                   yscrollcommand=lambda *args: self._on_scroll(*args))
+
+        # Modern custom scrollbar with sleek design
+        self.cool_scrollbar = tk.Canvas(scroll_container, width=12, bg='#f1f3f4',
+                                       highlightthickness=0, bd=0)
+
+        # Configure grid layout
+        scroll_container.grid_columnconfigure(0, weight=1)
+        scroll_container.grid_rowconfigure(0, weight=1)
+
+        self.file_display.grid(row=0, column=0, sticky='nsew')
+        self.cool_scrollbar.grid(row=0, column=1, sticky='ns')
+
+        # Initialize scrollbar
+        self._setup_cool_scrollbar()
         
         # Initialize with placeholder text
         self.file_display.config(state='normal')
         self.file_display.insert('1.0', "No files selected")
         self.file_display.config(state='disabled', fg='#6c757d')
+
+        # Update scrollbar
+        self._update_scrollbar()
         
         file_display_frame.grid_columnconfigure(0, weight=1)
         
@@ -1403,10 +1431,22 @@ class ModernTMSProcessorGUI:
         
         # Enable drag and drop
         self.setup_drag_drop(file_display_frame)
-        
-        browse_button = ttk.Button(file_frame, text="📂 Browse", 
-                                 command=self.browse_file, style='Browse.TButton')
-        browse_button.grid(row=0, column=1)
+
+        # Browse Button Frame (separate from file display)
+        browse_frame = tk.Frame(self.file_section, bg='#f8f9fa')
+        browse_frame.grid(row=2, column=0, pady=(2, 1))
+
+        browse_button_main = ttk.Button(browse_frame, text="📂 Browse Files",
+                                       command=self.browse_file, style='Browse.TButton')
+        browse_button_main.pack()
+
+        # Process Button added to input section (below browse)
+        process_frame = tk.Frame(self.file_section, bg='#f8f9fa')
+        process_frame.grid(row=3, column=0, pady=(1, 1))
+
+        self.process_button = ttk.Button(process_frame, text="🚀 PROCESS",
+                                       command=self.process_file, style='ProcessButton.TButton', state="disabled")
+        self.process_button.pack()
     
     def create_date_input_section(self):
         """Create the date input UI section for template generation"""
@@ -1415,10 +1455,10 @@ class ModernTMSProcessorGUI:
         self.date_section.columnconfigure(0, weight=1)
         
         # Section header
-        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(5, 3))
+        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(2, 1))
         
         date_frame = tk.Frame(self.date_section, bg='#f8f9fa')
-        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 5), padx=8)
+        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 1), padx=2)
         date_frame.columnconfigure(0, weight=1)
         
         # Date selection with calendar widgets
@@ -1437,14 +1477,12 @@ class ModernTMSProcessorGUI:
     def show_file_input_ui(self):
         """Show file input UI and hide other sections"""
         if hasattr(self, 'file_section'):
-            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
             # Refresh the description text for the current mode
             self.refresh_file_section_description()
         if hasattr(self, 'date_section'):
             self.date_section.grid_remove()
-        # Show process button and navigation bar for file input
-        if hasattr(self, 'process_button'):
-            self.process_button.grid()
+        # Show navigation bar for file input (process button is now integrated)
         if hasattr(self, 'nav_bar'):
             self.nav_bar.grid()
         self.update_process_button_state()
@@ -1464,7 +1502,7 @@ class ModernTMSProcessorGUI:
             self.desc_label = tk.Label(self.header_container, text=description_text, 
                                      font=('Segoe UI', 9, 'italic'), 
                                      fg='#4a5568', bg='#f8f9fa')
-            self.desc_label.pack(pady=(2, 0))
+            self.desc_label.pack(pady=(1, 0))
     
     def _create_calendar_widgets(self, parent_frame):
         """Create compact horizontal calendar layout"""
@@ -1472,15 +1510,19 @@ class ModernTMSProcessorGUI:
         parent_frame.grid_columnconfigure(0, weight=1)
         parent_frame.grid_rowconfigure(0, weight=1)
         
-        # Main horizontal container with improved layout
+        # Main horizontal container with improved layout and centering
         main_container = tk.Frame(parent_frame, bg='#ffffff')
-        main_container.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=0, pady=0)
+        main_container.grid(row=0, column=0, padx=0, pady=0)
         main_container.grid_columnconfigure(0, weight=5)  # Calendars get more space
         main_container.grid_columnconfigure(1, weight=3)  # Controls get proportional space
+
+        # Center the main container in the parent
+        parent_frame.grid_columnconfigure(0, weight=1)
+        parent_frame.grid_rowconfigure(0, weight=1)
         
         # Left side: Calendar container with enhanced layout
         calendar_section = tk.Frame(main_container, bg='#f8f9fa')
-        calendar_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 15), pady=0)
+        calendar_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 3), pady=0)
         calendar_section.grid_columnconfigure(0, weight=1)
         calendar_section.grid_columnconfigure(1, weight=1)
         calendar_section.grid_rowconfigure(0, weight=1)
@@ -1493,17 +1535,16 @@ class ModernTMSProcessorGUI:
         
         # FROM Calendar (Left side)
         from_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
-        from_shadow.grid(row=0, column=0, padx=(8, 4), pady=8, sticky='nsew')
+        from_shadow.grid(row=0, column=0, padx=(2, 1), pady=2, sticky='nsew')
         
         from_frame = tk.Frame(from_shadow, bg='#ffffff', relief='flat', bd=0)
         from_frame.pack(padx=0, pady=0, fill='both', expand=True)
         
-        from_header = tk.Frame(from_frame, bg='#4299e1', height=35)
-        from_header.pack(fill='both', expand=True, pady=0)
-        from_header.pack_propagate(False)
+        from_header = tk.Frame(from_frame, bg='#4299e1')
+        from_header.pack(fill='x', pady=0)
         
-        tk.Label(from_header, text="✨ FROM DATE", font=('Segoe UI', 11, 'bold'), 
-                fg='white', bg='#4299e1').pack(pady=8)
+        tk.Label(from_header, text="✨ FROM DATE", font=('Segoe UI', 9, 'bold'), 
+                fg='white', bg='#4299e1').pack(pady=2)
         
         self.start_calendar = Calendar(from_frame,
                                      selectmode='day',
@@ -1522,26 +1563,27 @@ class ModernTMSProcessorGUI:
                                      othermonthbackground='#f7fafc',
                                      headersbackground='#bee3f8',
                                      headersforeground='#1a365d',
-                                     font=('Segoe UI', 10),
+                                     font=('Segoe UI', 9),
                                      borderwidth=1,
                                      bordercolor='#e2e8f0',
-                                     cursor='hand2')
-        self.start_calendar.pack(padx=8, pady=(0, 8), fill='both', expand=True)
+                                     cursor='hand2',
+                                     showweeknumbers=False,
+                                     showothermonthdays=False)
+        self.start_calendar.pack(padx=2, pady=(0, 2), fill='both', expand=True)
         self.start_calendar.bind('<<CalendarSelected>>', self.on_start_date_select)
         
         # TO Calendar (Right side)
         to_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
-        to_shadow.grid(row=0, column=1, padx=(4, 8), pady=8, sticky='nsew')
+        to_shadow.grid(row=0, column=1, padx=(1, 2), pady=2, sticky='nsew')
         
         to_frame = tk.Frame(to_shadow, bg='#ffffff', relief='flat', bd=0)
         to_frame.pack(padx=0, pady=0, fill='both', expand=True)
         
-        to_header = tk.Frame(to_frame, bg='#38a169', height=35)
-        to_header.pack(fill='both', expand=True, pady=0)
-        to_header.pack_propagate(False)
+        to_header = tk.Frame(to_frame, bg='#38a169')
+        to_header.pack(fill='x', pady=0)
         
-        tk.Label(to_header, text="🎯 TO DATE", font=('Segoe UI', 11, 'bold'), 
-                fg='white', bg='#38a169').pack(pady=8)
+        tk.Label(to_header, text="🎯 TO DATE", font=('Segoe UI', 9, 'bold'),
+                fg='white', bg='#38a169').pack(pady=2)
         
         self.end_calendar = Calendar(to_frame,
                                    selectmode='day',
@@ -1560,47 +1602,48 @@ class ModernTMSProcessorGUI:
                                    othermonthbackground='#f7fafc',
                                    headersbackground='#9ae6b4',
                                    headersforeground='#1a365d',
-                                   font=('Segoe UI', 10),
+                                   font=('Segoe UI', 9),
                                    borderwidth=1,
                                    bordercolor='#e2e8f0',
-                                   cursor='hand2')
-        self.end_calendar.pack(padx=8, pady=(0, 8), fill='both', expand=True)
+                                   cursor='hand2',
+                                   showweeknumbers=False,
+                                   showothermonthdays=False)
+        self.end_calendar.pack(padx=2, pady=(0, 2), fill='both', expand=True)
         self.end_calendar.bind('<<CalendarSelected>>', self.on_end_date_select)
         
         # Right side: Controls container with proper weights
         controls_section = tk.Frame(main_container, bg='#f8f9fa')
-        controls_section.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(5, 0), pady=0)
+        controls_section.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(1, 0), pady=0)
         controls_section.grid_columnconfigure(0, weight=1)
         controls_section.grid_rowconfigure(3, weight=1)  # Spacer row
         
         # Header
-        header_frame = tk.Frame(controls_section, bg='#3182ce', height=50)
+        header_frame = tk.Frame(controls_section, bg='#3182ce')
         header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=0, pady=0)
-        header_frame.grid_propagate(False)
-        
-        tk.Label(header_frame, text="📅 Select Date Range", 
-                font=('Segoe UI', 13, 'bold'), fg='white', bg='#3182ce').pack(pady=15)
+
+        tk.Label(header_frame, text="📅 Select Date Range",
+                font=('Segoe UI', 9, 'bold'), fg='white', bg='#3182ce').pack(pady=2)
         
         # Date range text box with enhanced styling
         text_frame = tk.Frame(controls_section, bg='#f8f9fa')
-        text_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=15, pady=(25, 15))
+        text_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=10, pady=(15, 10))
         
         # Enhanced label with icon
         label_frame = tk.Frame(text_frame, bg='#f8f9fa')
-        label_frame.pack(fill='x', pady=(0, 8))
+        label_frame.pack(fill='x', pady=(0, 2))
         
-        tk.Label(label_frame, text="📅", font=('Segoe UI', 14), 
-                fg='#4299e1', bg='#f8f9fa').pack(side='left', padx=(0, 5))
-        
-        tk.Label(label_frame, text="Date Range:", font=('Segoe UI', 12, 'bold'), 
+        tk.Label(label_frame, text="📅", font=('Segoe UI', 10),
+                fg='#4299e1', bg='#f8f9fa').pack(side='left', padx=(0, 3))
+
+        tk.Label(label_frame, text="Date Range:", font=('Segoe UI', 9, 'bold'),
                 fg='#2d3748', bg='#f8f9fa').pack(side='left')
         
         # Enhanced textbox with better styling - no black border
-        textbox_container = tk.Frame(text_frame, bg='#e2e8f0', relief='flat', bd=1)
-        textbox_container.pack(fill='x', pady=(0, 5))
+        textbox_container = tk.Frame(text_frame, bg='#e2e8f0', relief='flat', bd=0)
+        textbox_container.pack(fill='x', pady=(0, 1))
         
         self.date_range_entry = tk.Entry(textbox_container,
-                                        font=('Segoe UI', 13, 'bold'),
+                                        font=('Segoe UI', 9, 'bold'),
                                         fg='#1a365d',
                                         bg='#ffffff',
                                         justify='center',
@@ -1610,7 +1653,7 @@ class ModernTMSProcessorGUI:
                                         highlightcolor='#4299e1',
                                         highlightbackground='#e2e8f0',
                                         insertbackground='#4299e1')
-        self.date_range_entry.pack(fill='x', padx=6, pady=6)
+        self.date_range_entry.pack(fill='x', padx=4, pady=4)
         self.date_range_entry.bind('<KeyRelease>', self.on_date_range_text_change)
         self.date_range_entry.bind('<Return>', self.on_date_range_enter)
         self.date_range_entry.bind('<FocusIn>', self.on_date_range_focus_in)
@@ -1618,13 +1661,13 @@ class ModernTMSProcessorGUI:
         
         # Generate button (moved here from bottom)
         button_frame = tk.Frame(controls_section, bg='#f8f9fa')
-        button_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=15, pady=(20, 15))
+        button_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=10, pady=(10, 10))
         
         # Create the template button for this layout
-        self.template_button = ttk.Button(button_frame, text="📋 GENERATE TEMPLATE", 
+        self.template_button = ttk.Button(button_frame, text="📋 GENERATE", 
                                          command=self.generate_template, style='ProcessButton.TButton', 
                                          state="disabled")
-        self.template_button.pack(fill='x', pady=5)
+        self.template_button.pack(fill='x', pady=1)
         
         # Spacer row to push everything up
         tk.Frame(controls_section, bg='#f8f9fa').grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -1635,13 +1678,13 @@ class ModernTMSProcessorGUI:
     def _create_fallback_date_entry(self, parent_frame):
         """Create fallback text entry if calendar widget not available"""
         # Date input with clean styling
-        date_input_frame = tk.Frame(parent_frame, bg='#ffffff', relief='flat', bd=1)
+        date_input_frame = tk.Frame(parent_frame, bg='#ffffff', relief='flat', bd=0)
         date_input_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
         date_input_frame.grid_columnconfigure(0, weight=1)
         
         # Date input field
         self.date_entry = tk.Entry(date_input_frame,
-                                  font=('Segoe UI', 12),
+                                  font=('Segoe UI', 10),
                                   fg='#2d3748',
                                   bg='#ffffff',
                                   borderwidth=0,
@@ -1873,21 +1916,21 @@ class ModernTMSProcessorGUI:
         self.report_type = tk.StringVar(value="basic")
         
         # Modern Navigation Bar with enhanced styling
-        nav_container = tk.Frame(main_frame, bg='#ffffff', relief='solid', bd=1, highlightbackground='#e2e8f0')
-        nav_container.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 8), padx=3)
+        nav_container = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
+        nav_container.grid(row=1, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
 
-        self.nav_bar = tk.Frame(nav_container, bg='#f8fafc', height=50)
-        self.nav_bar.pack(fill='both', expand=True, padx=1, pady=1)
+        self.nav_bar = tk.Frame(nav_container, bg='#f8fafc')
+        self.nav_bar.pack(fill='both', expand=True, padx=0, pady=0)
         self.nav_bar.grid_columnconfigure(0, weight=1)
         self.create_navigation_bar()
         
         # Create modern horizontal layout container for input and recent uploads
-        self.content_container = tk.Frame(main_frame, bg='#ffffff', relief='solid', bd=1, highlightbackground='#e2e8f0')
+        self.content_container = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
         self.content_container.grid(row=2, column=0, columnspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 8), padx=3)
 
         # Inner container with subtle background
         self.content_inner = tk.Frame(self.content_container, bg='#f8fafc')
-        self.content_inner.pack(fill='both', expand=True, padx=2, pady=2)
+        self.content_inner.pack(fill='both', expand=True, padx=1, pady=1)
         self.content_inner.grid_columnconfigure(0, weight=1)  # Input section (left) - 25%
         self.content_inner.grid_columnconfigure(1, weight=3)  # Recent uploads (right) - 75%
 
@@ -1902,27 +1945,18 @@ class ModernTMSProcessorGUI:
         
         # Set correct initial state (start with file input visible, date input hidden)
         if hasattr(self, 'file_section'):
-            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10), padx=5)
+            self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
         if hasattr(self, 'date_section'):
             self.date_section.grid_remove()
         
-        # Process Button with modern container styling
-        button_container = tk.Frame(main_frame, bg='#f8fafc', relief='solid', bd=1, highlightbackground='#e2e8f0')
-        button_container.grid(row=3, column=0, columnspan=3, pady=(8, 12), padx=3, sticky=(tk.W, tk.E))
-
-        button_frame = tk.Frame(button_container, bg='#f8fafc')
-        button_frame.pack(pady=12)
-        
-        self.process_button = ttk.Button(button_frame, text="🚀 PROCESS FILE",
-                                       command=self.process_file, style='ProcessButton.TButton', state="disabled")
-        self.process_button.grid(row=0, column=0)
+        # Process button is now integrated into the file input section
 
         # Stats Display Frame (right side of content) - Modern styling
-        self.stats_outer_frame = tk.Frame(self.content_inner, bg=UI_COLORS['BACKGROUND_WHITE'], relief='solid', bd=1, highlightbackground='#cbd5e0')
+        self.stats_outer_frame = tk.Frame(self.content_inner, bg=UI_COLORS['BACKGROUND_WHITE'], relief='flat', bd=0)
         self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
 
         # Create scrollable canvas for stats
-        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], height=350, highlightthickness=0)
+        self.stats_canvas = tk.Canvas(self.stats_outer_frame, bg=UI_COLORS['BACKGROUND_WHITE'], highlightthickness=0)
         stats_scrollbar = ttk.Scrollbar(self.stats_outer_frame, orient="vertical", command=self.stats_canvas.yview)
         self.stats_display_frame = tk.Frame(self.stats_canvas, bg=UI_COLORS['BACKGROUND_WHITE'])
 
@@ -1953,35 +1987,39 @@ class ModernTMSProcessorGUI:
         self.update_savings_display()
 
         # Create main landing page
-        # Set initial selection to basic report page
+        # Set initial selection to basic report page and auto-resize
         self.root.after(1, lambda: self.select_card('basic'))
+        self.root.after(100, self.auto_resize_window)
     
     def create_navigation_bar(self):
         """Create compact navigation bar for switching between pages"""
         nav_container = tk.Frame(self.nav_bar, bg='#e2e8f0')
-        nav_container.pack(pady=8, padx=15)
+        nav_container.pack(pady=2, padx=3)
         
         # Store button references for active state management
         self.nav_buttons = {}
         
         # Primary: Basic Report (larger, more prominent)
-        self.nav_buttons['basic'] = tk.Button(nav_container, text="📊 Basic", font=('Segoe UI', 11, 'bold'), 
+        self.nav_buttons['basic'] = tk.Button(nav_container, text="📊 Basic", font=('Segoe UI', 10, 'bold'),
                             bg='#4299e1', fg='white', relief='flat', bd=0,
                             cursor='hand2', command=lambda: self.select_card('basic'),
-                            activebackground='#3182ce', padx=15, pady=6)
-        self.nav_buttons['basic'].pack(side='left', padx=(0, 8))
+                            activebackground='#3182ce', padx=18, pady=10,
+                            highlightthickness=0, width=12)
+        self.nav_buttons['basic'].pack(side='left', padx=(0, 5))
         
-        # Secondary: Other options (smaller)
-        self.nav_buttons['detailed'] = tk.Button(nav_container, text="📈 Detailed", font=('Segoe UI', 10), 
-                               bg='#ffffff', fg='#4a5568', relief='flat', bd=1,
+        # Secondary: Other options (improved styling)
+        self.nav_buttons['detailed'] = tk.Button(nav_container, text="📈 Detailed", font=('Segoe UI', 10),
+                               bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
                                cursor='hand2', command=lambda: self.select_card('detailed'),
-                               activebackground='#f7fafc', padx=10, pady=4)
+                               activebackground='#cbd5e0', padx=18, pady=10,
+                               highlightthickness=0, width=12)
         self.nav_buttons['detailed'].pack(side='left', padx=(0, 5))
         
-        self.nav_buttons['template'] = tk.Button(nav_container, text="📋 Template", font=('Segoe UI', 10), 
-                               bg='#ffffff', fg='#4a5568', relief='flat', bd=1,
+        self.nav_buttons['template'] = tk.Button(nav_container, text="📋 Template", font=('Segoe UI', 10),
+                               bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
                                cursor='hand2', command=lambda: self.select_card('template'),
-                               activebackground='#f7fafc', padx=10, pady=4)
+                               activebackground='#cbd5e0', padx=18, pady=10,
+                               highlightthickness=0, width=12)
         self.nav_buttons['template'].pack(side='left')
         
     def setup_drag_drop(self, widget):
@@ -2019,27 +2057,27 @@ class ModernTMSProcessorGUI:
             pass
             
     def auto_resize_window(self):
-        """Dynamically resize window to fit content with padding"""
+        """Dynamically resize window to fit content with minimal padding"""
         self.root.update_idletasks()
-        
-        # Get the required size of all content
-        required_width = self.root.winfo_reqwidth() + 40  # Add padding
-        required_height = self.root.winfo_reqheight() + 60  # Add padding
-        
-        # Set reasonable limits
-        min_width = 1100
-        max_width = int(self.root.winfo_screenwidth() * 0.9)
-        min_height = 600
-        max_height = int(self.root.winfo_screenheight() * 0.85)
-        
+
+        # Get the required size of all content with minimal padding
+        required_width = self.root.winfo_reqwidth() + 10  # Minimal padding
+        required_height = self.root.winfo_reqheight() + 20  # Minimal padding
+
+        # Set more aggressive limits for minimalism
+        min_width = 600
+        max_width = int(self.root.winfo_screenwidth() * 0.8)
+        min_height = 400
+        max_height = int(self.root.winfo_screenheight() * 0.9)
+
         # Constrain to limits
         width = max(min_width, min(required_width, max_width))
         height = max(min_height, min(required_height, max_height))
-        
+
         # Center on screen
         x = (self.root.winfo_screenwidth() // 2) - (width // 2)
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
-        
+
         # Apply new size
         self.root.geometry(f'{width}x{height}+{x}+{y}')
         self.root.minsize(min_width, min_height)
@@ -2053,6 +2091,123 @@ class ModernTMSProcessorGUI:
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
         self.root.geometry(f'{width}x{height}+{x}+{y}')
         
+    def _setup_cool_scrollbar(self):
+        """Setup the cool custom scrollbar"""
+        self.scrollbar_thumb = None
+        self.scrollbar_track_height = 0
+        self.scrollbar_thumb_height = 0
+        self.scrollbar_thumb_pos = 0
+
+        # Bind scrollbar events
+        self.cool_scrollbar.bind('<Button-1>', self._on_scrollbar_click)
+        self.cool_scrollbar.bind('<B1-Motion>', self._on_scrollbar_drag)
+        self.cool_scrollbar.bind('<Configure>', self._on_scrollbar_configure)
+
+        # Bind text widget scroll events
+        self.file_display.bind('<MouseWheel>', self._on_mousewheel)
+        self.file_display.bind('<Configure>', self._update_scrollbar)
+
+    def _on_scroll(self, *args):
+        """Handle text widget scroll events"""
+        self._update_scrollbar()
+
+    def _update_scrollbar(self, event=None):
+        """Update the cool scrollbar appearance"""
+        try:
+            # Get scroll info from text widget
+            top, bottom = self.file_display.yview()
+
+            # Clear scrollbar
+            self.cool_scrollbar.delete('all')
+
+            # Get scrollbar dimensions
+            sb_height = self.cool_scrollbar.winfo_height()
+            sb_width = self.cool_scrollbar.winfo_width()
+
+            if sb_height <= 1:  # Not configured yet
+                self.cool_scrollbar.after(10, self._update_scrollbar)
+                return
+
+            # Draw track (subtle background)
+            track_x = sb_width // 2
+            self.cool_scrollbar.create_rectangle(track_x - 1, 0, track_x + 1, sb_height,
+                                               fill='#e8eaed', outline='')
+
+            # Calculate thumb dimensions
+            visible_ratio = bottom - top
+            if visible_ratio >= 1.0:  # No scrolling needed
+                return
+
+            thumb_height = max(20, int(sb_height * visible_ratio))
+            thumb_top = int(top * (sb_height - thumb_height))
+            thumb_bottom = thumb_top + thumb_height
+
+            # Draw modern thumb with rounded appearance
+            thumb_x1 = track_x - 3
+            thumb_x2 = track_x + 3
+
+            # Main thumb body
+            self.scrollbar_thumb = self.cool_scrollbar.create_rectangle(
+                thumb_x1, thumb_top + 2, thumb_x2, thumb_bottom - 2,
+                fill='#5f6368', outline='', tags='thumb'
+            )
+
+            # Rounded ends
+            self.cool_scrollbar.create_oval(thumb_x1, thumb_top, thumb_x2, thumb_top + 4,
+                                          fill='#5f6368', outline='', tags='thumb')
+            self.cool_scrollbar.create_oval(thumb_x1, thumb_bottom - 4, thumb_x2, thumb_bottom,
+                                          fill='#5f6368', outline='', tags='thumb')
+
+            # Store thumb info for dragging
+            self.scrollbar_thumb_pos = thumb_top
+            self.scrollbar_thumb_height = thumb_height
+            self.scrollbar_track_height = sb_height
+
+        except:
+            pass  # Ignore errors during updates
+
+    def _on_scrollbar_click(self, event):
+        """Handle scrollbar click"""
+        try:
+            click_y = event.y
+            sb_height = self.cool_scrollbar.winfo_height()
+
+            # Calculate target scroll position
+            target_ratio = click_y / sb_height
+
+            # Scroll to target
+            self.file_display.yview_moveto(target_ratio)
+            self._update_scrollbar()
+        except:
+            pass
+
+    def _on_scrollbar_drag(self, event):
+        """Handle scrollbar drag"""
+        try:
+            drag_y = event.y
+            sb_height = self.cool_scrollbar.winfo_height()
+
+            # Calculate scroll position
+            scroll_ratio = max(0, min(1, drag_y / sb_height))
+
+            # Scroll to position
+            self.file_display.yview_moveto(scroll_ratio)
+            self._update_scrollbar()
+        except:
+            pass
+
+    def _on_scrollbar_configure(self, event):
+        """Handle scrollbar resize"""
+        self._update_scrollbar()
+
+    def _on_mousewheel(self, event):
+        """Handle mouse wheel scrolling"""
+        try:
+            self.file_display.yview_scroll(int(-1 * (event.delta / 120)), 'units')
+            self._update_scrollbar()
+        except:
+            pass
+
     def browse_file(self):
         """Browse for multiple input files"""
         try:
@@ -2421,8 +2576,8 @@ class ModernTMSProcessorGUI:
             # Add to history
             self.savings_history.insert(0, entry)  # Add to beginning
 
-            # Keep only last 10 entries
-            self.savings_history = self.savings_history[:10]
+            # Keep only last 20 entries
+            self.savings_history = self.savings_history[:20]
 
             # Save to file
             with open(self.savings_history_file, 'w') as f:
@@ -2444,12 +2599,12 @@ class ModernTMSProcessorGUI:
             if self.savings_history:
                 # Header with clear button
                 header_frame = tk.Frame(self.stats_display_frame, bg=UI_COLORS['BACKGROUND_WHITE'])
-                header_frame.pack(fill='x', pady=(5, 5), padx=5)
+                header_frame.pack(fill='x', pady=(1, 1), padx=1)
 
                 header_label = tk.Label(
                     header_frame,
                     text=f"📊 Recent Uploads (Last {len(self.savings_history)})",
-                    font=('Segoe UI', 10, 'bold'),
+                    font=('Segoe UI', 12, 'bold'),
                     bg=UI_COLORS['BACKGROUND_WHITE'],
                     fg=UI_COLORS['TEXT_PRIMARY']
                 )
@@ -2458,7 +2613,7 @@ class ModernTMSProcessorGUI:
                 clear_button = tk.Button(
                     header_frame,
                     text="🗑️ Clear",
-                    font=('Segoe UI', 8),
+                    font=('Segoe UI', 10),
                     fg=UI_COLORS['ERROR_RED'],
                     bg=UI_COLORS['BACKGROUND_WHITE'],
                     relief='flat',
@@ -2482,13 +2637,13 @@ class ModernTMSProcessorGUI:
 
                     # Create frame for each upload record
                     record_frame = tk.Frame(self.stats_display_frame, bg=UI_COLORS['BACKGROUND_WHITE'])
-                    record_frame.pack(fill='x', padx=5, pady=1)
+                    record_frame.pack(fill='x', padx=1, pady=0)
 
                     # Date and type
                     date_label = tk.Label(
                         record_frame,
                         text=date_text,
-                        font=('Segoe UI', 8),
+                        font=('Segoe UI', 10),
                         bg=UI_COLORS['BACKGROUND_WHITE'],
                         fg=UI_COLORS['TEXT_MUTED'],
                         anchor='w'
@@ -2508,7 +2663,7 @@ class ModernTMSProcessorGUI:
                         file_label = tk.Label(
                             record_frame,
                             text=file_text,
-                            font=('Segoe UI', 8),
+                            font=('Segoe UI', 10),
                             bg=UI_COLORS['BACKGROUND_WHITE'],
                             fg=UI_COLORS['TEXT_SECONDARY'],
                             anchor='w'
