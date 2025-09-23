@@ -89,12 +89,11 @@ class TMSDetailedDataProcessor:
         self.DEFAULT_HEADER_ROW = 8   # Row 9 in Excel (column headers)
         self.DEFAULT_DATA_START_ROW = 9  # Row 10 in Excel (first data row)
 
-        # Carrier lists for special processing
-        # TL carriers that require copy-paste and zero-out logic
+        # TL carriers requiring special processing (from Basic_Processor)
         self.TL_CARRIERS = {
             'LANDSTAR RANGER INC',
             'SMARTWAY TRANSPORTATION INC',
-            'SMARTWAY CORPORATION INC'
+            'ONX LOGISTICS INC'
         }
 
         self.logger.info("TMSDetailedDataProcessor initialized for detailed reports with 27 columns")
@@ -597,58 +596,54 @@ class TMSDetailedDataProcessor:
 
                     self.data_logger.info(f"Applied TL carrier rule to {tl_count} rows (LANDSTAR/SMARTWAY)")
 
-            # Rule 5: DDI/Carrier Matching - New custom rule for detailed reports
+            # Rule 5: DALKO DEFENDER INSURANCE pattern matching (from Basic_Processor)
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
-                # Create mask for rows where Selected Carrier contains "DDI/" or similar patterns
-                # and the part after "/" matches Least Cost Carrier
-                ddi_matches = []
-                
+                dalko_matches = []
+
                 for idx, row in df.iterrows():
-                    selected = str(row['Selected Carrier']).strip()
-                    least_cost = str(row['Least Cost Carrier']).strip()
-                    
+                    selected = str(row['Selected Carrier']).strip().upper()
+                    least_cost = str(row['Least Cost Carrier']).strip().upper()
+
                     # Skip empty or nan values
-                    if selected in ['', 'nan', 'None'] or least_cost in ['', 'nan', 'None']:
+                    if selected in ['', 'NAN', 'NONE'] or least_cost in ['', 'NAN', 'NONE']:
                         continue
-                    
-                    # Check if selected carrier has "/" and extract the part after it
-                    if '/' in selected:
-                        # Split on "/" and get the part after the last "/"
-                        carrier_after_slash = selected.split('/')[-1].strip()
-                        
-                        # Check if the carrier after "/" matches the least cost carrier
-                        # Using case-insensitive comparison and handling common variations
-                        if carrier_after_slash.upper() == least_cost.upper():
-                            ddi_matches.append(idx)
-                        # Also check for R&L Carriers vs R%L Carriers variations
-                        elif (carrier_after_slash.upper().replace('&', '%') == least_cost.upper().replace('&', '%') or
-                              carrier_after_slash.upper().replace('%', '&') == least_cost.upper().replace('%', '&')):
-                            ddi_matches.append(idx)
-                
-                ddi_match_count = len(ddi_matches)
-                business_stats['ddi_carrier_rule_applied'] = ddi_match_count
-                
-                if ddi_match_count > 0:
-                    ddi_mask = df.index.isin(ddi_matches)
-                    
+
+                    # Check for DALKO DEFENDER INSURANCE patterns
+                    # Pattern 1: "DALKO DEFENDER INSURANCE/XXX" where least cost is "XXX"
+                    if 'DALKO DEFENDER INSURANCE/' in selected:
+                        carrier_after_slash = selected.split('DALKO DEFENDER INSURANCE/')[-1].strip()
+                        if carrier_after_slash == least_cost:
+                            dalko_matches.append(idx)
+
+                    # Pattern 2: "XXX/DALKO DEFENDER INSURANCE" where least cost is "XXX"
+                    elif '/DALKO DEFENDER INSURANCE' in selected:
+                        carrier_before_slash = selected.split('/DALKO DEFENDER INSURANCE')[0].strip()
+                        if carrier_before_slash == least_cost:
+                            dalko_matches.append(idx)
+                dalko_match_count = len(dalko_matches)
+                business_stats['ddi_carrier_rule_applied'] = dalko_match_count
+
+                if dalko_match_count > 0:
+                    dalko_mask = df.index.isin(dalko_matches)
+
                     # Copy selected carrier data to least cost columns
                     column_pairs = [
-                        ('Selected Carrier', 'Least Cost Carrier'), 
-                        ('Selected Service Type', 'Least Cost Service Type'), 
+                        ('Selected Carrier', 'Least Cost Carrier'),
+                        ('Selected Service Type', 'Least Cost Service Type'),
                         ('Selected Transit Days', 'Least Cost Transit Days'),
-                        ('Selected Freight Cost', 'Least Cost Freight Cost'), 
-                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), 
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'),
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'),
                         ('Selected Total Cost', 'Least Cost Total Cost')
                     ]
-                    self._copy_selected_to_least_cost(df, ddi_mask, column_pairs)
-                    
+                    self._copy_selected_to_least_cost(df, dalko_mask, column_pairs)
+
                     # Set Potential Savings to 0
                     if 'Potential Savings' in df.columns:
-                        df.loc[ddi_mask, 'Potential Savings'] = 0
-                    
-                    self.data_logger.info(f"Applied DDI/carrier matching rule to {ddi_match_count} rows in detailed report")
+                        df.loc[dalko_mask, 'Potential Savings'] = 0
+
+                    self.data_logger.info(f"Applied DALKO DEFENDER INSURANCE rule to {dalko_match_count} rows in detailed report")
             else:
-                self.data_logger.warning("Cannot apply DDI/carrier matching rule - required columns missing in detailed report")
+                self.data_logger.warning("Cannot apply DALKO DEFENDER INSURANCE rule - required columns missing in detailed report")
                     
             # Calculate total affected rows
             business_stats['total_rows_affected'] = (

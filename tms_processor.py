@@ -12,13 +12,6 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 
-# Try to import calendar widget - fallback to text entry if not available
-try:
-    from tkcalendar import DateEntry, Calendar
-    CALENDAR_AVAILABLE = True
-except ImportError:
-    CALENDAR_AVAILABLE = False
-    print("Note: tkcalendar not available. Install with 'pip install tkcalendar' for calendar widgets.")
 
 # Import UI styles from the new modular UI components
 try:
@@ -99,14 +92,6 @@ except ImportError as e:
             def complete(self): pass
         return MockProgress()
 
-# Define template generator function (fallback for removed src module)
-def create_bvc_generator():
-    class MockTemplateGenerator:
-        def generate_template(self, date_range, output_file=None):
-            raise RuntimeError("Template generator not available")
-        def validate_input(self, date_range):
-            return True
-    return MockTemplateGenerator()
 
 class ModernTMSProcessor:
     """Enhanced TMS Processor with comprehensive validation and error handling"""
@@ -123,12 +108,11 @@ class ModernTMSProcessor:
         self.title_info = {}
         self.validation_results = None
 
-        # Carrier lists for special processing
-        # TL carriers that require copy-paste and zero-out logic
+        # TL carriers requiring special processing (from Basic_Processor)
         self.TL_CARRIERS = {
             'LANDSTAR RANGER INC',
             'SMARTWAY TRANSPORTATION INC',
-            'SMARTWAY CORPORATION INC'
+            'ONX LOGISTICS INC'
         }
         
         # Performance tracking
@@ -593,58 +577,55 @@ class ModernTMSProcessor:
                 else:
                     self.data_logger.info("No TL carriers found in data")
 
-            # Rule 5: DDI/Carrier Matching - New custom rule
+            # Rule 5: DALKO DEFENDER INSURANCE pattern matching (from Basic_Processor)
             if 'Selected Carrier' in df.columns and 'Least Cost Carrier' in df.columns:
-                # Create mask for rows where Selected Carrier contains "DDI/" or similar patterns
-                # and the part after "/" matches Least Cost Carrier
-                ddi_matches = []
-                
+                dalko_matches = []
+
                 for idx, row in df.iterrows():
-                    selected = str(row['Selected Carrier']).strip()
-                    least_cost = str(row['Least Cost Carrier']).strip()
-                    
+                    selected = str(row['Selected Carrier']).strip().upper()
+                    least_cost = str(row['Least Cost Carrier']).strip().upper()
+
                     # Skip empty or nan values
-                    if selected in ['', 'nan', 'None'] or least_cost in ['', 'nan', 'None']:
+                    if selected in ['', 'NAN', 'NONE'] or least_cost in ['', 'NAN', 'NONE']:
                         continue
-                    
-                    # Check if selected carrier has "/" and extract the part after it
-                    if '/' in selected:
-                        # Split on "/" and get the part after the last "/"
-                        carrier_after_slash = selected.split('/')[-1].strip()
-                        
-                        # Check if the carrier after "/" matches the least cost carrier
-                        # Using case-insensitive comparison and handling common variations
-                        if carrier_after_slash.upper() == least_cost.upper():
-                            ddi_matches.append(idx)
-                        # Also check for R&L Carriers vs R%L Carriers variations
-                        elif (carrier_after_slash.upper().replace('&', '%') == least_cost.upper().replace('&', '%') or
-                              carrier_after_slash.upper().replace('%', '&') == least_cost.upper().replace('%', '&')):
-                            ddi_matches.append(idx)
-                
-                ddi_match_count = len(ddi_matches)
-                business_stats['ddi_carrier_rule_applied'] = ddi_match_count
-                
-                if ddi_match_count > 0:
-                    ddi_mask = df.index.isin(ddi_matches)
-                    
+
+                    # Check for DALKO DEFENDER INSURANCE patterns
+                    # Pattern 1: "DALKO DEFENDER INSURANCE/XXX" where least cost is "XXX"
+                    if 'DALKO DEFENDER INSURANCE/' in selected:
+                        carrier_after_slash = selected.split('DALKO DEFENDER INSURANCE/')[-1].strip()
+                        if carrier_after_slash == least_cost:
+                            dalko_matches.append(idx)
+
+                    # Pattern 2: "XXX/DALKO DEFENDER INSURANCE" where least cost is "XXX"
+                    elif '/DALKO DEFENDER INSURANCE' in selected:
+                        carrier_before_slash = selected.split('/DALKO DEFENDER INSURANCE')[0].strip()
+                        if carrier_before_slash == least_cost:
+                            dalko_matches.append(idx)
+
+                dalko_match_count = len(dalko_matches)
+                business_stats['ddi_carrier_rule_applied'] = dalko_match_count
+
+                if dalko_match_count > 0:
+                    dalko_mask = df.index.isin(dalko_matches)
+
                     # Copy selected carrier data to least cost columns
                     column_pairs = [
-                        ('Selected Carrier', 'Least Cost Carrier'), 
-                        ('Selected Service Type', 'Least Cost Service Type'), 
+                        ('Selected Carrier', 'Least Cost Carrier'),
+                        ('Selected Service Type', 'Least Cost Service Type'),
                         ('Selected Transit Days', 'Least Cost Transit Days'),
-                        ('Selected Freight Cost', 'Least Cost Freight Cost'), 
-                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'), 
+                        ('Selected Freight Cost', 'Least Cost Freight Cost'),
+                        ('Selected Accessorial Cost', 'Least Cost Accessorial Cost'),
                         ('Selected Total Cost', 'Least Cost Total Cost')
                     ]
-                    self._copy_selected_to_least_cost(df, ddi_mask, column_pairs)
-                    
+                    self._copy_selected_to_least_cost(df, dalko_mask, column_pairs)
+
                     # Set Potential Savings to 0
                     if 'Potential Savings' in df.columns:
-                        df.loc[ddi_mask, 'Potential Savings'] = 0
-                    
-                    self.data_logger.info(f"Applied DDI/carrier matching rule to {ddi_match_count} rows")
+                        df.loc[dalko_mask, 'Potential Savings'] = 0
+
+                    self.data_logger.info(f"Applied DALKO DEFENDER INSURANCE rule to {dalko_match_count} rows")
             else:
-                self.data_logger.warning("Cannot apply DDI/carrier matching rule - required columns missing")
+                self.data_logger.warning("Cannot apply DALKO DEFENDER INSURANCE rule - required columns missing")
                 
             # Calculate total affected rows
             business_stats['total_rows_affected'] = (
@@ -1088,7 +1069,6 @@ class ModernTMSProcessorGUI:
         # Initialize processors
         self.basic_processor = ModernTMSProcessor()
         self.detailed_processor = None
-        self.template_generator = create_bvc_generator()
         self.input_files = []  # Changed to list for multiple files
         self.output_file = None
         
@@ -1239,13 +1219,6 @@ class ModernTMSProcessorGUI:
                        focuscolor=UI_COLORS['PRIMARY_BLUE'],
                        font=('Segoe UI', 10))
 
-        # Enhanced calendar and container styling
-        style.configure('Calendar.TFrame',
-                       background='#ffffff',
-                       relief='solid',
-                       borderwidth=1,
-                       lightcolor='#cbd5e0',
-                       darkcolor='#cbd5e0')
         
 
     
@@ -1276,25 +1249,17 @@ class ModernTMSProcessorGUI:
                                         command=lambda: self.select_card('detailed'))
         self.detailed_button.grid(row=0, column=2, padx=2, pady=2, sticky="nsew")
         
-        # Template Generator Button
-        self.template_button = ttk.Button(button_frame,
-                                        text="📋\nBVC Template", 
-                                        style='ReportCardDisabled.TButton',
-                                        command=lambda: self.select_card('template'))
-        self.template_button.grid(row=0, column=3, padx=2, pady=2, sticky="nsew")
         
         # Make columns equal width
         button_frame.grid_columnconfigure(0, weight=1, uniform="card")
         button_frame.grid_columnconfigure(1, weight=1, uniform="card")
         button_frame.grid_columnconfigure(2, weight=1, uniform="card")
-        button_frame.grid_columnconfigure(3, weight=1, uniform="card")
-        
+
         # Store references for updating styles
         self.cards = {
             'home': {'button': self.home_button},
             'basic': {'button': self.basic_button},
-            'detailed': {'button': self.detailed_button},
-            'template': {'button': self.template_button}
+            'detailed': {'button': self.detailed_button}
         }
         
         # Don't set initial selection here - will be set after sections are created
@@ -1338,17 +1303,19 @@ class ModernTMSProcessorGUI:
             return "For M&T and Marmon Reports"
         elif report_type == 'detailed':
             return "For Cast Nylons Reports"
+        elif report_type == 'marmon':
+            return "For UTC Main, UTC FS, and Transco"
         else:
             return ""
     
     def update_ui_for_selection(self, card_type):
         """Update UI elements based on selected card type"""
-        if card_type == 'template':
-            # Show date input instead of file input for template generation
-            self.show_date_input_ui()
-            # Hide stats display for template page
+        if card_type == 'marmon':
+            # Show Marmon special clients UI
+            self.show_marmon_special_ui()
+            # Show stats display for processing pages
             if hasattr(self, 'stats_outer_frame'):
-                self.stats_outer_frame.grid_remove()
+                self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
         else:
             # Show normal file input UI
             self.show_file_input_ui()
@@ -1367,16 +1334,17 @@ class ModernTMSProcessorGUI:
         self.header_container = tk.Frame(self.file_section, bg='#f8f9fa')
         self.header_container.grid(row=0, column=0, pady=(2, 1))
         
-        ttk.Label(self.header_container, text="📁 Input File", style='Header.TLabel', background='#f8f9fa').pack()
+        self.header_label = ttk.Label(self.header_container, text="📁 Input File", style='Header.TLabel', background='#f8f9fa')
+        self.header_label.pack()
         
         # Add descriptive text based on report type
         description_text = self.get_report_description()
         if description_text:
-            self.desc_label = tk.Label(self.header_container, text=description_text, 
-                                 font=('Segoe UI', 9, 'italic'), 
+            self.desc_label = tk.Label(self.header_container, text=description_text,
+                                 font=('Segoe UI', 9, 'italic'),
                                  fg='#4a5568', bg='#f8f9fa')
             self.desc_label.pack(pady=(1, 0))
-        
+
         file_frame = tk.Frame(self.file_section, bg='#f8f9fa')
         file_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=3)
         file_frame.columnconfigure(0, weight=1)
@@ -1448,29 +1416,6 @@ class ModernTMSProcessorGUI:
                                        command=self.process_file, style='ProcessButton.TButton', state="disabled")
         self.process_button.pack()
     
-    def create_date_input_section(self):
-        """Create the date input UI section for template generation"""
-        self.date_section = tk.Frame(self.input_section, bg='#f8f9fa')
-        # Don't grid it initially - let the initial state logic handle visibility
-        self.date_section.columnconfigure(0, weight=1)
-        
-        # Section header
-        ttk.Label(self.date_section, text="📅 Date Range for Template", style='Header.TLabel', background='#f8f9fa').grid(row=0, column=0, pady=(2, 1))
-        
-        date_frame = tk.Frame(self.date_section, bg='#f8f9fa')
-        date_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 1), padx=2)
-        date_frame.columnconfigure(0, weight=1)
-        
-        # Date selection with calendar widgets
-        if CALENDAR_AVAILABLE:
-            self._create_calendar_widgets(date_frame)
-        else:
-            self._create_fallback_date_entry(date_frame)
-        
-        # No separate button needed - main process button handles template generation
-        
-        # Initially hide the date section
-        self.date_section.grid_remove()
     
    
             
@@ -1480,12 +1425,47 @@ class ModernTMSProcessorGUI:
             self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
             # Refresh the description text for the current mode
             self.refresh_file_section_description()
-        if hasattr(self, 'date_section'):
-            self.date_section.grid_remove()
+        if hasattr(self, 'marmon_section'):
+            self.marmon_section.grid_remove()
         # Show navigation bar for file input (process button is now integrated)
         if hasattr(self, 'nav_bar'):
             self.nav_bar.grid()
         self.update_process_button_state()
+
+    def show_marmon_special_ui(self):
+        """Show Marmon special clients UI and hide other sections"""
+        if hasattr(self, 'marmon_section'):
+            self.marmon_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
+            # Refresh the description text for the current mode
+            self.refresh_marmon_section_description()
+        else:
+            # Create the marmon section if it doesn't exist
+            self.create_marmon_special_section()
+            self.marmon_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
+
+        if hasattr(self, 'file_section'):
+            self.file_section.grid_remove()
+        # Show navigation bar
+        if hasattr(self, 'nav_bar'):
+            self.nav_bar.grid()
+        self.update_process_button_state()
+
+    def refresh_marmon_section_description(self):
+        """Refresh the description text in the marmon section header"""
+        if not hasattr(self, 'marmon_section') or not hasattr(self, 'marmon_header_container'):
+            return
+
+        # Remove existing description label if it exists
+        if hasattr(self, 'marmon_desc_label'):
+            self.marmon_desc_label.destroy()
+
+        # Add new description label
+        description_text = self.get_report_description()
+        if description_text:
+            self.marmon_desc_label = tk.Label(self.marmon_header_container, text=description_text,
+                                             font=('Segoe UI', 9, 'italic'),
+                                             fg='#4a5568', bg='#f8f9fa')
+            self.marmon_desc_label.pack(pady=(1, 0))
     
     def refresh_file_section_description(self):
         """Refresh the description text in the file section header"""
@@ -1503,394 +1483,124 @@ class ModernTMSProcessorGUI:
                                      font=('Segoe UI', 9, 'italic'), 
                                      fg='#4a5568', bg='#f8f9fa')
             self.desc_label.pack(pady=(1, 0))
+
+
+
     
-    def _create_calendar_widgets(self, parent_frame):
-        """Create compact horizontal calendar layout"""
-        # Configure parent frame for better alignment
-        parent_frame.grid_columnconfigure(0, weight=1)
-        parent_frame.grid_rowconfigure(0, weight=1)
-        
-        # Main horizontal container with improved layout and centering
-        main_container = tk.Frame(parent_frame, bg='#ffffff')
-        main_container.grid(row=0, column=0, padx=0, pady=0)
-        main_container.grid_columnconfigure(0, weight=5)  # Calendars get more space
-        main_container.grid_columnconfigure(1, weight=3)  # Controls get proportional space
 
-        # Center the main container in the parent
-        parent_frame.grid_columnconfigure(0, weight=1)
-        parent_frame.grid_rowconfigure(0, weight=1)
-        
-        # Left side: Calendar container with enhanced layout
-        calendar_section = tk.Frame(main_container, bg='#f8f9fa')
-        calendar_section.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 3), pady=0)
-        calendar_section.grid_columnconfigure(0, weight=1)
-        calendar_section.grid_columnconfigure(1, weight=1)
-        calendar_section.grid_rowconfigure(0, weight=1)
-        
-        # Set default dates first
-        from datetime import timedelta
-        today = datetime.now()
-        default_start = today
-        default_end = today + timedelta(days=4)
-        
-        # FROM Calendar (Left side)
-        from_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
-        from_shadow.grid(row=0, column=0, padx=(2, 1), pady=2, sticky='nsew')
-        
-        from_frame = tk.Frame(from_shadow, bg='#ffffff', relief='flat', bd=0)
-        from_frame.pack(padx=0, pady=0, fill='both', expand=True)
-        
-        from_header = tk.Frame(from_frame, bg='#4299e1')
-        from_header.pack(fill='x', pady=0)
-        
-        tk.Label(from_header, text="✨ FROM DATE", font=('Segoe UI', 9, 'bold'), 
-                fg='white', bg='#4299e1').pack(pady=2)
-        
-        self.start_calendar = Calendar(from_frame,
-                                     selectmode='day',
-                                     year=default_start.year,
-                                     month=default_start.month,
-                                     day=default_start.day,
-                                     background='#4299e1',
-                                     foreground='white',
-                                     selectbackground='#ffd700',
-                                     selectforeground='#1a202c',
-                                     normalbackground='#ffffff',
-                                     normalforeground='#2d3748',
-                                     weekendbackground='#ebf8ff',
-                                     weekendforeground='#2b6cb0',
-                                     othermonthforeground='#a0aec0',
-                                     othermonthbackground='#f7fafc',
-                                     headersbackground='#bee3f8',
-                                     headersforeground='#1a365d',
-                                     font=('Segoe UI', 9),
-                                     borderwidth=1,
-                                     bordercolor='#e2e8f0',
-                                     cursor='hand2',
-                                     showweeknumbers=False,
-                                     showothermonthdays=False)
-        self.start_calendar.pack(padx=2, pady=(0, 2), fill='both', expand=True)
-        self.start_calendar.bind('<<CalendarSelected>>', self.on_start_date_select)
-        
-        # TO Calendar (Right side)
-        to_shadow = tk.Frame(calendar_section, bg='#e2e8f0')
-        to_shadow.grid(row=0, column=1, padx=(1, 2), pady=2, sticky='nsew')
-        
-        to_frame = tk.Frame(to_shadow, bg='#ffffff', relief='flat', bd=0)
-        to_frame.pack(padx=0, pady=0, fill='both', expand=True)
-        
-        to_header = tk.Frame(to_frame, bg='#38a169')
-        to_header.pack(fill='x', pady=0)
-        
-        tk.Label(to_header, text="🎯 TO DATE", font=('Segoe UI', 9, 'bold'),
-                fg='white', bg='#38a169').pack(pady=2)
-        
-        self.end_calendar = Calendar(to_frame,
-                                   selectmode='day',
-                                   year=default_end.year,
-                                   month=default_end.month,
-                                   day=default_end.day,
-                                   background='#38a169',
-                                   foreground='white',
-                                   selectbackground='#ffd700',
-                                   selectforeground='#1a202c',
-                                   normalbackground='#ffffff',
-                                   normalforeground='#2d3748',
-                                   weekendbackground='#f0fff4',
-                                   weekendforeground='#276749',
-                                   othermonthforeground='#a0aec0',
-                                   othermonthbackground='#f7fafc',
-                                   headersbackground='#9ae6b4',
-                                   headersforeground='#1a365d',
-                                   font=('Segoe UI', 9),
-                                   borderwidth=1,
-                                   bordercolor='#e2e8f0',
-                                   cursor='hand2',
-                                   showweeknumbers=False,
-                                   showothermonthdays=False)
-        self.end_calendar.pack(padx=2, pady=(0, 2), fill='both', expand=True)
-        self.end_calendar.bind('<<CalendarSelected>>', self.on_end_date_select)
-        
-        # Right side: Controls container with proper weights
-        controls_section = tk.Frame(main_container, bg='#f8f9fa')
-        controls_section.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(1, 0), pady=0)
-        controls_section.grid_columnconfigure(0, weight=1)
-        controls_section.grid_rowconfigure(3, weight=1)  # Spacer row
-        
-        # Header
-        header_frame = tk.Frame(controls_section, bg='#3182ce')
-        header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=0, pady=0)
+    def create_marmon_special_section(self):
+        """Create the Marmon special clients UI section"""
+        self.marmon_section = tk.Frame(self.input_section, bg='#f8f9fa')
+        # Don't grid it initially - let the initial state logic handle visibility
+        self.marmon_section.columnconfigure(0, weight=1)
 
-        tk.Label(header_frame, text="📅 Select Date Range",
-                font=('Segoe UI', 9, 'bold'), fg='white', bg='#3182ce').pack(pady=2)
-        
-        # Date range text box with enhanced styling
-        text_frame = tk.Frame(controls_section, bg='#f8f9fa')
-        text_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=10, pady=(15, 10))
-        
-        # Enhanced label with icon
-        label_frame = tk.Frame(text_frame, bg='#f8f9fa')
-        label_frame.pack(fill='x', pady=(0, 2))
-        
-        tk.Label(label_frame, text="📅", font=('Segoe UI', 10),
-                fg='#4299e1', bg='#f8f9fa').pack(side='left', padx=(0, 3))
+        # Section header with context-specific description
+        self.marmon_header_container = tk.Frame(self.marmon_section, bg='#f8f9fa')
+        self.marmon_header_container.grid(row=0, column=0, pady=(2, 1))
 
-        tk.Label(label_frame, text="Date Range:", font=('Segoe UI', 9, 'bold'),
+        ttk.Label(self.marmon_header_container, text="🏭 Marmon Special Clients", style='Header.TLabel', background='#f8f9fa').pack()
+
+        # Add descriptive text
+        description_text = self.get_report_description()
+        if description_text:
+            self.marmon_desc_label = tk.Label(self.marmon_header_container, text=description_text,
+                                             font=('Segoe UI', 9, 'italic'),
+                                             fg='#4a5568', bg='#f8f9fa')
+            self.marmon_desc_label.pack(pady=(1, 0))
+
+        # Client selection frame
+        client_frame = tk.Frame(self.marmon_section, bg='#f8f9fa')
+        client_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=3)
+        client_frame.columnconfigure(0, weight=1)
+
+        # Client selection label
+        client_label_frame = tk.Frame(client_frame, bg='#f8f9fa')
+        client_label_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(5, 3))
+
+        tk.Label(client_label_frame, text="Select Client:", font=('Segoe UI', 11, 'bold'),
                 fg='#2d3748', bg='#f8f9fa').pack(side='left')
-        
-        # Enhanced textbox with better styling - no black border
-        textbox_container = tk.Frame(text_frame, bg='#e2e8f0', relief='flat', bd=0)
-        textbox_container.pack(fill='x', pady=(0, 1))
-        
-        self.date_range_entry = tk.Entry(textbox_container,
-                                        font=('Segoe UI', 9, 'bold'),
-                                        fg='#1a365d',
-                                        bg='#ffffff',
-                                        justify='center',
-                                        relief='flat',
-                                        bd=0,
-                                        highlightthickness=2,
-                                        highlightcolor='#4299e1',
-                                        highlightbackground='#e2e8f0',
-                                        insertbackground='#4299e1')
-        self.date_range_entry.pack(fill='x', padx=4, pady=4)
-        self.date_range_entry.bind('<KeyRelease>', self.on_date_range_text_change)
-        self.date_range_entry.bind('<Return>', self.on_date_range_enter)
-        self.date_range_entry.bind('<FocusIn>', self.on_date_range_focus_in)
-        self.date_range_entry.bind('<FocusOut>', self.on_date_range_focus_out)
-        
-        # Generate button (moved here from bottom)
-        button_frame = tk.Frame(controls_section, bg='#f8f9fa')
-        button_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=10, pady=(10, 10))
-        
-        # Create the template button for this layout
-        self.template_button = ttk.Button(button_frame, text="📋 GENERATE", 
-                                         command=self.generate_template, style='ProcessButton.TButton', 
-                                         state="disabled")
-        self.template_button.pack(fill='x', pady=1)
-        
-        # Spacer row to push everything up
-        tk.Frame(controls_section, bg='#f8f9fa').grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        
-        # Initialize the date range display
-        self.update_date_range_display()
-    
-    def _create_fallback_date_entry(self, parent_frame):
-        """Create fallback text entry if calendar widget not available"""
-        # Date input with clean styling
-        date_input_frame = tk.Frame(parent_frame, bg='#ffffff', relief='flat', bd=0)
-        date_input_frame.grid(row=0, column=0, padx=(0, 15), sticky=(tk.W, tk.E))
-        date_input_frame.grid_columnconfigure(0, weight=1)
-        
-        # Date input field
-        self.date_entry = tk.Entry(date_input_frame,
-                                  font=('Segoe UI', 10),
-                                  fg='#2d3748',
-                                  bg='#ffffff',
-                                  borderwidth=0,
-                                  highlightthickness=0)
-        self.date_entry.pack(fill='x', expand=True, padx=15, pady=12)
-        
-        # Add placeholder text
-        self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
-        self.date_entry.config(fg='#a0aec0')
-        
-        # Bind events for placeholder behavior and Enter key
-        self.date_entry.bind('<FocusIn>', self.on_date_entry_focus_in)
-        self.date_entry.bind('<FocusOut>', self.on_date_entry_focus_out)
-        self.date_entry.bind('<KeyRelease>', self.on_date_entry_change)
-        self.date_entry.bind('<Return>', self.on_date_entry_enter)
 
-    def show_date_input_ui(self):
-        """Show date input UI and hide other sections"""
-        if hasattr(self, 'date_section'):
-            self.date_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 5), padx=3)
-        if hasattr(self, 'file_section'):
-            self.file_section.grid_remove()
-        # Hide main process button (template has its own), but show nav bar
-        if hasattr(self, 'process_button'):
-            self.process_button.grid_remove()
-        if hasattr(self, 'nav_bar'):
-            self.nav_bar.grid()
-        self.update_process_button_state()
+        # Client selection dropdown
+        self.marmon_client_var = tk.StringVar()
+        client_options = ["UTC MAIN", "UTC FS", "TRANSCO"]
+        self.marmon_client_dropdown = ttk.Combobox(client_frame, textvariable=self.marmon_client_var,
+                                                  values=client_options, state="readonly", width=15)
+        self.marmon_client_dropdown.grid(row=1, column=0, sticky=(tk.W), pady=(0, 5))
+        self.marmon_client_dropdown.bind('<<ComboboxSelected>>', self.on_marmon_client_select)
+
+        # File display area
+        file_display_frame = tk.Frame(client_frame, bg='#ffffff', relief='flat', bd=1)
+        file_display_frame.grid(row=2, column=0, padx=(0, 3), sticky=(tk.W, tk.E), pady=(5, 0))
+        file_display_frame.columnconfigure(0, weight=1)
+
+        # Create custom scrollable text widget with cool scroller for Marmon
+        scroll_container = tk.Frame(file_display_frame, bg='#ffffff')
+        scroll_container.pack(fill='both', expand=True, padx=2, pady=1)
+
+        # Text widget for Marmon files
+        self.marmon_file_display = tk.Text(scroll_container,
+                                          height=3,
+                                          width=30,
+                                          font=('Segoe UI', 10),
+                                          fg='#000000',
+                                          bg='#ffffff',
+                                          wrap=tk.WORD,
+                                          state='disabled',
+                                          borderwidth=0,
+                                          highlightthickness=0,
+                                          yscrollcommand=lambda *args: self._on_marmon_scroll(*args))
+
+        # Modern custom scrollbar for Marmon section
+        self.marmon_cool_scrollbar = tk.Canvas(scroll_container, width=12, bg='#f1f3f4',
+                                              highlightthickness=0, bd=0)
+
+        # Configure grid layout
+        scroll_container.grid_columnconfigure(0, weight=1)
+        scroll_container.grid_rowconfigure(0, weight=1)
+
+        self.marmon_file_display.grid(row=0, column=0, sticky='nsew')
+        self.marmon_cool_scrollbar.grid(row=0, column=1, sticky='ns')
+
+        # Initialize scrollbar for Marmon
+        self._setup_marmon_cool_scrollbar()
+
+        # Initialize with placeholder text
+        self.marmon_file_display.config(state='normal')
+        self.marmon_file_display.insert('1.0', "Select a client and upload raw data file")
+        self.marmon_file_display.config(state='disabled', fg='#6c757d')
+
+        # Update scrollbar
+        self._update_marmon_scrollbar()
+
+        # Store reference to file display frame for updates
+        self.marmon_file_display_frame = file_display_frame
+
+        # Enable drag and drop for Marmon section
+        self.setup_drag_drop(file_display_frame)
+
+        # Browse Button Frame for Marmon
+        marmon_browse_frame = tk.Frame(self.marmon_section, bg='#f8f9fa')
+        marmon_browse_frame.grid(row=2, column=0, pady=(2, 1))
+
+        marmon_browse_button = ttk.Button(marmon_browse_frame, text="📂 Browse",
+                                         command=self.browse_marmon_file, style='Browse.TButton')
+        marmon_browse_button.pack()
+
+        # Process Button Frame for Marmon
+        marmon_process_frame = tk.Frame(self.marmon_section, bg='#f8f9fa')
+        marmon_process_frame.grid(row=3, column=0, pady=(1, 1))
+
+        self.marmon_process_button = ttk.Button(marmon_process_frame, text="🏭 PROCESS",
+                                               command=self.process_marmon_file, style='ProcessButton.TButton', state="disabled")
+        self.marmon_process_button.pack()
+
     
-    def on_date_entry_focus_in(self, event):
-        """Handle date entry focus in"""
-        if self.date_entry.get() == "Enter date range (e.g., 08.04.25 - 08.08.25)":
-            self.date_entry.delete(0, tk.END)
-            self.date_entry.config(fg='#2d3748')
     
-    def on_date_entry_focus_out(self, event):
-        """Handle date entry focus out"""
-        if not self.date_entry.get():
-            self.date_entry.insert(0, "Enter date range (e.g., 08.04.25 - 08.08.25)")
-            self.date_entry.config(fg='#a0aec0')
     
-    def on_start_date_select(self, event=None):
-        """Handle start date selection from calendar"""
-        self.update_date_range_display()
-        self.update_process_button_state()
     
-    def on_end_date_select(self, event=None):
-        """Handle end date selection from calendar"""
-        self.update_date_range_display()
-        self.update_process_button_state()
     
-    def update_date_range_display(self):
-        """Update the date range display in the text box"""
-        if hasattr(self, 'start_calendar') and hasattr(self, 'end_calendar') and hasattr(self, 'date_range_entry'):
-            try:
-                start_date = self.start_calendar.selection_get()
-                end_date = self.end_calendar.selection_get()
-                
-                # Format as MM.DD.YY - MM.DD.YY
-                start_str = start_date.strftime('%m.%d.%y')
-                end_str = end_date.strftime('%m.%d.%y')
-                range_text = f"{start_str} - {end_str}"
-                
-                # Update text box without triggering events
-                self.date_range_entry.delete(0, tk.END)
-                self.date_range_entry.insert(0, range_text)
-                self.date_range_entry.config(fg='#2d3748')
-            except:
-                self.date_range_entry.delete(0, tk.END)
-                self.date_range_entry.insert(0, "Select dates")
-                self.date_range_entry.config(fg='#a0aec0')
     
-    def on_date_range_text_change(self, event=None):
-        """Handle manual text changes in date range entry"""
-        # Only parse if user typed a complete date range
-        text = self.date_range_entry.get().strip()
-        if " - " in text and len(text) >= 15:  # Basic format check
-            try:
-                self.parse_and_update_calendars(text)
-            except:
-                pass  # Invalid format, ignore
-        self.update_process_button_state()
     
-    def on_date_range_enter(self, event=None):
-        """Handle Enter key in date range entry"""
-        text = self.date_range_entry.get().strip()
-        try:
-            self.parse_and_update_calendars(text)
-            if self.report_type.get() == 'template':
-                self.generate_template()
-        except:
-            # Reset to calendar values if invalid
-            self.update_date_range_display()
-    
-    def on_date_range_focus_in(self, event=None):
-        """Handle focus in on date range entry"""
-        if self.date_range_entry.get() == "Select dates":
-            self.date_range_entry.delete(0, tk.END)
-            self.date_range_entry.config(fg='#2d3748')
-    
-    def on_date_range_focus_out(self, event=None):
-        """Handle focus out on date range entry"""
-        if not self.date_range_entry.get().strip():
-            self.update_date_range_display()
-    
-    def parse_and_update_calendars(self, text):
-        """Parse date range text and update calendars"""
-        if " - " in text:
-            parts = text.split(" - ")
-            if len(parts) == 2:
-                from datetime import datetime
-                try:
-                    # Try multiple date formats
-                    formats = ['%m.%d.%y', '%m/%d/%y', '%m-%d-%y', '%m.%d.%Y', '%m/%d/%Y']
-                    start_date = None
-                    end_date = None
-                    
-                    for fmt in formats:
-                        try:
-                            start_date = datetime.strptime(parts[0].strip(), fmt)
-                            end_date = datetime.strptime(parts[1].strip(), fmt)
-                            break
-                        except:
-                            continue
-                    
-                    if start_date and end_date:
-                        # Update calendars
-                        self.start_calendar.selection_set(start_date.date())
-                        self.end_calendar.selection_set(end_date.date())
-                        return True
-                except:
-                    pass
-        raise ValueError("Invalid date format")
-    
-    def on_date_change(self, event=None):
-        """Handle date change from calendar widgets or text entry (fallback)"""
-        self.update_process_button_state()
-    
-    def on_date_entry_change(self, event):
-        """Handle date entry text change (fallback mode)"""
-        self.update_process_button_state()
-    
-    def on_date_entry_enter(self, event):
-        """Handle Enter key press in date entry field (fallback mode)"""
-        # Trigger template generation if valid input
-        if self.report_type.get() == 'template':
-            date_text = self.date_entry.get().strip()
-            if date_text and date_text != "Enter date range (e.g., 08.04.25 - 08.08.25)":
-                self.generate_template()
-    
-    def get_date_range_string(self):
-        """Get formatted date range string from text box or calendar widgets"""
-        if CALENDAR_AVAILABLE and hasattr(self, 'date_range_entry'):
-            # Get from the synced text box
-            text = self.date_range_entry.get().strip()
-            if text and text != "Select dates":
-                return text
-            # Fallback to calendar if text box is empty
-            elif hasattr(self, 'start_calendar') and hasattr(self, 'end_calendar'):
-                try:
-                    start = self.start_calendar.selection_get()
-                    end = self.end_calendar.selection_get()
-                    start_str = start.strftime('%m.%d.%y')
-                    end_str = end.strftime('%m.%d.%y')
-                    return f"{start_str} - {end_str}"
-                except:
-                    return ""
-        elif hasattr(self, 'date_entry'):
-            # Fallback to old text entry
-            return self.date_entry.get().strip()
-        else:
-            return ""
-    
-    def generate_template(self):
-        """Generate BVC template with the specified date range"""
-        date_range = self.get_date_range_string()
-        
-        # Check if valid date range
-        if not date_range or date_range == "Enter date range (e.g., 08.04.25 - 08.08.25)":
-            messagebox.showwarning("Date Range Required", "Please select or enter a date range for the template.")
-            return
-        
-        # Validate date format
-        if not self.template_generator.validate_input(date_range):
-            messagebox.showwarning("Invalid Format", "Please enter a valid date range (e.g., 08.04.25 - 08.08.25)")
-            return
-        
-        try:
-            # Ask user where to save the template
-            default_name = f"MARMON BVC {date_range}.xlsx"
-            output_file = filedialog.asksaveasfilename(
-                title="Save Template As",
-                defaultextension=".xlsx",
-                initialfile=default_name,
-                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
-            )
-            
-            if output_file:
-                # Generate the template
-                file_path = self.template_generator.generate_template(date_range, output_file)
-                messagebox.showinfo("Template Generated", 
-                    f"BVC Template created successfully!\n\n"
-                    f"File saved as:\n{os.path.basename(file_path)}")
-        
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to generate template:\n{str(e)}")
 
     def create_widgets(self):
         """Create the main GUI widgets"""
@@ -1941,13 +1651,10 @@ class ModernTMSProcessorGUI:
         
         # Create both file input and date input sections
         self.create_file_input_section()
-        self.create_date_input_section()
         
         # Set correct initial state (start with file input visible, date input hidden)
         if hasattr(self, 'file_section'):
             self.file_section.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 2), padx=1)
-        if hasattr(self, 'date_section'):
-            self.date_section.grid_remove()
         
         # Process button is now integrated into the file input section
 
@@ -2015,12 +1722,13 @@ class ModernTMSProcessorGUI:
                                highlightthickness=0, width=12)
         self.nav_buttons['detailed'].pack(side='left', padx=(0, 5))
         
-        self.nav_buttons['template'] = tk.Button(nav_container, text="📋 Template", font=('Segoe UI', 10),
+
+        self.nav_buttons['marmon'] = tk.Button(nav_container, text="🏭 Marmon", font=('Segoe UI', 10),
                                bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
-                               cursor='hand2', command=lambda: self.select_card('template'),
+                               cursor='hand2', command=lambda: self.select_card('marmon'),
                                activebackground='#cbd5e0', padx=18, pady=10,
                                highlightthickness=0, width=12)
-        self.nav_buttons['template'].pack(side='left')
+        self.nav_buttons['marmon'].pack(side='left')
         
     def setup_drag_drop(self, widget):
         """Setup drag and drop functionality for file selection"""
@@ -2062,12 +1770,12 @@ class ModernTMSProcessorGUI:
 
         # Get the required size of all content with minimal padding
         required_width = self.root.winfo_reqwidth() + 10  # Minimal padding
-        required_height = self.root.winfo_reqheight() + 20  # Minimal padding
+        required_height = self.root.winfo_reqheight() + 80  # Minimal padding
 
         # Set more aggressive limits for minimalism
-        min_width = 600
+        min_width = 450
         max_width = int(self.root.winfo_screenwidth() * 0.8)
-        min_height = 400
+        min_height = 550
         max_height = int(self.root.winfo_screenheight() * 0.9)
 
         # Constrain to limits
@@ -2208,6 +1916,105 @@ class ModernTMSProcessorGUI:
         except:
             pass
 
+    # Marmon scrollbar methods (similar to main scrollbar but for marmon section)
+    def _setup_marmon_cool_scrollbar(self):
+        """Setup the cool custom scrollbar for Marmon section"""
+        self.marmon_scrollbar_thumb = None
+        self.marmon_scrollbar_track_height = 0
+        self.marmon_scrollbar_thumb_height = 0
+        self.marmon_scrollbar_thumb_pos = 0
+
+        # Bind scrollbar events
+        self.marmon_cool_scrollbar.bind('<Button-1>', self._on_marmon_scrollbar_click)
+        self.marmon_cool_scrollbar.bind('<B1-Motion>', self._on_marmon_scrollbar_drag)
+        self.marmon_cool_scrollbar.bind('<Configure>', self._on_marmon_scrollbar_configure)
+
+        # Bind text widget scroll events
+        self.marmon_file_display.bind('<MouseWheel>', self._on_marmon_mousewheel)
+        self.marmon_file_display.bind('<Configure>', self._update_marmon_scrollbar)
+
+    def _on_marmon_scroll(self, *args):
+        """Handle Marmon text widget scroll events"""
+        self._update_marmon_scrollbar()
+
+    def _update_marmon_scrollbar(self, event=None):
+        """Update the Marmon scrollbar appearance"""
+        try:
+            top, bottom = self.marmon_file_display.yview()
+            self.marmon_cool_scrollbar.delete('all')
+
+            sb_height = self.marmon_cool_scrollbar.winfo_height()
+            sb_width = self.marmon_cool_scrollbar.winfo_width()
+
+            if sb_height <= 1:
+                self.marmon_cool_scrollbar.after(10, self._update_marmon_scrollbar)
+                return
+
+            track_x = sb_width // 2
+            self.marmon_cool_scrollbar.create_rectangle(track_x - 1, 0, track_x + 1, sb_height,
+                                                       fill='#e8eaed', outline='')
+
+            visible_ratio = bottom - top
+            if visible_ratio >= 1.0:
+                return
+
+            thumb_height = max(20, int(sb_height * visible_ratio))
+            thumb_top = int(top * (sb_height - thumb_height))
+            thumb_bottom = thumb_top + thumb_height
+
+            thumb_x1 = track_x - 3
+            thumb_x2 = track_x + 3
+
+            self.marmon_scrollbar_thumb = self.marmon_cool_scrollbar.create_rectangle(
+                thumb_x1, thumb_top + 2, thumb_x2, thumb_bottom - 2,
+                fill='#5f6368', outline='', tags='thumb'
+            )
+
+            self.marmon_cool_scrollbar.create_oval(thumb_x1, thumb_top, thumb_x2, thumb_top + 4,
+                                                  fill='#5f6368', outline='', tags='thumb')
+            self.marmon_cool_scrollbar.create_oval(thumb_x1, thumb_bottom - 4, thumb_x2, thumb_bottom,
+                                                  fill='#5f6368', outline='', tags='thumb')
+
+            self.marmon_scrollbar_thumb_pos = thumb_top
+            self.marmon_scrollbar_thumb_height = thumb_height
+            self.marmon_scrollbar_track_height = sb_height
+        except:
+            pass
+
+    def _on_marmon_scrollbar_click(self, event):
+        """Handle Marmon scrollbar click"""
+        try:
+            click_y = event.y
+            sb_height = self.marmon_cool_scrollbar.winfo_height()
+            target_ratio = click_y / sb_height
+            self.marmon_file_display.yview_moveto(target_ratio)
+            self._update_marmon_scrollbar()
+        except:
+            pass
+
+    def _on_marmon_scrollbar_drag(self, event):
+        """Handle Marmon scrollbar drag"""
+        try:
+            drag_y = event.y
+            sb_height = self.marmon_cool_scrollbar.winfo_height()
+            scroll_ratio = max(0, min(1, drag_y / sb_height))
+            self.marmon_file_display.yview_moveto(scroll_ratio)
+            self._update_marmon_scrollbar()
+        except:
+            pass
+
+    def _on_marmon_scrollbar_configure(self, event):
+        """Handle Marmon scrollbar resize"""
+        self._update_marmon_scrollbar()
+
+    def _on_marmon_mousewheel(self, event):
+        """Handle Marmon mouse wheel scrolling"""
+        try:
+            self.marmon_file_display.yview_scroll(int(-1 * (event.delta / 120)), 'units')
+            self._update_marmon_scrollbar()
+        except:
+            pass
+
     def browse_file(self):
         """Browse for multiple input files"""
         try:
@@ -2299,30 +2106,15 @@ class ModernTMSProcessorGUI:
     
     def update_process_button_state(self):
         """Enable process button based on current selection and input state"""
-        if self.report_type.get() == 'template':
-            # Template mode - hide main process button completely
-            if hasattr(self, 'process_button'):
-                self.process_button.grid_remove()  # Hide the button
-            
-            # Update dedicated template button state
-            if hasattr(self, 'template_button'):
-                date_range = self.get_date_range_string()
-                if CALENDAR_AVAILABLE and hasattr(self, 'date_range_entry'):
-                    # Enhanced calendar mode with text box - check for valid input
-                    if date_range and date_range not in ["Select dates", "Enter date range (e.g., 08.04.25 - 08.08.25)"]:
-                        self.template_button.config(state="normal")
-                    else:
-                        self.template_button.config(state="disabled")
-                elif date_range and date_range != "Enter date range (e.g., 08.04.25 - 08.08.25)":
-                    # Fallback text entry mode - check for valid input
-                    self.template_button.config(state="normal")
-                else:
-                    self.template_button.config(state="disabled")
+        # Check if we're on Marmon page
+        if self.report_type.get() == 'marmon':
+            # Update Marmon-specific button
+            self.update_marmon_process_button_state()
         else:
             # File processing mode - show main process button
             if hasattr(self, 'process_button'):
                 self.process_button.grid()  # Show the button
-            
+
             # Check files
             if self.input_files:
                 file_count = len(self.input_files)
@@ -2333,27 +2125,25 @@ class ModernTMSProcessorGUI:
     
     
     def process_file(self):
-        """Process the selected files (template generation now handled by dedicated button)"""
+        """Process the selected files"""
         if self.is_processing:
             return
-            
-        # Only handle file processing mode (template has its own button now)
-        if self.report_type.get() != 'template':
-            # File processing mode
-            if not self.input_files:
-                return
-                
-            # Set processing state
-            self.is_processing = True
-            
-            # Update UI for processing state
-            file_count = len(self.input_files)
-            self.process_button.config(state="disabled", text=f"⏳ PROCESSING {file_count} FILE{'S' if file_count > 1 else ''}...")
-            
-            # Start processing in separate thread
-            thread = threading.Thread(target=self._process_file_thread)
-            thread.daemon = True
-            thread.start()
+
+        # File processing mode
+        if not self.input_files:
+            return
+
+        # Set processing state
+        self.is_processing = True
+
+        # Update UI for processing state
+        file_count = len(self.input_files)
+        self.process_button.config(state="disabled", text=f"⏳ PROCESSING {file_count} FILE{'S' if file_count > 1 else ''}...")
+
+        # Start processing in separate thread
+        thread = threading.Thread(target=self._process_file_thread)
+        thread.daemon = True
+        thread.start()
         
     def _process_file_thread(self):
         """Process files in background thread"""
@@ -2711,6 +2501,203 @@ class ModernTMSProcessorGUI:
             self.update_savings_display()
 
             messagebox.showinfo("Cleared", "Recent uploads history has been cleared.")
+
+    def on_marmon_client_select(self, event=None):
+        """Handle Marmon client selection"""
+        selected_client = self.marmon_client_var.get()
+        if selected_client:
+            # Update file display placeholder
+            if hasattr(self, 'marmon_file_display'):
+                self.marmon_file_display.config(state='normal')
+                self.marmon_file_display.delete('1.0', tk.END)
+                self.marmon_file_display.insert('1.0', f"Upload raw data file for {selected_client}")
+                self.marmon_file_display.config(state='disabled', fg='#6c757d')
+                self._update_marmon_scrollbar()
+
+    def browse_marmon_file(self):
+        """Browse for Marmon raw data file"""
+        try:
+            self.root.focus_force()
+            self.root.lift()
+
+            selected_client = self.marmon_client_var.get()
+            if not selected_client:
+                messagebox.showwarning("No Client Selected", "Please select a Marmon client first.")
+                return
+
+            filetypes = [
+                ('Excel files', '*.xlsx *.xls'),
+                ('All files', '*.*')
+            ]
+
+            file_path = filedialog.askopenfilename(
+                title=f"Select {selected_client} Raw Data File",
+                filetypes=filetypes,
+                initialdir=os.path.expanduser("~")
+            )
+
+            if file_path:
+                self.marmon_input_files = [file_path]
+                self.update_marmon_file_display([file_path])
+                self.update_marmon_process_button_state()
+
+        except Exception as e:
+            messagebox.showerror("Browse Error", f"Error browsing for file: {str(e)}")
+
+    def update_marmon_file_display(self, files):
+        """Update the Marmon file display with selected files"""
+        if not hasattr(self, 'marmon_file_display'):
+            return
+
+        try:
+            self.marmon_file_display.config(state='normal')
+            self.marmon_file_display.delete('1.0', tk.END)
+
+            if not files:
+                self.marmon_file_display.insert('1.0', "Select a client and upload raw data file")
+                self.marmon_file_display.config(fg='#6c757d')
+            else:
+                # Display selected files
+                file_list = []
+                for file_path in files:
+                    filename = os.path.basename(file_path)
+                    file_size = os.path.getsize(file_path)
+                    size_mb = file_size / (1024 * 1024)
+                    file_list.append(f"📄 {filename} ({size_mb:.1f} MB)")
+
+                self.marmon_file_display.insert('1.0', '\n'.join(file_list))
+                self.marmon_file_display.config(fg='#000000')
+
+            self.marmon_file_display.config(state='disabled')
+            self._update_marmon_scrollbar()
+
+        except Exception as e:
+            print(f"Error updating Marmon file display: {e}")
+
+    def update_marmon_process_button_state(self):
+        """Enable/disable Marmon process button based on selections"""
+        if not hasattr(self, 'marmon_process_button'):
+            return
+
+        selected_client = self.marmon_client_var.get()
+        has_files = hasattr(self, 'marmon_input_files') and self.marmon_input_files
+
+        if selected_client and has_files:
+            self.marmon_process_button.config(state="normal",
+                                             text=f"🏭 PROCESS {selected_client} SPECIAL")
+        else:
+            self.marmon_process_button.config(state="disabled",
+                                             text="🏭 PROCESS")
+
+    def process_marmon_file(self):
+        """Process Marmon special client files with special city logic"""
+        try:
+            selected_client = self.marmon_client_var.get()
+            if not selected_client:
+                messagebox.showwarning("No Client Selected", "Please select a Marmon client first.")
+                return
+
+            if not hasattr(self, 'marmon_input_files') or not self.marmon_input_files:
+                messagebox.showwarning("No File Selected", "Please select a raw data file first.")
+                return
+
+            # Use Basic processing first, then apply special city rules
+            input_file = self.marmon_input_files[0]
+
+            print(f"[MARMON] Step 1: Running Basic processing for {selected_client}")
+
+            # Run the same Basic processing logic
+            processed_df = self.basic_processor.process_file(input_file)
+
+            print(f"[MARMON] Step 2: Applying {selected_client} special city rules")
+
+            # Define special cities for Marmon clients
+            special_cities = ['EVANSTON', 'GREEN RIVER', 'MILES CITY']
+
+            # Apply special city modifications on top of Basic results
+            processed_df = self._apply_marmon_special_modifications(processed_df, selected_client, special_cities)
+
+            # Generate output filename
+            timestamp = datetime.now().strftime("%m.%d.%y_%H.%M")
+            base_name = os.path.splitext(os.path.basename(input_file))[0]
+            output_filename = f"{selected_client}_{base_name}_SPECIAL_{timestamp}.xlsx"
+
+            # Ask user where to save
+            output_file = filedialog.asksaveasfilename(
+                title=f"Save {selected_client} Special Processing Results",
+                defaultextension=".xlsx",
+                initialfile=output_filename,
+                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
+            )
+
+            if output_file:
+                # Save the processed data
+                with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+                    processed_df.to_excel(writer, sheet_name='Processed Data', index=False)
+
+                # Show success message
+                # Count special rows (will be calculated in the modification method)
+                special_rows = getattr(self, '_last_special_rows_count', 0)
+
+                messagebox.showinfo("Marmon Special Processing Complete",
+                                   f"✅ {selected_client} special processing completed!\n\n"
+                                   f"📁 File: {os.path.basename(output_file)}\n"
+                                   f"📊 Total rows: {len(processed_df)}\n"
+                                   f"🏭 Special city rows: {special_rows}\n"
+                                   f"🎯 Special cities: {', '.join(special_cities)}")
+            else:
+                messagebox.showinfo("Cancelled", "Processing cancelled by user.")
+
+        except Exception as e:
+            messagebox.showerror("Processing Error", f"Error processing Marmon file: {str(e)}")
+
+    def _apply_marmon_special_modifications(self, df, client_name, special_cities):
+        """Apply special city modifications to already-processed Basic results"""
+
+        # Find city column in the processed data
+        city_column = None
+        for col in df.columns:
+            if 'city' in col.lower() and ('dest' in col.lower() or 'to' in col.lower() or 'delivery' in col.lower()):
+                city_column = col
+                break
+
+        if not city_column:
+            print(f"[MARMON] No city column found - skipping special modifications")
+            self._last_special_rows_count = 0
+            return df
+
+        print(f"[MARMON] Using column '{city_column}' for special city modifications")
+
+        # Find special city rows
+        special_mask = df[city_column].str.upper().isin([city.upper() for city in special_cities])
+        special_count = special_mask.sum()
+        self._last_special_rows_count = special_count
+
+        if special_count > 0:
+            print(f"[MARMON] Modifying PS for {special_count} {client_name} special city rows")
+
+            # Apply simple PS modifications based on client
+            if 'Potential Savings' in df.columns:
+                if client_name == "UTC MAIN":
+                    # UTC MAIN: Increase PS by 15% for remote locations
+                    df.loc[special_mask, 'Potential Savings'] *= 1.15
+                elif client_name == "UTC FS":
+                    # UTC FS: Increase PS by 20% for priority routes
+                    df.loc[special_mask, 'Potential Savings'] *= 1.20
+                elif client_name == "TRANSCO":
+                    # TRANSCO: Decrease PS by 10% for consolidated shipping
+                    df.loc[special_mask, 'Potential Savings'] *= 0.90
+
+                print(f"[MARMON] Applied {client_name} PS modifications to {special_count} rows")
+            else:
+                print(f"[MARMON] Warning: 'Potential Savings' column not found")
+        else:
+            print(f"[MARMON] No special cities found in data")
+
+        return df
+
+
+
 
 def main():
     root = tk.Tk()
