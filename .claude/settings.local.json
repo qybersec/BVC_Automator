@@ -27,7 +27,11 @@
       "Bash(dir \"C:\\Users\\Quincy Nguyen\\Desktop\\Automation Projects\\BVC_Automator\\icon\")",
       "Bash(del requirements.txt)",
       "Bash(dir:*)",
-      "Bash(del:*)"
+      "Bash(del:*)",
+      "Bash(findstr:*)",
+      "Bash(git checkout:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []
