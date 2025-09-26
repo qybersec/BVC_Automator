@@ -13,6 +13,14 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 
 
+# Import city processors from modular files
+try:
+    from city_processors import UTCMainProcessor, UTCFSProcessor, TranscoProcessor
+except ImportError:
+    UTCMainProcessor = None
+    UTCFSProcessor = None
+    TranscoProcessor = None
+
 # Import UI styles from the new modular UI components
 try:
     from ui import COLORS as UI_COLORS
@@ -1310,14 +1318,20 @@ class ModernTMSProcessorGUI:
     
     def update_ui_for_selection(self, card_type):
         """Update UI elements based on selected card type"""
-        if card_type == 'marmon':
+        if card_type in ['utc_main', 'utc_fs', 'transco']:
+            # Show normal file input UI for city processors
+            self.show_file_input_ui()
+            # Show stats display for processing pages
+            if hasattr(self, 'stats_outer_frame'):
+                self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
+        elif card_type == 'marmon':
             # Show Marmon special clients UI
             self.show_marmon_special_ui()
             # Show stats display for processing pages
             if hasattr(self, 'stats_outer_frame'):
                 self.stats_outer_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(8, 5), pady=5)
         else:
-            # Show normal file input UI
+            # Show normal file input UI for basic/detailed
             self.show_file_input_ui()
             # Show stats display for processing pages
             if hasattr(self, 'stats_outer_frame'):
@@ -1721,14 +1735,30 @@ class ModernTMSProcessorGUI:
                                activebackground='#cbd5e0', padx=18, pady=10,
                                highlightthickness=0, width=12)
         self.nav_buttons['detailed'].pack(side='left', padx=(0, 5))
-        
 
-        self.nav_buttons['marmon'] = tk.Button(nav_container, text="🏭 Marmon", font=('Segoe UI', 10),
+        # UTC Main button
+        self.nav_buttons['utc_main'] = tk.Button(nav_container, text="🏢 UTC Main", font=('Segoe UI', 10),
                                bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
-                               cursor='hand2', command=lambda: self.select_card('marmon'),
+                               cursor='hand2', command=lambda: self.select_card('utc_main'),
                                activebackground='#cbd5e0', padx=18, pady=10,
                                highlightthickness=0, width=12)
-        self.nav_buttons['marmon'].pack(side='left')
+        self.nav_buttons['utc_main'].pack(side='left', padx=(0, 5))
+
+        # UTC FS button
+        self.nav_buttons['utc_fs'] = tk.Button(nav_container, text="⚡ UTC FS", font=('Segoe UI', 10),
+                               bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
+                               cursor='hand2', command=lambda: self.select_card('utc_fs'),
+                               activebackground='#cbd5e0', padx=18, pady=10,
+                               highlightthickness=0, width=12)
+        self.nav_buttons['utc_fs'].pack(side='left', padx=(0, 5))
+
+        # Transco button
+        self.nav_buttons['transco'] = tk.Button(nav_container, text="🚛 Transco", font=('Segoe UI', 10),
+                               bg='#e2e8f0', fg='#4a5568', relief='flat', bd=0,
+                               cursor='hand2', command=lambda: self.select_card('transco'),
+                               activebackground='#cbd5e0', padx=18, pady=10,
+                               highlightthickness=0, width=12)
+        self.nav_buttons['transco'].pack(side='left', padx=(0, 5))
         
     def setup_drag_drop(self, widget):
         """Setup drag and drop functionality for file selection"""
@@ -2152,7 +2182,7 @@ class ModernTMSProcessorGUI:
             if len(self.input_files) == 1:
                 # Single file - ask for specific output file location
                 input_name = os.path.splitext(os.path.basename(self.input_files[0]))[0]
-                report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                report_type = self.report_type.get()
                 default_name = f"{input_name}_processed_{report_type}.xlsx"
                 
                 output_file = filedialog.asksaveasfilename(
@@ -2179,7 +2209,7 @@ class ModernTMSProcessorGUI:
                 
                 # Create timestamped folder name
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-                report_type = "basic" if self.report_type.get() == "basic" else "detailed"
+                report_type = self.report_type.get()
                 folder_name = f"TMS_Processed_{report_type}_{timestamp}"
                 output_folder = os.path.join(base_dir, folder_name)
                 
@@ -2200,8 +2230,31 @@ class ModernTMSProcessorGUI:
                 output_file = None  # Will be generated per file
             
             # Select processor based on report type
-            if self.report_type.get() == "basic":
+            report_type = self.report_type.get()
+
+            if report_type == "basic":
                 processor = self.basic_processor
+            elif report_type == "utc_main":
+                if UTCMainProcessor is None:
+                    self.root.after(0, lambda: messagebox.showerror("Error",
+                        "UTC Main processor not available. Please ensure city_processors.py is present."))
+                    self.root.after(0, self._reset_ui)
+                    return
+                processor = UTCMainProcessor()
+            elif report_type == "utc_fs":
+                if UTCFSProcessor is None:
+                    self.root.after(0, lambda: messagebox.showerror("Error",
+                        "UTC FS processor not available. Please ensure city_processors.py is present."))
+                    self.root.after(0, self._reset_ui)
+                    return
+                processor = UTCFSProcessor()
+            elif report_type == "transco":
+                if TranscoProcessor is None:
+                    self.root.after(0, lambda: messagebox.showerror("Error",
+                        "Transco processor not available. Please ensure city_processors.py is present."))
+                    self.root.after(0, self._reset_ui)
+                    return
+                processor = TranscoProcessor()
             else:
                 # Import detailed processor when needed
                 if self.detailed_processor is None:
@@ -2209,7 +2262,7 @@ class ModernTMSProcessorGUI:
                         from tms_detailed_processor import TMSDetailedDataProcessor
                         self.detailed_processor = TMSDetailedDataProcessor()
                     except ImportError as e:
-                        self.root.after(0, lambda: messagebox.showerror("Error", 
+                        self.root.after(0, lambda: messagebox.showerror("Error",
                             f"Failed to load detailed processor: {e}"))
                         self.root.after(0, self._reset_ui)
                         return
