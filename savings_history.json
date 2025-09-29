@@ -1,5 +1,131 @@
 [
   {
+    "timestamp": "2025-09-29T10:20:51.753094",
+    "report_type": "utc_fs",
+    "file_count": 1,
+    "file_names": [
+      "02_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 897.5600000000001,
+    "total_loads": 92,
+    "percentage_savings": 5.001075368271844,
+    "loads_with_savings": 28
+  },
+  {
+    "timestamp": "2025-09-29T10:20:23.597981",
+    "report_type": "utc_fs",
+    "file_count": 1,
+    "file_names": [
+      "03_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 5614.25,
+    "total_loads": 177,
+    "percentage_savings": 11.904618018514313,
+    "loads_with_savings": 71
+  },
+  {
+    "timestamp": "2025-09-29T10:09:44.496502",
+    "report_type": "basic",
+    "file_count": 1,
+    "file_names": [
+      "Ferro_09.22-09.26.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 775.02,
+    "total_loads": 33,
+    "percentage_savings": 7.512162118937235,
+    "loads_with_savings": 14
+  },
+  {
+    "timestamp": "2025-09-29T10:06:14.568422",
+    "report_type": "utc_main",
+    "file_count": 1,
+    "file_names": [
+      "01_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 5980.370000000001,
+    "total_loads": 229,
+    "percentage_savings": 8.37779265825764,
+    "loads_with_savings": 77
+  },
+  {
+    "timestamp": "2025-09-29T10:05:58.641656",
+    "report_type": "utc_fs",
+    "file_count": 1,
+    "file_names": [
+      "02_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 897.5600000000001,
+    "total_loads": 92,
+    "percentage_savings": 5.001075368271844,
+    "loads_with_savings": 28
+  },
+  {
+    "timestamp": "2025-09-29T10:05:44.486413",
+    "report_type": "transco",
+    "file_count": 1,
+    "file_names": [
+      "03_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 4278.76,
+    "total_loads": 177,
+    "percentage_savings": 9.072806410989589,
+    "loads_with_savings": 48
+  },
+  {
+    "timestamp": "2025-09-29T07:54:16.975427",
+    "report_type": "detailed",
+    "file_count": 1,
+    "file_names": [
+      "CN_09.22-09.26.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 2166.22,
+    "total_loads": 69,
+    "percentage_savings": 7.33883475476349,
+    "loads_with_savings": 16
+  },
+  {
+    "timestamp": "2025-09-26T16:26:37.940914",
+    "report_type": "detailed",
+    "file_count": 1,
+    "file_names": [
+      "CN_09.15-09.19.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 0.0,
+    "total_loads": 70,
+    "percentage_savings": 0.0,
+    "loads_with_savings": 0
+  },
+  {
+    "timestamp": "2025-09-26T14:37:51.927215",
+    "report_type": "basic",
+    "file_count": 1,
+    "file_names": [
+      "Ferro_raw_09.01.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 258.20000000000005,
+    "total_loads": 15,
+    "percentage_savings": 7.0439633888502415,
+    "loads_with_savings": 4
+  },
+  {
     "timestamp": "2025-09-26T14:01:52.671349",
     "report_type": "basic",
     "file_count": 1,
@@ -152,131 +278,5 @@
     "total_loads": 97,
     "percentage_savings": 7.968500396775243,
     "loads_with_savings": 38
-  },
-  {
-    "timestamp": "2025-09-26T14:01:01.891108",
-    "report_type": "transco",
-    "file_count": 1,
-    "file_names": [
-      "3_05.19.xlsx"
-    ],
-    "file_index": 4,
-    "total_files": 5,
-    "total_potential_savings": 1207.12,
-    "total_loads": 59,
-    "percentage_savings": 7.139587234480482,
-    "loads_with_savings": 23
-  },
-  {
-    "timestamp": "2025-09-26T14:01:01.849865",
-    "report_type": "transco",
-    "file_count": 1,
-    "file_names": [
-      "3_05.12.xlsx"
-    ],
-    "file_index": 3,
-    "total_files": 5,
-    "total_potential_savings": 1339.02,
-    "total_loads": 143,
-    "percentage_savings": 3.4022721451831246,
-    "loads_with_savings": 37
-  },
-  {
-    "timestamp": "2025-09-26T14:01:01.777591",
-    "report_type": "transco",
-    "file_count": 1,
-    "file_names": [
-      "3_05.05.xlsx"
-    ],
-    "file_index": 2,
-    "total_files": 5,
-    "total_potential_savings": 1649.6299999999999,
-    "total_loads": 116,
-    "percentage_savings": 6.012939102238152,
-    "loads_with_savings": 37
-  },
-  {
-    "timestamp": "2025-09-26T14:01:01.739721",
-    "report_type": "transco",
-    "file_count": 1,
-    "file_names": [
-      "3_05.01.xlsx"
-    ],
-    "file_index": 1,
-    "total_files": 5,
-    "total_potential_savings": 801.13,
-    "total_loads": 13,
-    "percentage_savings": 26.867148251738865,
-    "loads_with_savings": 6
-  },
-  {
-    "timestamp": "2025-09-26T14:00:37.401076",
-    "report_type": "utc_main",
-    "file_count": 1,
-    "file_names": [
-      "3_05.26.xlsx"
-    ],
-    "file_index": 5,
-    "total_files": 5,
-    "total_potential_savings": 1595.65,
-    "total_loads": 97,
-    "percentage_savings": 8.265201257249176,
-    "loads_with_savings": 39
-  },
-  {
-    "timestamp": "2025-09-26T14:00:37.372917",
-    "report_type": "utc_main",
-    "file_count": 1,
-    "file_names": [
-      "3_05.19.xlsx"
-    ],
-    "file_index": 4,
-    "total_files": 5,
-    "total_potential_savings": 1383.4299999999998,
-    "total_loads": 59,
-    "percentage_savings": 8.182383829111716,
-    "loads_with_savings": 25
-  },
-  {
-    "timestamp": "2025-09-26T14:00:37.344377",
-    "report_type": "utc_main",
-    "file_count": 1,
-    "file_names": [
-      "3_05.12.xlsx"
-    ],
-    "file_index": 3,
-    "total_files": 5,
-    "total_potential_savings": 2677.17,
-    "total_loads": 143,
-    "percentage_savings": 6.802333735806715,
-    "loads_with_savings": 52
-  },
-  {
-    "timestamp": "2025-09-26T14:00:37.312275",
-    "report_type": "utc_main",
-    "file_count": 1,
-    "file_names": [
-      "3_05.05.xlsx"
-    ],
-    "file_index": 2,
-    "total_files": 5,
-    "total_potential_savings": 2201.65,
-    "total_loads": 116,
-    "percentage_savings": 8.025064635368313,
-    "loads_with_savings": 54
-  },
-  {
-    "timestamp": "2025-09-26T14:00:37.282588",
-    "report_type": "utc_main",
-    "file_count": 1,
-    "file_names": [
-      "3_05.01.xlsx"
-    ],
-    "file_index": 1,
-    "total_files": 5,
-    "total_potential_savings": 809.43,
-    "total_loads": 13,
-    "percentage_savings": 27.14550174054771,
-    "loads_with_savings": 7
   }
 ]

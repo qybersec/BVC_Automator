@@ -1,19 +1,22 @@
-import pandas as pd
-from datetime import datetime
-import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
+# Standard library imports
+import json
 import os
 import threading
 import time
-import json
+from datetime import datetime
 from pathlib import Path
+
+# Third-party imports
+import pandas as pd
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 
 
-# Import city processors from modular files
+# Local imports
 try:
     from city_processors import UTCMainProcessor, UTCFSProcessor, TranscoProcessor
 except ImportError:
@@ -21,7 +24,6 @@ except ImportError:
     UTCFSProcessor = None
     TranscoProcessor = None
 
-# Import UI styles from the new modular UI components
 try:
     from ui import COLORS as UI_COLORS
 except ImportError:
@@ -2416,7 +2418,6 @@ class ModernTMSProcessorGUI:
 
             # Map report type to display name
             display_type = str(report_type)
-            print(f"Debug: Original report_type = '{report_type}', display_type = '{display_type}'")
 
             if display_type.lower() == 'basic':
                 display_type = 'Basic'
@@ -2429,7 +2430,6 @@ class ModernTMSProcessorGUI:
             elif display_type.lower() == 'transco':
                 display_type = 'Transco'
 
-            print(f"Debug: Final display_type = '{display_type}'")
 
             self.add_result_entry(
                 processor_type=display_type,

@@ -31,7 +31,10 @@
       "Bash(findstr:*)",
       "Bash(git checkout:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(UTC Main)",
+      "Bash(1/5)",
+      "Bash(file.xlsx)"
     ],
     "deny": [],
     "ask": []

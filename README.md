@@ -6,10 +6,17 @@ A professional, enterprise-grade Transportation Management System (TMS) data pro
 
 ### 🎯 **Core Functionality**
 
-- **Automated Data Processing**: Handles various TMS file formats automatically
-- **Smart Business Logic**: Applies industry-standard TMS rules and validations
+- **5 Processor Types**: Basic, UTC Main, UTC FS, Transco, Cast Nylon (Detailed)
+- **Smart Business Logic**: 5+ automated TMS business rules with city-specific exclusions
 - **Cost Analysis**: Calculates potential savings between selected and least-cost carriers
-- **Professional Formatting**: Creates Excel reports with color-coded sections and insights
+- **Professional Formatting**: Consistent color-coded Excel reports across all processors
+
+### 🤖 **Automation Ready**
+
+- **CLI Tool**: `automation_cli.py` - Full command-line interface for batch processing
+- **Python API**: `automation_api.py` - Programmatic integration for enterprise systems
+- **Auto-Detection**: Intelligent processor type selection based on file names
+- **Batch Processing**: Handle multiple files with unified reporting
 
 ### 🎨 **Visual Enhancements**
 
@@ -28,20 +35,34 @@ A professional, enterprise-grade Transportation Management System (TMS) data pro
 
 ## 🚀 Quick Start
 
-### For End Users (Non-Technical)
+### For End Users (GUI)
 
-1. Download `TMS_Processor_Complete.zip`
-2. Extract to a folder
-3. Double-click `Run TMS Processor.bat`
-4. Select your Excel file and click "Process File"
+1. Run `python tms_processor.py`
+2. Select processor type (Basic, UTC Main, UTC FS, Transco, Cast Nylon)
+3. Upload Excel files and view real-time processing results
+4. Download professionally formatted reports
 
-### For Developers
+### For Automation (CLI)
 
 ```bash
-git clone https://github.com/yourusername/BVC_Automator.git
-cd BVC_Automator
-pip install -r requirements.txt
-python tms_processor.py
+# Process single file with auto-detection
+python automation_cli.py data.xlsx
+
+# Process multiple files with specific type
+python automation_cli.py *.xlsx --type utc_main --output-dir ./processed
+
+# Export results to JSON
+python automation_cli.py files/*.xlsx --export results.json
+```
+
+### For Integration (Python API)
+
+```python
+from automation_api import TMSAutomator
+
+automator = TMSAutomator()
+result = automator.process_file('data.xlsx', 'utc_main')
+print(f"Savings: ${result['stats']['total_potential_savings']}")
 ```
 
 ## 📋 Requirements
