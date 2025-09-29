@@ -35,7 +35,17 @@ class CityRuleProcessor:
 
         if not (origin_col_found or dest_col_found):
             print(f"{rule_description}: No city columns found, skipping rule")
+            print(f"Available columns: {list(df.columns)}")
             return df
+
+        # Debug: Show sample of city data
+        print(f"\n{rule_description}: Looking for '{city_name}'")
+        if origin_col_found:
+            unique_origins = df['Origin City'].dropna().unique()[:5]
+            print(f"Sample Origin Cities: {list(unique_origins)}")
+        if dest_col_found:
+            unique_destinations = df['Destination City'].dropna().unique()[:5]
+            print(f"Sample Destination Cities: {list(unique_destinations)}")
 
         # Create mask for matching cities
         city_mask = pd.Series([False] * len(df), index=df.index)

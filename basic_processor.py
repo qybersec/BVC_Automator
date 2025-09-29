@@ -46,6 +46,15 @@ class BasicTMSProcessor(TMSProcessorInterface):
         data_df = df_raw.iloc[self.DATA_START_ROW:].copy()
         data_df.columns = headers
 
+        # Remove columns with empty/nan headers
+        valid_columns = []
+        for i, header in enumerate(headers):
+            if header.strip() != '' and header.lower() not in ['nan', 'unnamed']:
+                valid_columns.append(i)
+
+        if valid_columns:
+            data_df = data_df.iloc[:, valid_columns]
+
         # Map column names to expected format
         data_df = self._map_columns(data_df)
 
