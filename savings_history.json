@@ -1,5 +1,47 @@
 [
   {
+    "timestamp": "2025-09-29T10:42:43.370411",
+    "report_type": "utc_main",
+    "file_count": 1,
+    "file_names": [
+      "01_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 5980.370000000001,
+    "total_loads": 229,
+    "percentage_savings": 8.37779265825764,
+    "loads_with_savings": 77
+  },
+  {
+    "timestamp": "2025-09-29T10:42:25.046834",
+    "report_type": "transco",
+    "file_count": 1,
+    "file_names": [
+      "03_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 4278.76,
+    "total_loads": 177,
+    "percentage_savings": 9.072806410989589,
+    "loads_with_savings": 48
+  },
+  {
+    "timestamp": "2025-09-29T10:39:32.498703",
+    "report_type": "utc_fs",
+    "file_count": 1,
+    "file_names": [
+      "02_09.22.xlsx"
+    ],
+    "file_index": 1,
+    "total_files": 1,
+    "total_potential_savings": 897.5600000000001,
+    "total_loads": 92,
+    "percentage_savings": 5.001075368271844,
+    "loads_with_savings": 28
+  },
+  {
     "timestamp": "2025-09-29T10:20:51.753094",
     "report_type": "utc_fs",
     "file_count": 1,
@@ -236,47 +278,5 @@
     "total_loads": 137,
     "percentage_savings": 0.0,
     "loads_with_savings": 0
-  },
-  {
-    "timestamp": "2025-09-26T14:01:36.785408",
-    "report_type": "detailed",
-    "file_count": 1,
-    "file_names": [
-      "3_05.05.xlsx"
-    ],
-    "file_index": 2,
-    "total_files": 5,
-    "total_potential_savings": 0.0,
-    "total_loads": 111,
-    "percentage_savings": 0.0,
-    "loads_with_savings": 0
-  },
-  {
-    "timestamp": "2025-09-26T14:01:36.741110",
-    "report_type": "detailed",
-    "file_count": 1,
-    "file_names": [
-      "3_05.01.xlsx"
-    ],
-    "file_index": 1,
-    "total_files": 5,
-    "total_potential_savings": 0.0,
-    "total_loads": 13,
-    "percentage_savings": 0.0,
-    "loads_with_savings": 0
-  },
-  {
-    "timestamp": "2025-09-26T14:01:01.932213",
-    "report_type": "transco",
-    "file_count": 1,
-    "file_names": [
-      "3_05.26.xlsx"
-    ],
-    "file_index": 5,
-    "total_files": 5,
-    "total_potential_savings": 1538.3700000000001,
-    "total_loads": 97,
-    "percentage_savings": 7.968500396775243,
-    "loads_with_savings": 38
   }
 ]

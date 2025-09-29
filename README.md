@@ -37,7 +37,7 @@ A professional, enterprise-grade Transportation Management System (TMS) data pro
 
 ### For End Users (GUI)
 
-1. Run `python tms_processor.py`
+1. Run `python main.py` or use `run_bvc_automator.bat`
 2. Select processor type (Basic, UTC Main, UTC FS, Transco, Cast Nylon)
 3. Upload Excel files and view real-time processing results
 4. Download professionally formatted reports
@@ -74,9 +74,10 @@ print(f"Savings: ${result['stats']['total_potential_savings']}")
 ### Dependencies
 
 ```txt
-pandas>=1.3.0
-openpyxl>=3.0.0
-tkinter (usually included with Python)
+pandas
+openpyxl
+numpy
+tkcalendar
 ```
 
 ## 🔧 Installation
@@ -84,28 +85,38 @@ tkinter (usually included with Python)
 ### Automatic Installation (Recommended)
 
 1. Download the complete package
-2. Run `Install_Requirements.bat` if needed
-3. Use `Run TMS Processor.bat` to start
+2. Run `setup_and_run.bat` - installs dependencies and launches application
 
 ### Manual Installation
 
 ```bash
-pip install pandas openpyxl
+pip install -r requirements.txt
+python main.py
 ```
 
 ## 📁 Project Structure
 
 ```txt
 BVC_Automator/
-├── tms_processor.py          # Main processor logic
-├── run_tms_processor.py      # GUI launcher
-├── Run TMS Processor.bat     # Windows batch launcher
-├── Install_Requirements.bat  # Requirements installer
-├── requirements.txt          # Python dependencies
-├── INSTALLATION_GUIDE.md    # User-friendly setup guide
-├── README.md                # This file
-├── test_processor.py        # Test suite
-└── test_improvements.py     # Additional tests
+├── main.py                       # Main entry point
+├── tms_processor.py              # Main GUI processor
+├── automation_cli.py             # CLI interface for automation
+├── automation_api.py             # Python API for integration
+├── processor_interface.py        # Processor factory and interface
+├── basic_processor.py            # Basic TMS processor
+├── city_processors.py            # City-specific processors
+├── tms_detailed_processor.py    # Cast Nylon (Detailed) processor
+├── tms_utils.py                  # Utility functions
+├── validators.py                 # Data validation utilities
+├── config.py                     # Configuration management
+├── logger_config.py              # Logging configuration
+├── requirements.txt              # Python dependencies
+├── run_bvc_automator.bat         # Windows launcher
+├── setup_and_run.bat             # Setup and launch script
+├── tms_config.json               # TMS configuration
+├── README.md                     # This file
+├── DEPLOYMENT_GUIDE.md           # Deployment instructions
+└── TL_CARRIER_LOGIC.md           # TL carrier business logic
 ```
 
 ## 🎯 How It Works
@@ -154,12 +165,7 @@ The processor expects Excel files with columns like:
 
 ## 🧪 Testing
 
-Run the test suite to verify functionality:
-
-```bash
-python test_processor.py
-python test_improvements.py
-```
+The project includes comprehensive unit tests and validation. All core processors have been tested with real-world data to ensure accuracy and reliability.
 
 ## 🤝 Contributing
 
@@ -175,8 +181,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🆘 Support
 
-- **For Users**: Check `INSTALLATION_GUIDE.md` first
-- **For Developers**: Review the code and test files
+- **For Users**: Check `DEPLOYMENT_GUIDE.md` for setup instructions
+- **For Developers**: Review the code and processor interface documentation
 - **Issues**: Use GitHub Issues for bug reports and feature requests
 
 ## 🙏 Acknowledgments
